@@ -18,8 +18,8 @@ collinearity_check <- function(y, x, fes, hdfetol) {
   reg_x  <- x
   mu  <- (y + mean(y)) / 2
 
-  z_resid <- lfe::demeanlist(reg_z, fes, weights = sqrt(mu), eps = hdfetol)
-  x_resid <- lfe::demeanlist(reg_x, fes, weights = sqrt(mu), eps = hdfetol)
+  z_resid <- collapse::fhdwithin(reg_z, fes, w = mu)
+  x_resid <- collapse::fhdwithin(reg_x, fes, w = mu)
 
   check <- stats::lm.wfit(x_resid, z_resid, mu)
   check$coefficients
@@ -121,7 +121,7 @@ fastridge <- function(x, y, weights = rep(1/n, n), lambda, standardize = TRUE) {
   n <- length(y)
   if (standardize) {
     b <- fastridgeCpp(sqrt(weights) * standardize_wt(x, weights), sqrt(weights) * y, lambda)
-    beta <- b * faststddev(x, weights)
+    beta <- b / faststddev(x, weights)
   } else {
     beta <- fastridgeCpp(sqrt(weights) * x, sqrt(weights) * y, lambda)
   }
