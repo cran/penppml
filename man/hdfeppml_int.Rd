@@ -6,11 +6,12 @@
 \usage{
 hdfeppml_int(
   y,
-  x,
-  fes,
+  x = NULL,
+  fes = NULL,
   tol = 1e-08,
   hdfetol = 1e-04,
-  colcheck = TRUE,
+  colcheck_x = TRUE,
+  colcheck_x_fes = TRUE,
   mu = NULL,
   saveX = TRUE,
   init_z = NULL,
@@ -32,10 +33,13 @@ hdfeppml_int(
 \item{hdfetol}{Tolerance parameter for the within-transformation step,
 passed on to \code{collapse::fhdwithin}.}
 
-\item{colcheck}{Logical. If \code{TRUE}, checks for perfect multicollinearity in \code{x}.}
+\item{colcheck_x}{Logical. If \code{TRUE}, this checks collinearity between the independent variables and drops the
+collinear variables.}
 
-\item{mu}{Optional: initial values of the conditional mean \eqn{\mu}, to be used as weights in the
-first iteration of the algorithm.}
+\item{colcheck_x_fes}{Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
+by the fixed effects drops those that are perfectly explained.}
+
+\item{mu}{A vector of initial values for mu that can be passed to the command.}
 
 \item{saveX}{Logical. If \code{TRUE}, it returns the values of x and z after partialling out the
 fixed effects.}

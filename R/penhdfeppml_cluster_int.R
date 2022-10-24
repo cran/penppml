@@ -47,9 +47,10 @@
 
 penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e-4, glmnettol = 1e-12,
                                 penalty = "lasso", penweights = NULL, saveX = TRUE, mu = NULL,
-                                colcheck = TRUE, K = 15, init_z = NULL, post = FALSE,
-                                verbose = FALSE, lambda = NULL) {
+                                colcheck_x = TRUE, colcheck_x_fes = TRUE, K = 15, init_z = NULL, post = FALSE,
+                                verbose = FALSE, lambda = NULL, gamma_val=NULL) {
 
+  xnames <- colnames(x)
   n <- length(y)
   k <- ncol(x) # BUG? should be defined after colcheck
   nclusters <- nlevels(droplevels(cluster, exclude = if(anyNA(levels(cluster))) NULL else NA))
@@ -57,7 +58,8 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
 
   if(is.null(lambda)){
     c <- 1.1
-    gamma <- .1 / log(n)
+    if(is.null(gamma_val)){gamma_val <- 0.1/log(n)}
+    gamma <- gamma_val
     lambda <- c * sqrt(n) * stats::qnorm(1 - gamma / (2 * k))
   }
 
@@ -69,9 +71,33 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
   rownames(b) <- colnames(x)
   include_x <- 1:ncol(x)
 
-  if (colcheck == TRUE) {
-    include_x <- collinearity_check(y, x, fes, 1e-6)
-    x <- x[, include_x]
+  if (colcheck_x==TRUE & colcheck_x_fes==TRUE){
+    include_x <- collinearity_check(y,x,fes,1e-6, colcheck_x=colcheck_x, colcheck_x_fes=colcheck_x_fes)
+    x <- x[,include_x]
+    colnames(x) <- xnames[include_x]
+    xnames <- xnames[include_x]
+    colcheck_x_post = FALSE
+    colcheck_x_fes_post = FALSE
+  }
+  if (colcheck_x==FALSE & colcheck_x_fes==FALSE){
+    colcheck_x_post = TRUE
+    colcheck_x_fes_post = TRUE
+  }
+  if (colcheck_x==TRUE & colcheck_x_fes==FALSE){
+    include_x <- collinearity_check(y,x,fes,1e-6, colcheck_x=colcheck_x, colcheck_x_fes=colcheck_x_fes)
+    x <- x[,include_x]
+    colnames(x) <- xnames[include_x]
+    xnames <- xnames[include_x]
+    colcheck_x_post = TRUE
+    colcheck_x_fes_post = FALSE
+  }
+  if (colcheck_x==FALSE & colcheck_x_fes==TRUE){
+    include_x <- collinearity_check(y,x,fes,1e-6, colcheck_x=colcheck_x, colcheck_x_fes=colcheck_x_fes)
+    x <- x[,include_x]
+    colnames(x) <- xnames[include_x]
+    xnames <- xnames[include_x]
+    colcheck_x_post = FALSE
+    colcheck_x_fes_post = TRUE
   }
 
   # number of obs (needed for deviance)
@@ -84,10 +110,16 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
   while (crit > tol) {
     iter <- iter + 1
 
+    if(iter > 200){message("Plugin Lasso exceeded 200 iterations. Break loop and return last model."); break}
+
     if (iter == 1) {
 
-      # initilize "mu"
-      if (is.null(mu)) mu  <- (y + mean(y)) / 2
+      # initialize "mu"
+      if (is.null(mu)){
+        only_fes <- hdfeppml_int(y, fes=fes, tol = 1e-8, hdfetol = 1e-4, colcheck_x = FALSE, colcheck_x_fes = FALSE, mu = NULL, saveX = TRUE,
+                                 init_z = NULL, verbose = FALSE, maxiter = 1000, cluster = NULL, vcv = TRUE)
+        mu <- only_fes$mu
+      }
       z   <- (y - mu) / mu + log(mu)
       eta <- log(mu)
       last_z <- z
@@ -105,11 +137,25 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
       reg_x  <- x_resid
       ## colnames(reg_x)   <- colnames(x)
     }
-    print(iter)
 
-    z_resid <- collapse::fhdwithin(reg_z, fes, w = mu)
-    x_resid <- collapse::fhdwithin(reg_x, fes, w = mu)
-
+    if(!missing(fes)){
+      if(is.null(fes)){
+        z_resid <- collapse::fwithin(x=reg_z, g=factor(rep(1,length(reg_z))), w = mu)
+        if(!missing(x)){
+          x_resid <- collapse::fwithin(x=reg_x,g=factor(rep(1,length(reg_z))), w = mu)
+        }
+      }else{
+        z_resid <-  collapse::fhdwithin(reg_z, fes, w = mu)
+        if(!missing(x)){
+          x_resid <- collapse::fhdwithin(reg_x, fes, w = mu)
+        }
+      }
+    } else {
+      z_resid <- reg_z
+      if(!missing(x)){
+        x_resid <- reg_x
+      }
+    }
     # the "cluster_matrix" command computes the variance of the score based on the assumed clustering
     if (iter == 1) {
       e <- mu * z_resid
@@ -136,7 +182,7 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
         warning(penalty, " penalty is not supported. Lasso is used by default.")
       }
       penreg <- glmnet::glmnet(x = x_resid, y = z_resid, weights = mu / sum(mu), lambda = lambda_glmnet,
-                               thresh = glmnettol, penalty.factor = phi, standardize = FALSE)
+                               thresh = glmnettol, penalty.factor = phi, standardize = FALSE, family=gaussian(link = "identity"), warm.g=NULL)
 #    }
 
     b[include_x] <- penreg$beta #[-1,]   #does using [,include_x] make a difference?
@@ -148,10 +194,21 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
     residuals <- z_resid - x_resid %*% b[include_x]  #technically this reflects (y-mu)/mu
 
     mu <- as.numeric(exp(z - residuals))
+    mu[which(mu < 1e-190)] <- 1e-190
+    mu[mu > 1e190] <- 1e190
+
+    # print("mu")
+    # print(length(mu[which(mu == 1e-190)]))
 
     # calculate deviance
     temp <-  -(y * log(y / mu) - (y - mu))
     temp[which(y == 0)] <- -mu[which(y == 0)]
+    #temp[which(mu==Inf)] <- 0
+
+    # print("clust")
+    # print(temp[which(is.na(temp))])
+    # print(mu[which(is.na(temp))])
+    # print(y[which(is.na(temp))])
 
     deviance <- -2 * sum(temp) / n
 
@@ -177,8 +234,9 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
   select_x <- which(b!=0)
 
   k   <- length(select_x)
-  print(k)
+  message(paste("No of variables:", k))
   bic <- deviance + k * log(n) / n
+  message(paste("BIC:", bic))
   # k = number of elements in x here
   # BIC would be BIC = deviance + k * ln(n)
 
@@ -187,7 +245,7 @@ penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e
     x_select <- x_resid[, as.numeric(penreg$beta) != 0]
     if (length(x_select) != 0) {
       ppml_temp <- hdfeppml_int(y = y, x = x_select, fes = fes, tol = tol, hdfetol = hdfetol,
-                            mu = penreg$mu, colcheck = FALSE, cluster = cluster)
+                            mu = penreg$mu, colcheck_x = colcheck_x_post, colcheck_x_fes = colcheck_x_fes_post, cluster = cluster)
 
       penreg$beta[which(penreg$beta != 0), 1]  <- ppml_temp$coefficients
       b[include_x] <- penreg$beta

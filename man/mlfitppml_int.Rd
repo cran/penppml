@@ -12,7 +12,8 @@ mlfitppml_int(
   penalty = "lasso",
   tol = 1e-08,
   hdfetol = 1e-04,
-  colcheck = TRUE,
+  colcheck_x = FALSE,
+  colcheck_x_fes = TRUE,
   post = TRUE,
   cluster = NULL,
   method = "bic",
@@ -22,7 +23,9 @@ mlfitppml_int(
   standardize = TRUE,
   vcv = TRUE,
   penweights = NULL,
-  K = 15
+  K = 15,
+  gamma_val = NULL,
+  mu = NULL
 )
 }
 \arguments{
@@ -41,7 +44,11 @@ mlfitppml_int(
 \item{hdfetol}{Tolerance parameter for the within-transformation step,
 passed on to \code{collapse::fhdwithin}.}
 
-\item{colcheck}{Logical. If \code{TRUE}, checks for perfect multicollinearity in \code{x}.}
+\item{colcheck_x}{Logical. If \code{TRUE}, this checks collinearity between the independent variables and drops the
+collinear variables.}
+
+\item{colcheck_x_fes}{Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
+by the fixed effects drops those that are perfectly explained.}
 
 \item{post}{Logical. If \code{TRUE}, estimates a post-penalty regression with the selected variables.}
 
@@ -65,6 +72,10 @@ is assigned to a different fold (warning: this is likely to be very resource-int
 \code{method == "plugin"}.}
 
 \item{K}{Maximum number of iterations for the plugin algorithm to converge.}
+
+\item{gamma_val}{Numerical value that determines the regularization threshold as defined in Belloni, Chernozhukov, Hansen, and Kozbur (2016). NULL default sets parameter to 0.1/log(n).}
+
+\item{mu}{A vector of initial values for mu that can be passed to the command.}
 }
 \value{
 A list with the following elements:

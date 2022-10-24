@@ -14,7 +14,19 @@
 
 <title>Penalized PPML Regression with penppml</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -24,6 +36,7 @@
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -107,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -125,7 +145,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -142,36 +342,74 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#data-sets"><span class="toc-section-number">2</span> Data Sets</a></li>
-<li><a href="#unpenalized-ppml-estimation-with-hdfe"><span class="toc-section-number">3</span> Unpenalized PPML estimation with HDFE</a></li>
-<li><a href="#penalized-ppml-estimation-with-hdfe"><span class="toc-section-number">4</span> Penalized PPML estimation with HDFE</a>
+<li><a href="#introduction"><span class="toc-section-number">1</span>
+Introduction</a></li>
+<li><a href="#data-sets"><span class="toc-section-number">2</span> Data
+Sets</a></li>
+<li><a href="#unpenalized-ppml-estimation-with-hdfe"><span class="toc-section-number">3</span> Unpenalized PPML estimation with
+HDFE</a></li>
+<li><a href="#penalized-ppml-estimation-with-hdfe"><span class="toc-section-number">4</span> Penalized PPML estimation with
+HDFE</a>
 <ul>
 <li><a href="#lasso-regression"><span class="toc-section-number">4.1</span> Lasso regression</a></li>
-<li><a href="#ridge-regression-in-development"><span class="toc-section-number">4.2</span> Ridge regression (in development)</a></li>
+<li><a href="#ridge-regression-in-development"><span class="toc-section-number">4.2</span> Ridge regression (in
+development)</a></li>
 <li><a href="#penalty-selection"><span class="toc-section-number">4.3</span> Penalty selection</a>
 <ul>
 <li><a href="#cross-validation"><span class="toc-section-number">4.3.1</span> Cross-validation</a></li>
 <li><a href="#plugin-lasso"><span class="toc-section-number">4.3.2</span> Plugin lasso</a></li>
-<li><a href="#iceberg-lasso-in-development"><span class="toc-section-number">4.3.3</span> Iceberg lasso (in development)</a></li>
+<li><a href="#iceberg-lasso-in-development"><span class="toc-section-number">4.3.3</span> Iceberg lasso (in
+development)</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#references"><span class="toc-section-number">5</span> References</a></li>
+<li><a href="#bootstrap-lasso"><span class="toc-section-number">5</span>
+Bootstrap Lasso</a></li>
+<li><a href="#references"><span class="toc-section-number">6</span>
+References</a></li>
 </ul>
 </div>
 
 <div id="introduction" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p><code>penppml</code> is an R package that enables users to fit penalized Poisson Pseudo Maximum Likelihood (PPML) regressions with high-dimensional fixed effects (HDFE). Supported penalties in the current version are ridge and lasso. The original application that motivated the development of <code>penppml</code> was the estimation of three-way gravity models of trade with a large number of PTA provision dummies (Breinlich, Corradi, Rocha, Ruta, Santos Silva and Zylkin, 2021).</p>
-<p>To install and load <code>penppml</code>, you can use the following commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(penppml)</span></code></pre></div>
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p><code>penppml</code> is an R package that enables users to fit
+penalized Poisson Pseudo Maximum Likelihood (PPML) regressions with
+high-dimensional fixed effects (HDFE). Supported penalties in the
+current version are ridge and lasso. The original application that
+motivated the development of <code>penppml</code> was the estimation of
+three-way gravity models of trade with a large number of PTA provision
+dummies (Breinlich, Corradi, Rocha, Ruta, Santos Silva and Zylkin,
+2021).</p>
+<p>To install and load <code>penppml</code>, you can use the following
+commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;penppml&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(penppml)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Loading penppml</span></span></code></pre></div>
 </div>
 <div id="data-sets" class="section level1" number="2">
-<h1 number="2"><span class="header-section-number">2</span> Data Sets</h1>
-<p>The <code>penppml</code> package features the <code>trade</code> data set, which integrates panel data on bilateral trade flows with information about specific provisions in trade agreements for 220 exporters and 270 importers. The provisions included in the package are a subset of 16 out of 305 “essential” provisions featured in the full data set. More information about the data set and the variables is included in the corresponding help file, accessible via <code>?trade</code>.</p>
+<h1><span class="header-section-number">2</span> Data Sets</h1>
+<p>The <code>penppml</code> package features the <code>trade</code> data
+set, which integrates panel data on bilateral trade flows with
+information about specific provisions in trade agreements for 220
+exporters and 270 importers. The provisions included in the package are
+a subset of 16 out of 305 “essential” provisions featured in the full
+data set. More information about the data set and the variables is
+included in the corresponding help file, accessible via
+<code>?trade</code>.</p>
 <table>
 <caption>Table 1: International Trade Data Set</caption>
+<colgroup>
+<col width="4%" />
+<col width="4%" />
+<col width="6%" />
+<col width="11%" />
+<col width="3%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">exp</th>
@@ -309,7 +547,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>Along with the <code>trade</code> data set, the package includes an auxiliary data frame, <code>countries</code>, which contains basic information about the country ISO codes included in the main data set.</p>
+<p>Along with the <code>trade</code> data set, the package includes an
+auxiliary data frame, <code>countries</code>, which contains basic
+information about the country ISO codes included in the main data
+set.</p>
 <table>
 <caption>Table 2: Country Data Set</caption>
 <thead>
@@ -329,7 +570,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td align="left">ALA</td>
-<td align="left"> Islands</td>
+<td align="left">0c5land Islands</td>
 <td align="left">Europe</td>
 <td align="left">Northern Europe</td>
 </tr>
@@ -383,33 +624,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>This enables users to easily filter by region or subregion. For instance, if we want to restrict our analysis to countries in the Americas, we can do the following:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> countries<span class="sc">$</span>iso[countries<span class="sc">$</span>region <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Americas&quot;</span>)]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>trade2 <span class="ot">&lt;-</span> trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="sc">-</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)] <span class="co"># We remove columns 5 and </span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 6 because these variables are not needed in our regressions.</span></span></code></pre></div>
-<p>We will show the capabilities of this package using the filtered <code>trade2</code> data frame.</p>
+<p>This enables users to easily filter by region or subregion. For
+instance, if we want to restrict our analysis to countries in the
+Americas, we can do the following:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> countries<span class="sc">$</span>iso[countries<span class="sc">$</span>region <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Americas&quot;</span>)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>trade2 <span class="ot">&lt;-</span> trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="sc">-</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)] <span class="co"># We remove columns 5 and </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 6 because these variables are not needed in our regressions.</span></span></code></pre></div>
+<p>We will show the capabilities of this package using the filtered
+<code>trade2</code> data frame.</p>
 </div>
 <div id="unpenalized-ppml-estimation-with-hdfe" class="section level1" number="3">
-<h1 number="3"><span class="header-section-number">3</span> Unpenalized PPML estimation with HDFE</h1>
-<p>The package enables users to run unpenalized PPML regressions with HDFE, using the <code>hdfeppml</code> function as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>reg1 <span class="ot">&lt;-</span> <span class="fu">hdfeppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)))</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; User did not specify independent variables. By default, the function takes all variables</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         not included in &#39;dep&#39; or &#39;fixed&#39; as regressors.</span></span></code></pre></div>
-<p>As we can see, the function is designed to be data-frame-friendly: the user sets a data frame of reference in the <code>data</code> argument and then picks the dependent, independent and fixed effect variables either by name or by column number within the provided data frame. Also, note the following points about the syntax:</p>
+<h1><span class="header-section-number">3</span> Unpenalized PPML
+estimation with HDFE</h1>
+<p>The package enables users to run unpenalized PPML regressions with
+HDFE, using the <code>hdfeppml</code> function as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reg1 <span class="ot">&lt;-</span> <span class="fu">hdfeppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; User did not specify independent variables. By default, the function takes all variables</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         not included in &#39;dep&#39; or &#39;fixed&#39; as regressors.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables have been dropped, due to collinearity:  ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<p>As we can see, the function is designed to be data-frame-friendly:
+the user sets a data frame of reference in the <code>data</code>
+argument and then picks the dependent, independent and fixed effect
+variables either by name or by column number within the provided data
+frame. Also, note the following points about the syntax:</p>
 <ul>
-<li><p>The <code>fixed</code> argument can take either a single vector (just like the <code>dep</code> argument; each element will be used as a separate fixed effect) or a list of vectors. The latter option is useful in cases where the desired fixed effect is the result of the interaction of two or more variables, as in the gravity model of trade. In those cases, you can specify any number of separate fixed effects in distinct elements of the list and, inside each element, which variables in the data set you want to interact.</p></li>
-<li><p>As explained in the note, if <code>indep</code> is empty, the function uses all remaining columns in the data frame by default.</p></li>
+<li><p>The <code>fixed</code> argument can take either a single vector
+(just like the <code>dep</code> argument; each element will be used as a
+separate fixed effect) or a list of vectors. The latter option is useful
+in cases where the desired fixed effect is the result of the interaction
+of two or more variables, as in the gravity model of trade. In those
+cases, you can specify any number of separate fixed effects in distinct
+elements of the list and, inside each element, which variables in the
+data set you want to interact.</p></li>
+<li><p>As explained in the note, if <code>indep</code> is empty, the
+function uses all remaining columns in the data frame by
+default.</p></li>
 </ul>
-<p>Internally, the function will do the necessary transformations of the columns into vectors and matrices, as needed by the algorithm.</p>
-<p>Alternatively, more advanced users who prefer to handle data transformations themselves can use the internal function <code>hdfeppml_int</code>. For more information and examples on this issue, run <code>?hdfeppml</code> or <code>?hdfeppml_int</code>. Note also that this applies to all of the main functions in our package: both the data-frame-friendly wrapper and the internal function are available for use.</p>
+<p>Internally, the function will do the necessary transformations of the
+columns into vectors and matrices, as needed by the algorithm.</p>
+<p>Alternatively, more advanced users who prefer to handle data
+transformations themselves can use the internal function
+<code>hdfeppml_int</code>. For more information and examples on this
+issue, run <code>?hdfeppml</code> or <code>?hdfeppml_int</code>. Note
+also that this applies to all of the main functions in our package: both
+the data-frame-friendly wrapper and the internal function are available
+for use.</p>
 <p>The results of our PPML model are:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg1<span class="sc">$</span>coefficients), <span class="at">b =</span> reg1<span class="sc">$</span>coefficients, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg1<span class="sc">$</span>coefficients)] <span class="ot">&lt;-</span> reg1<span class="sc">$</span>se</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg1<span class="sc">$</span>coefficients), <span class="at">b =</span> reg1<span class="sc">$</span>coefficients, <span class="at">se =</span> <span class="dv">0</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg1<span class="sc">$</span>coefficients)] <span class="ot">&lt;-</span> reg1<span class="sc">$</span>se</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
 <table class="kable_wrapper">
 <caption>
 Table 3: Unpenalized PPML results
@@ -525,89 +793,157 @@ Table 3: Unpenalized PPML results
 </tr>
 </tbody>
 </table>
-<p>(Note that the functions is automatically dropping perfectly collinear variables from the estimation algorithm and reporting <code>NA</code> as the coefficient.)</p>
+<p>(Note that the functions is automatically dropping perfectly
+collinear variables from the estimation algorithm and reporting
+<code>NA</code> as the coefficient.)</p>
+<p>If we want to specify the independent variable, we can specify indep
+as pointing to columns 5 to 7 with the following code.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>reg1_indep <span class="ot">&lt;-</span> <span class="fu">hdfeppml</span>(<span class="at">data =</span> trade2, <span class="at">indep=</span><span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)))</span></code></pre></div>
 </div>
 <div id="penalized-ppml-estimation-with-hdfe" class="section level1" number="4">
-<h1 number="4"><span class="header-section-number">4</span> Penalized PPML estimation with HDFE</h1>
+<h1><span class="header-section-number">4</span> Penalized PPML
+estimation with HDFE</h1>
 <div id="lasso-regression" class="section level2" number="4.1">
-<h2 number="4.1"><span class="header-section-number">4.1</span> Lasso regression</h2>
-<p>The <code>mlfitppml</code> function is a flexible tool for computing penalized PPML regressions with HDFE. For instance, if we want to fit a PPML regression with a lasso penalty for several values of the penalty parameter (lambda) at once, we can run:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.0075</span>, <span class="fl">0.005</span>, <span class="fl">0.0025</span>, <span class="fl">0.001</span>, <span class="fl">0.00075</span>, <span class="fl">0.0005</span>, <span class="fl">0.00025</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>reg2 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span></code></pre></div>
-<p>The function returns a list that contains two sets of coefficients for each value of lambda: the penalized coefficients (in the <code>beta_pre</code> element) and the post-penalty or unpenalized coefficients (in the <code>beta</code> element; these are calculated by estimating a post-penalty regression with just the selected variables). We can plot the regularization path of the penalized coefficients as follows:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(reg2<span class="sc">$</span>beta_pre)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(results) <span class="ot">&lt;-</span> lambdas</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>provision <span class="ot">&lt;-</span> <span class="fu">row.names</span>(results)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(results, <span class="at">id.vars =</span> <span class="st">&quot;provision&quot;</span>, <span class="at">variable.name =</span> <span class="st">&quot;lambda&quot;</span>, </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">value.name =</span> <span class="st">&quot;coefficient&quot;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>lambda <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(results<span class="sc">$</span>lambda))</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(<span class="at">data =</span> results, <span class="at">mapping =</span> ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> coefficient, <span class="at">col =</span> provision)) <span class="sc">+</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">scale_x_reverse</span>(<span class="at">expand =</span> ggplot2<span class="sc">::</span><span class="fu">expansion</span>(<span class="at">add =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.015</span>))) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  directlabels<span class="sc">::</span><span class="fu">geom_dl</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">label =</span> provision), </span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method =</span> <span class="fu">list</span>(directlabels<span class="sc">::</span><span class="fu">dl.trans</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="fl">0.5</span>), <span class="st">&quot;last.bumpup&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Penalty parameter (lambda)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Coefficient&quot;</span>, </span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">&quot;Figure 1: Regularization path for lasso&quot;</span>)</span></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAHgCAIAAAD17khjAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO3df2xUdb4//udpwX5pgYoMUJDOIle3u3MGrgVNhNHrJmqUuELyoWdI8Y+NJmL2K9mENSvJxs3MZDc3FzcsyQ1+zbKJxj+wYQ5+E7oaNKvJdWWAXIR6YU6vVbayU4QiRSyl9VtKO98/zjkzZ36dOTOdH2fOPB/ZZNs5v95zQJ7zep33OSPE43EQERGRszRUewBERERUegx4IiIiB2LAExERORADnoiIyIEY8ERERA7EgCciInIgBjwREZEDMeCJiIgcqAYCXgl5hez8cmK5N6RUe5xGsl8fnTW53qPX65cr8cZmcw5Lcf6VkN+bOF92/AOd5Qhlvzfxd3Z278uWJ4eIbKkGAr7mKCFvIeFuuitF9pdsZ/alHJYr8jmmeLMaoew3xrpYkgEREeVTKwEvheOZwhIAiIFoPB4N2OPfTUX2e73B4qIg8z1Gw5IIyCFbF2wlP/+2+gMtGe1PV/07S0RUfrUS8CbSm5ZKsh/q9YfkkDfRLc9sbyrpS/2y3i3Xiy7j7vI0zGW/4PXLkMLBLP+Ky36hsLY9AFEKB9J3ZTqeYt97OkX2e5MXDbx+w9nNOEuGPcv+XNdRcu9TCXkFb1BRN/aGlCxDNbwrIeUta2vKckjfs3GoafT9J3aWsa7lERr2me+4iYs1KX/+5u8o8y9hbrn/pKBeV8h6GNNFJsMjopqSpTC2mWhQzFHBG5aLwWjylwza1ilrZuxbXSpq26urZdldyvapwkEpHI3HtTItbcjZXsvzHqNRrUeROKTpeGb93s3OoT64zLNk2DZbeapumHufKUvEYDR9qGEp91s2fccZfzoSIEppe8tz9kxHmL4vky5Tyip531HaX8LMvynW/6QKXmQ+PCKqJbUS8Ln/HUv5J08PRDVno2FtU+shl7JcfUXUUjuxP5MPGxrTMC/gPWZ7pznHM+v3ri2NajtNOw3mZykzAlI+m5jvM+3zTeZgklumHj6aeI8pgZf9zOtRK6WeoJT3VcgIYQxaKfdx0/46WHpHuRPV8p+U9iEk9TB5F+UZHhHVEge06A1kWQbE4KGAWoSIUuCQWXJmIwUSF3+Vw7ICMXgoUdJo+5PlSs16E0UpHE0kk/l4SvDetb0GovF4POyBIsuhkD/rnALDWcpKm2cohbVL6Vb2mXU/h2UFkMLJtxyIhiVAkQ8nt08uFgMZVzTS31wwGk6coGhYgv6nWcQIE+8OYkCyemnd2jvKc3r1N5N3zEp/KBQKyYqiryvlWWRpeERUG2ol4DOLoyztYKW/HxClLmNHtSuz4WhGFD2Jn/sVBVCCKTeweYMK0N9fln/sku9RDSFRkg4Z+6Wm4ynBe09QL217vX5/MJh18rjxLGUh+71BRc1S6/vMTUpNz7RfUwfjEc3fssdjXO4RxeSfZqEjLOi4qQp5R6ZMxqx+2FEUORhUr9J7/SFtDZNFVoZHRDWiVgK+vohSOBqWFDnorcIdz2o8Q5SkYDAcDkejBc78lv0pxXtJ9ll+9h9hpjxjlsLxaDiY+JCnyMHELZcmi4jIMRwV8KLHk95MVFuOKcuV/uTifsUkPz1ijtl9FbmFSwqHJUAJbktEvOl4Svbelf5+LQDCgYAkSaKo9PdnWzErtTefWrzPdp9pl0RmdYUkpfminiCPR5ztCAtVmndkYcyiFNBmHETVWzuShzJZVMoTTkTV46iAV5uJSnCb1nBU5NC2zCupspy8/cm0ahG7JBGy35tsXypyyFv4zW7F0iM+JFsZT0nfu5zo9yqyX92PlesSakmZWrxb3me2A6hXGQwPitHGnXotogCZJ8jQgC5mhIUq9TvKOWbZLwhC4u+KKHo8oqh1/00WlfyEE1EVlWKmXnmV7ja5jAv36p1OOeeZZ7/vy8KE4hLdJpc5Ldx0PCV67zlm9BuXZs7GT9wvl40UNt9ncstibpPLeWtAtj8UMe1aecbE+CJGmOe4GX/0hb2jNAX+SRW8iLfJETmHsyp4QAxEo8l/ocT0Z85I4ah+5VGUgtG8vXYpHI8mL1Wqs9or+Yw1UZ0Kr17WzjeeEr13MWCc2idKwbA6j1qZRcs6zz7FgDb3X1EyimQpHE15y7P7E/AEEqcoMYrZjrBQJXtH5mMWA9Fcf1dMFpX6hBNR9QjxeLzaYygr2S/4+y1EuRPV83vPJPsFvyyFa2DyHBFRKTirglef8Jl8XKeilr6p90Y5VD2/dyIiyuCsgNemCCVuFVfnBwXzPf3EEer5vRMRUQZnBbz5xUWHq+f3TkRE6Rx/DZ6IiKgeOayCJyIiIoABT0RE5EgMeCIiIgdiwBMRETkQA56IiMiB7B7wgiBUewhERES1x+4BT0REREVgwBMRETkQA56IiMiBGPBEREQOxIAnIiJyIAY8ERGRAzHgiYiIHIgBT0RE5EAMeCIiIgdiwBMRETkQA56IiMiBGPBEREQOxIAnIiJyIAY8ERGVwalvpk9pP8aPfH37+S9uP//F9JHJqo4pj/gbX9x+dSSeueDSyPTz32R53d4Y8EREVHJj02+MJX6eOTIpbLlnzps/adzSVM1BmTN8Ikk1Np019W1vTrUHQEREdWCFjaMdSP1EYnDqm9tZX68FQjxu688lgmD3ERIRUYpLIzlK3gWNb94tmG01JvxyQfwNbVthyz16xT82/fyIsOWOmSNjyZ0Yoldb89LI9Ksj+OVPGh/U93nqm9tv3Gr4wz0NK/IMOX7k6+lTCxruHpn5xtX4B5eQ3HxM2HJP44qR22/AbPC2xAqeiIiyu/38F3Pe/EnBm61wNb7ZNP38N3rWjhl+Njc588ak8MufzHlQDdevp1cktpqcOWX4fKBGb3L/X9++dPecXy4QVozMfDaGBxeoa8U/G8MKl5Av3XFpZOYIGv7gEo6MpLz+4N1z1KNnb93bHa/BExGRXQhb7tES/cG7G7c0xY8kOwHCgwv0Anpy5shYck0saPzlApwambnUJDzYhFM39E3GZk4Zt8plcub/GcGWFXmr/JrDgCciItswXKoXVtyBS2PxSxmL1BeNF/XvbhIwGf8GwhaXgLEZteA+dSOOJuHBPNf+40cuzcDVYOfZf8ViwBMRkU00CXcXtV0y7Bc0PIj4Z2PQ+vML8vTn1eb8/+2qrYvrFvEaPBERZVHkBfiquJS8vV54YAHeuBH/JWZOQfhlnuSOnxqLYzL+6hczyddGpp8fESzNGLA7BjwREdnEZPzUJPRuec4pcisWCCtG4pcmAb1w/2YyjqYGtfp/cKHwxjczbyCOBXlDWthyz5wtyV/jb3wxbZxFX+PYoiciovK4VPBz6+JHLs2oF91PfTN9Sr2mnqmpYcuC+JGv9efSjE2/MYYHXfosuQUNDyJ+agwPLnRGTheNFTwREZXcgoYHMX3k69unXI1/KGD+mrBlQfzVL26rP5v0yR+8ew6+uf3GF7ffULe6Z45hlpzwwAKcGhMeWFD06J3B7o+R4YNuiIiqotLX4DMfU0OzwxY9ERGRA7FFT0REFZHzEbYAmhp+WZ6OuvlBLTzFtnbZvQHOFj0RUVXU0m1ylA1b9ERElI7p7gAMeCIiIgdiwBMRETkQA56IiMiBGPBEREQOxIAnIiJyIAY8ERGRAzHgiYgoBe+RcwYGPBERkQMx4ImIiByIAU9EREnszzsGA56IiMiBGPBEREQOxIAnIiJyIAY8ERFpeAHeSRjwREREDsSAJyIiciAGPBERAezPOw4DnoiIyIEY8ERERA7EgCciInIgBjwREfECvAMx4ImIiByIAU9ERORADHgiIiIHYsATEdU7XoB3JAY8ERGRAzHgiYiIHIgBT0RE5EAMeCKiusYL8E7FgCciInIgBjwREZEDMeCJiOoX+/MOxoAnIiJyIAY8ERGRAzHgiYjqFPvzzsaAJyIiciAGPBERkQMx4ImI6hH7847HgCciInIgBjwREZEDMeCJiOoO+/P1gAFPRETkQAx4IiIiB2LAExHVF/bn6wQDnoiIyIEY8ERERA7EgCciqiPsz9cPBjwREZEDMeCJiIgciAFPRFQv2J+vKwx4IiIiB2LAExERORADnoiIyIEY8EREdYEX4OsNA56IiMiBGPBEREQOxIAnInI+9ufr0JxqD4CIiJxoAMeAhzuAEbz/Flo34+EO09XsaQDv9Go/rnkOa1zpLxq5c73HKmHAExFR6R3rBTaXbLXqGMA7vXquD+CdtwD15w5s/03Kisf+iFiHvdIdbNETETke+/PFOXccrT69au/Awx04dzzLaqPHEQMett/HFFbwRERUUiN4/y2MAujFOy48/QwA4Bre/yNGAQCtPjy9MWO159BqukP3ZsR6U/cAADj2R7T6cC4CAA//Bm6ktNCNx0q5TGCsznMcNDaC1o3JF1pdQAQxwJ262rEIWn2pL9pDWQM+smfznggAd/f+/d053nysZ+fOWHfvbl85B0JERBXjwtO/wbE/Apu1a/AAYhE9TUfw/lt4H3h6Y+pq+ZzrhXsznu7QsvnY4uRW5wbw9G/0zwcDeKc3eTn82B/xzgi2b4bbhXMDgL5JbABwwZ0r3XWti7P/nBA7jlHg4Y1ZFlVd+Vr0sZ6de7C7t7e3d78vsnNPJMdKr/XEyjYEIqK6Z5P+fLLX7cLDPoxGUOi//a0+PdE78LRPS1ZtUUey+lf76onsf3gzMIBzI3B3AAPJg8YGUrbK4lpy/0ajIym/xgZsWr6jnAE/FIv5HvYBgNvnc0eOZUn4WM9rkXafPU8MERGVTmYpnJaUBe9hBLGRjEVqX91Yai9GKzB6Da0b4VYLd2hJ7/5xYQPIolT7KY+ytehjsSG3u1392e1uRyQWQ2qWx3pei/heeQWvRdI+xz3wwAPlGhUREVVDZujOag/WuZLHcnfg2ADQYa0/n2OQrYatLPb5q6VsAT8Ui5k2LdR43+9GT8aizz77LPGzIAhlGBwRUV2wSX8ewOg1IBGEObrfZTGCUWhR7e4AehEDYgNwb7b0IcM47NFr6UvV/nwRH1Yqo2wt+nZ3/njPNfGOiIicxZiOamoWWvjGvjT8nKt0dsHtSk3iaxhNVP8dcAOxXsTUsDeXsavREW0PmhHDnm2pbAHvdrfHYkPqz7HYUGrgxyKRWKxn5+bNmzfv7IkhsmfzTs61IyKymXf+OKvNU9IxgnPqJfMBvB+Be2Oy8M2sjLPvzbCHYwMpezBasxGjERwb0H491gt0JO+Fc6v9+Q5L0+LUXRkPusY4W/6a3QO+fLfJtbvdkZ6emK/bHYtEYr5u431w7u79vd3qj7xNjoioNNLy2P+/1ezPuztwLIJ3BrT74N0+xN7COXWR4b645Gom98HDbA/pOrB9M97pxTsAgFYfthtSWZ1Ln79813f1tA/v6wdNu2le/VzSatcL8ACEeDxetp1n3AefJc3zBLwglHWERES1J1dhnfb81NvPfxH+6U+yLrJ+oOI2LDHzp9lTDnaPTwY8EdUti0Gei3GGnbqrQtOaAV/T+KhaIiK7SEv02YRr2vx5dVeJ/dsito0Sj63NZk2ZHvNuflCTp9jWCLvXx6zgicjZjKFewtw1v0HOYtLbpYKnorCCJyKqtDKFunWJg5q07meX7if9H+/DmkPhpUXvwT4uhk6+HBzXfhFX743es9LCouqze33MCp6InKGSoV7o822yxjzLdwB6hK8MPrQ30ALl65e9gxexdFd8zUOmi2yBFTwRUblUvVK3KHGF3s6DrI7xk/I4pDV7Ay0AIN6zN4qXvYMnZDwkmSyq7ph1DHgiolKqeqgX/Xja7b8pYcYbW/Tqz7twbp8MAJDWHAq3HPaelD3GHv63+4RzF9VqOLvxw96TJ6Q1G+RzsgIgpSV+0v+xLK5eGRw8CTwUfmyXpO3wJIxrjhd+0Jau6GNdxhfElpXAxf5x80WWz1M5MeCJiGar6qFeKmrGQ38Xwsfb4o8dKsme5XNy8KFDYbWVfe7l0EO7pBY5eOUklmoNbfnKSbRIXXmi8WLwnCytORRdqmbzy/6WRFpfDF7ZEH1sl6j+9u0+4dxJKfkJ42Xh5q74moeKOmjqG7lyEnjIk20Tk0VVwYAnIiqGY0I9TdoNdaUirt6ltbKXbhAHZWV8ZWDZymCyoX1S/hbi6ofE/PvZqyX60l3R1S97Bw8rS7vUrcRlic0vhgZPJtfEQ+E1Dwnn5ND43q6iDpr07T7/txBXS1ma8CaLqoQBT0Rklf1DvVRfH6eW8qUq3wF4WvTp5S0rPQAA8R5JGtwnfwtpKfDtCRkrg0vzT0FP7kdtiY+fODzeJbakLho/KY+nrImWdhEnlXEEijqoRu35L92VZaq8yaLqYcATEZmxf6iXybPrtm1HyQI+m4ekpfBfOYmlD1lula8Ui2uA658qijooAC3Cs98IZ7KoqhjwRETp6jbUK0xa9hDOnZAB+VtIa7oKaJUXavxiP+Ap9qDqLXBZI9xkUdUx4ImIAEeEeqn68yjp9DozSzdI2Cefg4yHrD0S56L87cWAHqU5S/CWh6QWWR6/CCSa9kMKVkotxRxUjXAp20N7TBbZAQOeiOqafR/PXhcekpbC/+1JLN1lcW6aMrgvtHRvoEWb1JajBF8ZWP1QMDnH/qT/3Eks3aXfC1fIQccPbxu8aJivZ22RPTDgiajuOKBYz1TC8r2SpGUP4duT0jKrT3+TVm+QT24Lqj+blM5Ld8XX7BPObRMAAOLqvXFDC936QZVvTygABl8WBo0vrww+tLcr96Kcd9VXlt0fBMtH1RJRqTi7WC9twFeoRV+QzMfUkClW8ETkZI4s1svNjulOhWPAE5EDObtYz1Sj/fl044e9J7XH0GZYGVyzoQoHtU2/vQh2b4CzRU9E1tVbrifU3vx5Kj9W8ERU29iEd0j5TqXGgCeimlS3xTqRRQx4IqoZLNbLjf15J2HAE5HdsVg3wf485cKAJyI7YrFONEsMeCKyERbrBbH1w21OHwc2Yj0A4L0P8NdRAHjmKfy8tWSHKLkDh3DZi0Di6bdDePF4ygrrN2JHe8WHVSQGPBFVH3PdcYZwYAg79J//Omr3aAdw+jhOAysMr1y6AbQi8FTKi7WDAU9E1cEmfH1Zbu90Vz+RpLk8Ciys0XQHA56IKozFeqnYd3rdJQWhKAAcMDT8DxwC2vHnjaZbDWFHOw5EtVeSRf8QXlTwzEL8dSi5k9PHk5Gsrqked8c27bqAts4NSyX4ewpWeLE8isuGFy/fwPoyfkl9uTHgiajsWKzbXykvwK8Q8eeFePG4nrVDhp/NjeLAqLbm6eM48AGWJ7YaxWnD5wM13ZP7/wCXNmLHSqyI4vQQ1uuXyU8PYYU3f7pfUvBXICDivWjq66O4rCQvw9v/KkMqBjwRlQuLdSrYM09pib5+I575AO8pyRp6feL7Xkfx3lByTbRjRzsOKLj0FNa3alU+AAzhNPDMSuQxir9E8UxmlT+E08CKdvz5Ke2FA4fwXi1lPAOeiEqJxXpl2Lc/P0vGS/XLF+LSEC6JWvQmFl26iEtICdrlrcAQLgM/F/HX4zgNrAdODwGtWJcvj987AXizxXY7/rwt5YX17Tig4Oe5rzLYDAOeiEqAxTqVQiuWF7XdioX6T+1atK9vt9SfTzTnrVjeCkS1Tw+1gAFPREVisV4tJS/fa/4JtZduJH9e365NvjsN7MiX3GeGgFGEjO89ihejuWcMFPsRpBoY8ERUGBbrVDajODOKFXq3PFcJvmIlVkRxeRTQ11R/VqN3fTtwHAegVfPmfv4Ufm741figm8w5+bV21xwDnogsYa5TwYwZbNFfT2DdU1ihP3Ymewneip+3G+bYD+HAENZv1KM30aWf3cXyFSLWZ8zJf+Yp023shQFPRDmxCW9DNTK9rh3rgb9+gNNeBBbmXz3hmfZkw9zkzrr1G7HjePI++7Qb2NQL8Otn/UzZHdtw4BBeNPxaI1ffVUI8Hq/2GMwIgt1HSOQ8LNbtzLEX4DNb4jQ7rOCJCGCxXiNqpHwnW2DAE9U1Fut1rqLle+IRtlm0lutb2swPWrNfJGMFA56o7rBYp+pYIeLPpvetmS8t00GdiwFPVC9YrNc6x159r3kToVN9wXHtF3FVZ3RVc/oq40PeUxOBn3VIFRwWA57IyVisE5WZmu7NwQc7Ay1QLvR5L/QJ4x1x0WVYZ8R/KqbAlXMf5cGAJ3IgFuuUF8v30hi/Jo9DEjsDLYBavqPPe+GaDJdWrF8dEJSRqgyNAU/kHMx1B6ux+fPjQ95TMY/YAWVABqAm35Jr3lMxBQAgib7wEn1lQwSm9beVC33eCxPaL0vSyuKsBx2RRJesaEcx7G3E/19D4qrm4IURwBVWW+WZx9WGnTa2CbU6z66lPfqzlOmBYkszMNE/DrRohxBXdUZbhgTFbOzlwIAnqm1swlMRKlO+y8pQ8EFfONG4vuAK/8wnqbGtDMiGlNXzfsT/X8n+tnKhz3sBwQd9gRZ10YD3QnOWy9spJoJKTBJ90SXqnvv8LYm0nghedUV/5tNm3GU/7mKpJRb8dgRLtE8S8rcjaHF35Ur3rO/62xHA5VE3WdIR/1kHAFwtYA+lwoAnqkks1utKjZXvOnFVh9a4XuISL8Swql3tWqu/ylc7pCUToQsj4qpOPYNdYfGaoAyFxl2BlpHQhQlxVaJ0doV/ZukadnJvSzqiqya8F4aUJe2idtzF+nz6XMft7FrSHEw22EfkqxBXLS5gFv7VAf9ViPo7rS4GPFHNYLFOJVGxq++elmaTXwHtArbHWJQ3N4sYUSYA/NCfdZNCDiq2NOPCyOHxdrEldVHu4wZWtUsXBuSrHdIS4Oo1Gc3BJZbHoPb8l3TkazNUCAOeyO5YrFMJ2X1uXcs8T/KXZrHgoCxik7TjuqQlA/5vR7DEVVh/PnG53R7pDgY8kT2xWKeEGu3PF2n8h35Az9oJZQIo5Pp3SY4rLXVBuSYD8lVIYruV/rw6GdBW6Q4GPJGtsFinsrJd+d6yWGqJyeMTSLTBJyYUNEvNWkndb1xkyYR8dSKgt+JzluAmxwWwZLGEAVmBDFdyOn1uarqn3BdgDw3VHgAR4Z0/av/b/hvtf0Qqp5fvzYFVLuVCn1+bZD7iV0awpD3QAsAVWNWsXBgIaU+Imwidili5oTy5ydUB/1VIq7KW4CbHBeCSlkC+OoIli/PPlRsf2nZhwjBfz0ZYwRNVB5vwVGG2K99VSzriIgQlIgAAxFWdcb3LrT005lQkmFwz/0R6aZVL1jcxq6pzHxdql/7qiLQ0/+GUqyMKgAt9wgXjy81mt85Xit2/bZ3fB08OwyY8FaSEFbxNA76EMh9TU99YwROVHYt1Kg7TnWaDAU9UFgx1sg/npPv4UOJhtxmagxYa+KU/qA1a8bnYvQHOFj3VEIY6lRDLd5olVvBEs8JQJ5urgXQ/+9bkwctzfv3bxmXVHomJK0dv/Wl4zp7nst57NnPwV1NXNt3x601CpYdlhgFPVDCGOlGd6Zv609E4OrMvPPvW1FnAfp9OGPBEljDUqZJK1Z+vgfLd/s6+NXmwL/fivimzpdXEgCfKiaFONBszB381dVb7ueHZ/5y7Nrko/tG/3/rbMACgbc4Ty/Pv68rRW3/qa3y2c/rgUXValvDEb+94vA0A0De1+2jDE8tv/60P6JyrdtENqayteeXorT8dFYzDsHJp4Oxbkwf7hCd+e8fSo5MHsyyPf3R0ZtmmOcuO3r6S/01UGAOeKAVDnax6sajK+M/bSj2OnKpbvs8c/NUUnmva0wk1zg/++/QyLUpnDv5q6mzn3D2/NSRxm4VdDt8+eLTh2f+8Y6261b9PLU2k9fDts5137PlP7RL42bcmD/bpHyn6pnb/++SV55qe7WxcdvT2uT6s1TrtM+f6sGxTg3lrfe1zTWufA4Cz2ZZeOTr1N8z59Sbho6MWxl9pDHgihjplsBLexUW1tY8Fc+YCqOkn1PZNn22b82stSoU1ncLfjs5cQeMy4MrR22fR8Kw+W23tc3PP9U1ljc8MwhO/1RJ97XN3fHv51kdH42u1eW3C2k59gtvw9Ed9yTXROffZzycPHp1+/LcNa9vwt89nnu1s0EYI4YnOWUyLG54+eBRP/LZxGWaK30kZMeCpHhkTHQz1umWSteWrsy3sWbsAnzk8y6MSPt4GoKpX3zvn7tGnpOndci1KrwzH0TnH0K5vWNOJs5et7FRY2mb4eTmu9M1c2aR2BZKLrvRNX0lZE8vaBPTNXEHj45sa/vbW9NnnGtYCZz+fQducNVY6B9nFP3rzNjbplwnsiAFP9YJlev3KFeQV7JZbl5xelzk8C5Fvg2jXGK6yd8799abbf9Ka2PFvLwMWLrpn0ZannZ7Lsja9TO9sXPvW1Lk+rO201J83kWjOF7uDCmDAk5Mx1OtO1iy3ZZAXw0Lkx/9c/WgH1PwbTk6su5K8RC0sLS7dZzOY4bjeP2hY04mDn888i+mzaHi2+HiOn+uLY/j2n351O/na0Vu7j6bNJawuBjw5DUO9Xjgxywu+O+7P25BWtaedlmqdkLQ+vCFisaxNwFGtTw5Aq+mtGJ4+N9y4TGuJ5yzBl3U2Ljs6/e1wcuLeleE42rSp8mvvbzj41vRBzKBzNkksPP7bpseTv/JBN0TlwlB3sppqsFdYloZ82mlJnL0Kn66UFNfuFI+robts09wn+pKT6s++detvw9Zm0SP+tzen12hbTeUswdsaH++8nZxj3zd1sA9rn9PvhetsXPvW1Nk+rM3+TDonsRLwsl/wIxwPS3leI6okhroDObEot66g8t3qtfbE2VPPbcVOppbiv5o8CKBtzq//s/GjX03p8Sw8/ts78O+3tP5225wnOm//zVIR3/BE57TeFTdrhq99rgmY1I4O4YnfNhmmwjWs6cTZvoY1OR5L5yBWvsqlmgHPL5shI4a6Q7Aoz8ZiwM9qGl21CvrZy3xMDeVjVsErIa83qH9Fnl9I74RILN+pEhjqtS8roSYAACAASURBVK2+i3LrrKR7CWbIpxX04J+FkxVbwVcKK/g6xJvUaxKL8lnIm+5lvPntxdzX7yvsytFbfzqa45/7tjnPdk4fLEMFb35Qm3/BXT52j08GfJ1gmV5LWJSXmknAV/S+9lk8WodsyFp8pjTrEyReg6fZYKjXAGZ5+eVKd/s8sqbEYtgOvOOu9jAK138OnfojdX/3c7zaalgWQ9OnORZVj5VZ9EpoW1CpRJqT8zHUbYoNdjtxbLQDALZ/CjxS7UEUTk33d57FVgAxNL0HJII8hqZP9VxPW1RVVgK+X1EgBZjuVCSGur2wKLeTtPLd2dFe0/5wFp612Kr+4sbvWvH7s3j1keQiLdHdeMeN7fqi6rIS8B5RREZ/nsgMQ736WJTbnpruaqirHBXto+h8D/36b1sfwTut+iufoqkVfT+HJ7Xv7VmLvjWWdrv1Ebz7qbZz41bbD8KzFr8/C8BQbevNc23NUXS+h58+YrhMYCzBc3jn2ZzjeXcUPzVs+NM7gbN4F/qngeqxEvBiICAJfr/MHj2ZYqhXDYvyWqOG+hRC1f3K9jLSQ7RPDdEYmj7F9kfQ9yy2HwT0cFXTXUvWUXS+h05YyHjg959iq7pzdc+tybT+/T/R9yw8SB53q3647QfR9D0mH8HWVvz+n4C+ybv/BFrxfyw31fvP4fej+J2hRve0Zv+5uqw9yc4vI8ud8LwsTwz1ymJRXsvSKnW1fI/DiekOYBT9wKuJEtmNyWwVcEpzuxV9j6DpU7y7Jn/t61mrJ7obfWvReRb9bi3UPT/S013ffyL733kETZ/iD6P4Pz/C7w1F9rsxeNYmtzKj9wOSwx5Ff7Zi/X9HgWonvZWAl8Kcx0463qReISzKHcGx7fe83NgKbD+o98mziuFd4HfG6fSt8ADvxrA13xz7n6ZVzKP4f0e10jm5KKN5ru6/fxSvrsHWs/qBModh+r7UTyp/eA9N/9SuMtgWv2yG8mOZXl7McmexEuoFf2tcDXrnWfzhPWw/qP269ZHst8b9/j38PvWVn1rYeZFt8Nbkzre6sf2fgLvg/rzq1bX4/afap4qsGf/TapfvsB7wiTvhpXA80O/1ylI0GhDLOTKqLoZ66bHB7lwFVer1kO6qV3+OVwEA736K7Z/iD9lmsVX0rvFR/K/+AWLrj4BP8a7aMHik8EJcbwaoffh+Q0O+f7R0A54dSwEv+wV/fzAaD4QEPwAxcCgoe71+Dy/BOwxDvWRYlDudMdFRb+33wm19BFsPpqQgoLXx01+05t0YXtXn4uUswVuxtRXvGuNWvV6u38+2FXj3U7xr5ak7mRPvDZMM0o7yv99rO686S5PsZBlSOCBC1l8RAwEp6JdlSEz4WsdQnxUW5XWjVIleL+V72o1n6nVuPYP/V4/DV9ei01DZv/sptscs1fT9Z/EHt/Zgme25S3C1kZ6YY7/9U8Cd3PlWN7bHrIVxK151Y7thKp/xtnj1KMbx/O7nefdYCbwGX48Y6gVjkNelkk+Rq5d0B+DG5CNoMlxfT8T2Vje2n9VnqK1BH9BpWM1sUp7B1rV4V98q19X95DA+RRMAwLMWk4Z78Lb+CIhh648svaGtj+CdT9FpmFLQZ7hHoG9t8l3Y51G1lp70roTUi+6ekPa1clrPvgJX4fks+lJhqFvCIK9v5W6811zAC/8Vif/MV+1RpMrsllMOlip4MRCNe/yCEAS02+HFiqQ7zRJDPScGOQGo7KX0mkt3qnWWW/S8Gb5GMNRTMMjJIC3Owclx9pT6jNs0vyvTM97ND2qbrntB7N4AZ4s+Lz55RsOJ65TBPnPda7F8n9z9q/9r0zbbtejJMpMKXvYbrrjLWVbgo2qrpq7LdBbllJt9Et2oRtO9jHu/7N+L8MvLy3iE2Rj6yrvrS/Ub1kT/v0X9C7IuwoZ1cdu+BZVJwCea8uzO20LdhTqDnPJhy702yXvPyFhX7VHkMPSVd9eXnpefjm4AcNnf9Xcv9Iwf+sq760v4/y3uXwBc9nedEfbaO+N5m5yt1UWoM8jJMnsW6OZqtHxv2vOf5S3ibUoOf6m0//jQBvW35QH/Am/4K9m/TgKUE5cVLA9rBf3y8MvLhb2XZSy3byPbYsDrN8oFRO2ptR6258vFsaHOIKcCsUCvCjXdS7IrY0O7/cfRffeJGAvt+ntwCMAZoWtBcN+/BdpzbTwW2vV3ecM66cSZ4JBxDwAg730/1P5jT/hLGZBefjqsVdtn5MxjrTQW2Zf9XWf607ruqaSXn3ZOx9rio2q9QU84rt0XJwaiUXi9gp8ZXzKOCnUGORWrFgt0czVXvhvTfZYz7FIa2mOhXX/37kJ0332BfU979r7vh6XmthI+o2xYF9+3XM1m7975ia2U8GVp39Nh7fPBZX/XGVm/KC7vfd/bNRY+vK5rw4Jg2FBkn7gsY0FwQ850z3wL28Jjor9T3VzcsFwMfxkKj0lqi37vZWxYZ+sQtP6oWuPb4KNqS8AJoc6J6zQLji/QazrdZ03tdeu18oLAvnVK15nQifvCGwrZS/uPo1qiLw/v+7F311ehoeVa0d++vEuv/pXwV3JyTUgvr5O6zoTCY9ENy8Xwl/IJSBsAQD5+Ge0/7srZMzDS+wHJtwC03xc9PN/f9XchDACi9tnFxngNvqJqNdRZlFMpOK9Ad7ziI/+yfAKiv83wPLT5YjuCxy9jQyGz0lbOT+6hfb4HY/KJsUD7gtRFY4dPjGHlfWnHkoduwn9fYMOXfu2gmUMysTx8+GkASvjv3q7L2qWEE2eEvZell5+Ob4DakxBOJK8a2JGVgJcCQdHr98vJjrzs98tiMMryPa8au0mdQU4lVc+JXt/lu0oJa8Vu0srC9iC2zy/qyAs8+oGkjcuhToUrtD+vDsB/nxQ+I58YC7QjFL6MDev0DsSCwK9/LO/6suCeRCUV9KhaIfkKH1WbWw2U6QxyKgPHt9wdrAzpjsybyCtnrP+i/mFiw3IJZ+QTwPHL2LAu95y+XPRmAKAMQdxg+MDRPt8D9A+NocAPDZXDR9WWhk1DnUFO5VTPBbq5mivfS2+5tAH+oZvArMJPOTGs+BdoxWTOEnxB14YFwRM3FUAvO28awni5tAH+42dwAlL+aX2ZE+9vKkOQ/MuBMT3pUwbgabdruoPX4GfDRqHOIKfyY4FuUc2le3nKd8n/Y3HXGW9YL+JPnBH2Xk7W9BeNeZzb0Jfbwm1Rw6z1rCW42khPzLGX956RkzesJ7v0FnrpCwL+5cG9yal82vS9DYlFZ/wn1LvyxkK7zuiL7IqPqi1M9UOdE9epUligO576KBuTdJ9N8LffF90H767kZXj9hnU1cb9MTl4zseHH0gl9D2aPhl0ePrzO33VG6FIP/ePoYcPctw3LJVyWN1h7Is2GdfGXzwi73g8mft23PGXR3ve1q9Xt9p5hB37ZjBXVCXUW5VRZLNBLoobK97yFe5W/DD6zW04FslrBo86q9cqFOoOcqoQFej0rT1ue7IXX4JPKG+oMcqo2JnpZ3X7+CwD2L9/ztuUrJ/HY2ixEf5keEmd+0GpN+y8Pswa4EvJ6g0rubStxDb6sLfqy3KTOICd7YMu9MtRcRy1EOwos3KvcoqdZsxKf1WzRlzzgS1amM8jJZligV1itlOyqIgp34b8id3zjm3y2bGOqAcqNN703RrRf5vqiy3zJWXVTEe+ViPa18Qufjy50VWF85qxcg6/caMpktqHOietkPyzQq6W2SnZVEVfcme56umvhPRXxXol4L46EV26RoKW7Z/Er0XkABvwX3/TCfhnv2GvwxYQ6i3KyMRbo1VWLua7ifLoijRz+YQTztmixPdcXXQbvlYj8A6R5kG9ElLm+Q/PUNTsCC13eGxF54RZ7FcQmAa8+gl5/Pq3f8KBafQW7lfdWQ51BTrbHAt0+aqsVb1T1+XSGJjbQEV65RcJI6Mqb8rwt0g9HglMAMvre2ZltJV97LTTX57kRkQFp8SthraQ+oj29RVtzJHTlzeCcLfHFHfo+B/wXj/SbtdZdgWWvBIwvzHV5gP6pEcxzSYtfsfUd5iqzCl4MROMBzKJXH9mzeU8EgLt7//5ud2FLrTILdQY51Q4W6HZTiyW7mugJs4n22ffnpyLeKxEsfD6+0AVAvvaa/0okuqwDgHLjiDJvS3xZh5qy3msuQ+7mZLKVcmNAWvZKeK7624D/4hF5npbl8rXX1L561zxX8MYXMjq0JPvhCxmu4LxCmuo/fCED0tyMTaYi226MiAs326rgBSx+m1xRj6GP9ezcg929vT7Eenbu3OPu3e2zvDSP9FBPBPmLqesxyMnGmOj2VBO5nhbkCXZqxatN7ER9rJe8I4cBzPVFtWzuCC/zea9EQlMdgbn59miy1dyOLn1z5UZETq4JafEW6eKR0I2R6LwO8YbWYAcgTwxgrq8r70GTBvzXBjDXF5iX+qLaKjC8Uxuxeg0+ccucFI4H+r1eWcr3dXJDsZjvYR8AuH0+d8+xCHw+q0uzeOeP2H5e+xdwu3HBiwxyqgFsudufDVvxVQnypoMAcOvuCDCLe+RG+m8Dc1zZU8L4+lyXBxH5h5FAZmVsfavkopHDP4xgjrHnv1icC3nqGhb6AvMi/okBzOsABuQfIC7ssPygWTXIO8LpVxM6witfgTod7+JAcNnz+T+mVJKlgJf9gr8/GI0HQoIfgBg4FJS9Xr/HrGsfiw253dpDht3udkRiMfjclpY+8MADKbt68RCA7cDtqX/Nfiz9EzeRbU0hlPbK7YP8e2svF1vvAYBdk9UeiNEfs79czkEOqP/32QMXjkyu2tc0iz2JcxcX9Hpxe8vH5dFzTmruwLUvZHRIhfXnB/wXj8imcwXEhT7pxhFLH1MqyUrAy7IMKRwQkfjGGTEQkIJ+WYaUM+GHYjHkvrBuuvSzzz5L/CwIQqJAd+yMfyKygVXVHkBC5C+C74X4gUMpM5t3bCvsUqnwyeuY2BbfVHDgXHxNWPlKHMCF2X6MUKauAVUPPLWXAACY9xMJR+QfgIkBzNtiqdpW5wnmnwmo9wmq/34Nyhaa7W6zeXPmS4mI6pjvhXjkL8KOF1IS3Zj3hYZ9Fbg8c4DbIwqytMGVHwaUhXpT3XIxbW0rV9c8V/AH43GvKVMQ56nVf4c0D/6JI/gBkoVpfVq6z9uSMQcwc07+NWUK0kIL+6ykBgvrSIGgKIdChofWyn6/LAYDZlMG3e72WEx73m8sNpQW6eZLiYjqm5rxxld2bIsn/nfgkGD8X66dxDe5hKMjuZbmsvKV+MXXtH12vZ9z5/lIC33iVGSb/hg45cabQuLWteTrA/5rA5jns1hMW9lKXOiTpiLea9qVBvnaERkdgcRcv+YO/DAgo0Oal2XbVCOh7yKKYb6egSuwsAM/REJT0N9dRE6ff2cDlip4MRCNe/yCEAS0G+LFYL45dmh3uyM9PTFftzsWicR83b4ClhIR1Ts1430vZCnW0yr4rM38+KMvCZ+8DsxqDvLhp4tvFWhPhnlTuKH+rt8HD2CeT/pBfz1LfZyD1a06wiu3+C8eES7qw1hp6K7P+4mEAXneT/Lf0jY1IE8BiHgvRowvaw+2m7clvviIcOW1IPTxLLNZ+Y4yfx98xp3usZ6dO2Pd2i1xlu6Dt8P3wRMRVUuujDeRyPsX2/bHH31JODpS3JX425f/v9lNsssms7ldvq3qXlknrvl29/amvODu3t+beykREaUyqeNzUSv4RMyrjfoiMp5qXcH3wasstOiJiKgEish4ADu2xV/85PWiD7rylfisZ9EXYiR05c3gVPZlYrme8W5+UPt9eUyhLDXAlZDXG/QYHlar3RhfgYxni56ICEX16oVPXo8/+pL2c+FFfLm69FQpVmbRy6GgIoWND7WRwmFJCYbk3NsQEVEJZc6rt7vPp65+DgAYnv5m16T2s8lqtjT14a0LuyYv7Jq8sOvW98NWF9mElYAnIqLqKzTj9Yn0QFG3zK2c1RemzVx9e6Z0q1XH1Ie3vvlAWLKvadW+plW/EL7fkwxyk0X2Yfk+eL/fUK9buA+eiIhKbTZ1fHG3xdexme8/iM99ak6L+tv9c+5si3//4Uy+RTZi9T74KLxewzfCc5IdEVFVJDK+0EvylTM8/c2e21MA3p4c/3DO3b8AAFyZ/mbXbe3b3J+64+4nhfTVdjfmfNzN8PQ3e6ZbftE4/nbqHgBg5uqu23OfEr7/YAZoWLJvbguAz6cu6I0B47Hu+EXTkvv1fX4+deHt+J2777izLddRG5bknH9gsshGrM6i178bnoiIqkyNdovT7g4cEhIPxqnQLXNtjXfvE67umoIaqMPTAMY/mL5zd9OdbWpa3/oGd9z9ZOpqecS/f/t2yy+a7r5fzeZbV5cltop//3nj3fvmap8PPp+68PZMi7bPmau7bl0YnrvqFw0tbfj+f2aW3K/1rcf/ZwZtc1pypnu6qQ+nvh8W7vxFlra3yaLqst2AiIjIiuLa9QU16ks4hX7uU3O1WrmtcelTwtQHt8cL3sMdWqLfP/fup4TxD6cTd7jNvb9Br/7j3384k1wTDUt+0YDPb38/LLTcL+Dzaf2gMxOfG7cy9fnUhV2T33wQT74FK4tsIG/Ay35BMFx+V0JeQfAan0tPRETVUUNT6+9Ylhzn3GUCEJ8qcFZa+h6Gp8eHMxYNz4wPp6yJtoa5iE8NY+6Tc1owM6HO2P98ehxCy79aO3X3z121r2nVvjtaPr91Yc/0lMVFNmAa8ErIK/j7g1HDHXJiIBoPe4JeY+gTEVGVFJHx1ZhtJ8w1Frht1kpnkz1Y1ybcof3U0Hw/xv9nBlp/vtF6f14dwJ1PNhg/VVhbVE1mAa/e/545mU4Kx8NS6rR6IiKqEpOMjz/60ott+02+ca5SUuv14ZnKFbvD8Vv6jy3/2oDPp8cxM/E5Wp7MPacvF70ZUNii6jEJeFmWIUnZb4WTJAmyzIQnIrKDgm+Rr3gRf+tKcj7g1JV44QV0fPx/knvIWYK3NbS0pRwLwzNTier//sYWzEy8PT2Ohua80/oyn88zPDOlbmiyyE44yY6IyAlsmPEpof7BlPYomM+nvvkgbiygU/I4N+MeruYswYU7n2yY+uCWnr4zV9+ewf1z9BlwDc33Y/zzGdzf2JL3eG2Nd94Pw1Q+dfrenBbzRXZicpucRxQh9ytAlvvdlf5+iJKnfOMiIqIC5fpamh3b4sab5Sqiofl+jH9w68Ln2n3wLU81ju+Z/B4A0JK8L86wmsl98DDZQ4b7567C1IW3J8ffBoC5T92x6snk556Wf224+vlMy79aKm5bftGEtye/2XU78evd9+dfZB9mX+WS8R0zKUtkiV82Q0RkO2kZr37lTK6Ar41vks18TA1ZYPYpRgxEw5LsT78rTvYL3iCCh/gkOyIi+6mhe+eorCzUx2lfBV/Zx9SygiciKoKxjq+BIj7x2NoshDt/0Tj+dhkqePODmj3FtjZYeFQtn1JLRFRrcl2Pt6m2xrv3NZosv/N+s6VlOmit4yx6IiJnYq++zjHgiYgcy5jx6lz6zHX4NbJOxYAnInKymunSU6kx4ImInI+9+jrEgCcicj61V5+rS0+OxIAnInK4+KMvCZ+8btKr52V4R2LAExHVCzbq6woDnoioXvheiIs3wC59nWDAExHVEU6qrx8MeCKiupPZq+dleOdhwBMR1Zcd2+LKQl6Pdz4GPBGR86kT6Y2v8EG2jseAJyKqU8x4Z2PAExHVL2PG8zK8wzDgiYjqjvGRdmrGs5R3HgvfB09ERI6m3jsX+YuAlVerPRYqGVbwREQE8BZ5x2EFT0RUj9Qu/Y5tKaGuXoY/dnEJwx4AoAwd9saua780r492rhOTC6+H+g4HJ9SfV4d9j0kVH14erOCJiOpC5p1yuXB2PQA93UV3V9z3QrxzvThx2hv5WNYWDvojH6PjhbjvhbjvhbBr0J9cZBsMeCIiogzXD49ch+uxaPsiAGheF+1cL2JQHgEAZeiM3Ly6q1lbVWpPLrIRtuiJiOqUSZc+/kI88hdhlo36iTPevtOK9ovaxL4e6jssux6TRj7Wmtvpfe+szLaSB/4Sal7viZ2WAanjhbALanmt1dPamtdDfYeDzY/FO1br+xz0Rz7ud3dp+Z3FokDnCwHjC813eoD+H64DODxyXXTdkxx287qob52lc1JJDHgiIiq9iTPevtNwd8XbFwGQB/7i71sU7bwHgBL7WHE9Fu9craasd+BOQ+7mZLKVEhuUOl8Ia/X0oD/ysezSslwe+Is3cj3se6zLtSgY+1ruWK1dKR/5Wsai4OJc6Z7NyNcyIM1bBAwqE/DMWyQP/MWvVu2WPqZUHFv0RERUcvLQaaV5/SG9PpY6XognIrB5fVTL5tXhzvXiyJnQhIU9mmxl6JYrQ2fk5JqQOh6TMBgaui4uXm3sosvXBo1bWTDoHxhE8/qAC5j4vh+QB/4iL9auwUddg15egyciIhsxPvEmQe3Sz6o/f71/Ami+M3tRa3y9+U4PrsvXrmdd0epWyUXXD49cTz3uIrEZysR1NK8LuCBfGwQADMojSOmx56H2/FeHDWW66O4Ku/Sf29dJNrwGz4AnIqoX1ifSl4LYnL0Bnuv14vaWzyJPYirc4tVqm13tz0tW+/OD/sjHcvP6aOqNcJ55xs0Xic2JTw+2wYAnIqJyUCYs1OVld70/0cl33aPW2fK1QbjWBaz05yfOeNV0N15ib77Tk23dYj+ClA0DnoiormXt0s/WIk8zMPG9km2ZMvJ18nXLxbS1rRZ1uRalHve6MpGI3tWSC/K1j+URSIvzT+vT7gJwPRZPn0Cn7sdYr19Xp93l32clMeCJiKjkpPb14sTpbUNaEa8MHRYS09CSrw/6B6wX05a2EtvXSROnvQNa+soDH8tYHUjM9Vu8GiODMlZLrizbproeGjitGObrpb87wyw/dWZfIP8+K4u3yRERUek1r4t2wtt3WIipv+v3wQNwrZdG9Nddj1m5Rw4FbLU67IM/8rEw8jEANK+P+gz1t+seaWBQdt2T/7GyE1/LEwBOeyOnjS+L6q3zzeuivjv9ief92fM2OSEet/UDhwXB7iMkIqohwievxx99KfP1tCfeCEdH4pvKUJFmPnCmfFvVPbboiYiIHIgteiKiOqLeKZe1iK8m4zezpRPdZfqiNvODmjzFtkbYvQHOFj0RUWlVuUtPlcIKnoiIqHCjIfkDZf22sHFiwHXFK0e1m/RWb4w/3l6VkWl4DZ6IiKhQ8kcfBNMe5HNd8cpRrH8qvmNbfMdGafC48NFQdQanYsATERFQpifeONKQ/8Ahf8ZzaZXBIQXtgfWtAID28OPtGByq5jfQsEVPRERlYexXL/JGJVH7BvePDvmxMYzjWkau3hh/fGFI/iC4yNjTHvIfON6//qmolpeZRkPyB/LqjdLgca2STj1EaJHXczoqA9Ljahd9yH/guJwymNHCD6rvZ5E3Ki0MHThezGmpGFbwRET1pTJfOZPSr34qiKhXVpJPkB08Hlr0VHzHtrjkFQePe0+ja3VrSr07OCSjVVptErQAoJw+Hly0UWuJX496DS1x5fSQKG2L7zCk+2p1zW3hRVHvgeMyWos6aHt4x7a4/knCSFzdLmIodHoUADDk/2gIq9vLM//fGgY8ERFpStell09HlUXeQ1op3BqQNkrXo6FEWzuxaNFKaRGU6zfUdJT1FeTBISxq78p7n9oib1Srv9vDklccVEKJ6+KGzZXTipxcE9LjGyUMhU6PFnnQnIMRozs2ek5/IBw4JBw43r/+KU6yIyIihxmSByGuXmkocxeKiyAP6hX2ooX6olaPGqiLxMDqxAqZm+eQ3A+waKEHo/LgaMai0cODoylrYqG4CMr1G0UeNJfB48KB43h8m9q0kAY/EIxNi8pjwBMRUVLpinhFq2XV/2XMOc8grdZnpVnrzwMQFy0samj6p4qiDprDaOj0EFZv1O+aaw087hWNTYvK4yQ7IiIqBzHPbLUMq9slHJcHgcEhrN4YKONz5Eb7rwOLSnvQG8p1iKsNHzgWLfQA/ddHgaI/NMwOK3giIkpRgiK+XVoN5fqNIraSB4/Lg5BWW7p6rQxeNEzcy1WCt3atbsX1G4Zu+Q3leqL6L/igOeht/1SeRVVKdzDgiYioDKT16vR4/Yr44HHhwKHkr7m20hrm7ZLF7427Ht2WMmtdzFqCi+tF4xx7+aPjcvKG9cIPml1rYH07BvV7/zAako/Li7yBKn4BHlv0RER1pwJfObNIjErwyh8I+tep6/ejm1rdLmFItn532WqvNKgfwuzRsO3hHRv9B44LB9SxeaM7DPe5FXrQnIPZGH/8uPCR3vww3JdfHXb/Khd+2QwRUTnkDXi7f9lM5mNqKBVb9ERERA7EFj0REWXx5xtLhKNXq1nEj4bknDfXies3luchceYHLfC+gOqyewOcLXoionLI26I/cEh4cWFVA55mhxU8ERFRYeS+Ef/N5ugjzSKA4TGhbzJzHanTFW6r+MgM7F4fs4InIiqTmp9nVy1qos/XAz7dpP/omNy2IN7ZVPGRpeAkOyIiIusm/dnq9QTl/ISMpnC10x0MeCIiKoubE96jI4L+P/9wcoly/nride/5af3lSf/R66HzY8LREeHomJxtl4Y9Xw8NJ/efZyfDY+mHuznhTR0ShseEo9dDN/O/LeX8hDy/OZir935zYttX0+J9zdX8mlgdA56IiLIrvj9/c8L76YSn0xXf5IpvcsU7m+Q+LVCV89e9XyH4iCu+yRV/pBlfXTfE83TwcmN0kyu+aUG+gJwO9un772xSvrpuSOvUnQyPCX2TkjaSBZ6vrgt9k5jfJM2HfDlZiMuXJzG/qWt+/ve17SsEO5s9OZbLX00oaArc25hvR5XAgCciolK7Oa2gSUqUuW0L4pvUGWeToa+mxfsWBtQond8c7WxSvppI1Ovi8iaLz34T2aR+OQAAEE9JREFU71ukTWFrWxC9r1H+aiLxrHnDTqZDX00m11Q758MToZuNXcsbMXxLP+6kPGzl0NOhvgkkBp/FpDwMm5TvYMATEVHptd0hqXPN0l4fviWjUWozFLjzG0VMynr97ZlvtfY1rinOn4Obk4dvZiy6OSnfTN3n/EYR08pNiPc2S4njZo4qG+X8jSCaD5lU59b2UzG8TY6IiEquKbxpTujT6/6jWhvccM/YdPDTkWDq2rk63rk1innb6VnNb9SP1SS1jfkvT6KtSb48ifnNefrzanM++7R5jaX9VBADnoioTpX5K2caA4+4AgDUu8b7roceWRQAgMbgI4tyd7nL7OZ0v/55QlrehL5bMiAPQ+o0S24AyvCkgmkl5aPJhPfohOGDi9qft3qJoQLYoiciovKSOhdImFZuqq37acXCZPV8puXhxNS83FPk5jdJ89F/M7kmbk4rieq/7Q4Jk3LfLdk4XSAH8d5F2oTBTS5tPsH85ugmw6Ns1I8Oli8xVAADnoiISi3trrPhW7IWq02B+xrlvuQiuW/E4v1paZSvbmhbDY/5hyHdl7UEbwzcZ5xjP+nvm0Rbs94/aJLaIA9Pou2OEkyLM350sAe26ImIqNTaFsQ7x4RkQzvZlhfvXRTFdW9yUVM4/01xWUj3Ncn6TsweCtu2IN4JoW9E/ZJ28b5FccMsOWl5E4YnpeUleCiNcvM2MMdjp4C3+4Ng+ahaIqLyKec1+LLRb7Kv7pPe7Y8teiIiIgdii56IqH6VeSJ9sW5OeD9NPrgmVWOwTI95Nz9oFWf+F8vuDXC26ImIysqOAU+lwBY9ERGRAzHgiYiIHIgBT0RE5EAMeCIiIgdiwBMRETkQA56IiMiBGPBERHVNvRW+2qOg0mPAExERORADnoiIyIEY8ERERA7EgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4IiIiB2LAExHVOz7rxpEY8ERERA7EgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4IiIiB2LAExERORADnoiIyIEY8ERExGfdOFBZAz6yZ/PmzZs3b97ZE8u5Tqxn5+Y9kXKOgoiIqP6UL+BjPTv3YHdvb2/vfl9kZ44Mj/W8ZhL+REREVJzyBfxQLOZ72AcAbp/PHTmWJeFjPa9F2n3usg2BiIioXs0p145jsSG3u1392e1uRyQWQ2qWx3pei/heeQWvRdJq+AceeKBcoyIiIqoPZQv4oVgMZrW5Gu/73ejJWPTZZ58lfhYEoQyDIyIicrhSBnxkjz5dzre7t9ttKd7BK/BERESlV8qA9+3u7TX82h47NgS4AcRiQ2h/2BD4sUgkFovt3KxX73s27+zev7+bV+OJiIhKo2wterS73ZGenpiv2x2LRGK+bp9hmbt7f2+3+mOsZ+fOWHfvbl/WnRAREVExyjeL3t29f3d7z87NmzfvjPj2qwHOm96JiIgqQojH49UegxlBsPsIiYgcQ/jk9fijL1V7FFQafFQtERGRAzHgiYiIHIgBT0RE5EAMeCIiIgdiwBMRETkQA56IiMiBGPBEREQOxIAnIiJN/NGXhE9er/YoqDQY8ERERA7EgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4IiIiB2LAExFREu+UcwwGPBERkQMx4ImIiByIAU9ERORADHgiIiIHYsATERE5EAOeiIjIgRjwRESUgnfKOQMDnoiIyIEY8ERERA7EgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4IiIiB2LAExERORADnoiIyIEY8ERERA7EgCcionR8Wq0DMOCJiIgciAFPRETkQAx4IiIiB2LAExERORADnoiIyIEY8ERERA7EgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4IiIqufP+T173X632KEpi/JT3kw/ltBevfih88rrwyevCJz2h8aoMKz8GPBERZcHH0QMAzvs/+28l7bWrHwr93wUfeCn+6Etxz13Bz2ya8Qx4IiKibK5+KGTW7vgu9M/z4qonAy0AgCVPhpd8F/zn+YoPLr851R4AERE51/gp72f/7fE8iX4tKcVV3VHXP7x6WSx5XgovybuH85LnXrlf20Rc1R390V0AgPP+T06Jq+4KXjgP3Bt+9EkJanmtxa22pjYGw4G0ErxbC+msrn4o9J8XV3VHm08J/cbx/EMeh0cbAAB4Wu7ChX/IuFeyelIqhBU8ERGVl9x/SnzgpfijL0VX3aVc6BE++y7wqPar3J9ZImf6Ltj/3x6P2hK/V7nQY7i6/13w6l3RR1+KG9JdUtd89EnPhR6h/zxa/kVqgXw1WWTLV8+j5d4uk3QHsOTJ+KMvRQ1BbnCX2Jz8RWzOuk71MeCJiCi7+KMvlWQ/iYa26LpXBMRVD6rFrui6V8R52cJcPHFVt1Z/L3kyuuou+Z+nEtfFxSX/Imo/qs1zfU3cG/bci6unQuN3dS25C1f/oX+SOC9fNW5VoInv0i/JA8B3/fa7DM+AJyKi8vKk1riewkte4yZi810YP394PGOR2jw37rz5LhHfKRMQf/SglPgkcfUfMu6SXDYtu0uIAU9ERDaX0hIvQMsij/bTvdISrUtvqT9vovmubKX/XZ6id1g2DHgiInKo8euJ6XHSkntx9R8yzstXIf3owSL785rvlInkL8rEd7PaWdkw4ImIyOa+k0eSIZqzBG/5F6kF/ca4nfhOSVT/S/5Fwnm5/x8y7pXM5+2byzhK//h3WPIvdptCDwY8ERHZn3LhQ+1hMlc/9Ocswe8K/Mg4x/68v/88ljyo3wund+lnG8bqUYzjuSv4o3tntcvy4H3wRERkd9Kqe+XPXg+qP5vcOr/kybgHQv/rAgBAXNUdN9znJi25F1fPS0tmHcZLnoyu6vFq47krz/301SPE4/Fqj8GMINh9hEREVEaZj6kha9iiJyIiciC26ImIqKrGT3kzv9BFc1fQU57L2+YHtWvXvSB2b4CzRU9ERFQEtuiJiIgciAFPRETkQAx4IiIiB2LAExERORADnoiIyIEY8ERERA7EgCciInKiuL2tX7++2mfIpnhmcuGZyYVnJheemVx4ZnKx1ZnJFaA18CS7OB90k80DDzzAM5MVz0wuPDO58MzkwjOTS02cGbboiYiIHIgBT0RE5EB80jsREZEDsYInIiJyIAY8ERGRAzHgiYiIHIgBT0RE5EBVD/jIns2bN2/evHlnT8za0ljPzs1JeyIVHGtlFXxmdLGenU4+L8WcGf01R/+FQTFnxvCfk6NPTbH/NTn+P6Zizoz5Jg5T439zKvE4upz++c5Lz/zHsdSf8i099h8ZKzpQMWcmuewZB5+iws+MYb1smzhGEX9njv3HMy+988/Ecv1npyn2v6Zj//HMM47+j6mYM2O+icPU/N+c6lbwQ7GY72EfALh9PnfkWCT/0lhsyO1ur/hIK62IMwMAiPW8Fmn3uSs51Aor/My4u/f37vYh1yaOUfiZiRyL+Lq71b8t7u5uXyw2VOExV0Yx/zVF9mzevGeoe3e3k/9jKubMmG/iMDX/N6eqAW8Ma7e7HUOxWN6lQ7FYsqtogw5IeRRzZqDGu+8VW/zFKpciz4y+PBLR/5N0nCLOjG+3/skHQORYxKEfnYv6O+Pb3dvbu7/bkSckoYgzk+8/MUep/b85VQ14878bWZfGYkNwd+/v7e3t7e3d7+5x6FWgIs5MXcR7kWcG0C427+xBd7cz8734MwMAsZ6de4a6HfqXZ1ZnxtGKODN1dbpq/29OVb9spt1t9u9J1qXu7v293Ylf3O2xY0OA8/5VKuLMqPG+3w3Y/2/dLBRxZlTa35zIns07e/bvd2CSFX1mENmzec9QtyNPCoDZnBmnK+LMOP10RfbojWHf7t7umv+bU9UK3u1uT1z1i8WG0k6Y+VJnK/zMxCIR/drFzp6YmmNOTPrZ/p3xPezUK83FnZlYz87Ne7C717HpDv47k1sRZ8bpp8u3u1ez2+eAvznVnWTX7nZHenpiyH5xNNvSlOCKxYacekG14DOTuG7R27u/2w2fY//JnuXfGedeaS7izMR6du7saTdeiHemws9MvSjizNTV6ar5vzlV/7IZvSPi1luEsZ6dO2Pd2r85GUu1f5TUf67dDm4rFnFmdCnrORH/zuRS2JkxnBaNz7FhX+x/TY7/j6mYM2Pyj4/z1PbfnKoHPBEREZVe1Z9kR0RERKXHgCciInIgBjwREZEDMeCJiIgciAFPRETkQAx4oryUkFfI4A0pJT+Ivk9Flku788orwVtQQl7BL6eemdnuz8J+ZL8g+OU8a5T6T5+oDBjwRJaIwajxexijQQS95jFQLCXk9Yb6y7HniinFW1BC24KecFgqzYhKSgqHPcFtjHiyOwY8UTHEQECCLJcl4QmAHAoiGLBjvAOAFAgiGOKfPtkbA55o9ow9fL2sVxvCcnJJst5PbfmndHv7Q15vUIES9ArekJLWLdZ71mlH9oZC/iz7ynoUJeQV/CFtiV82Wy1l8N6QYlwzbVApLyspb8H0/KSOJOVthWRR6hJNz3QxowUOZztXkJOv9uc7HKB+wJNDLOLJ3uJElEc0KKa36MMSACmsL9V+NK4aDYpIdvYNK4Wl5OqG1xNbGo+WsW7iF+P22UZichTDAvPVUgaf9b2YvPfECTM9P+nvJ9sJT/42u9GmrJZ+roxnPM+fVLYxEtkQA54oLy0yUun/1qekgOH3tEBI5nc0mr7v1FxPSQ7D3rPle1FHMa5vcbUcRzF771k/o+Q+PylStyn4TeU6J5beheEDQY7DZR0kkf2wRU9kSUaxpk3/Uvr7DQ1erR/c36/2bkXRk7kjUYSxJRw0bfNKgaCoXupXDsuKJGW7KG04iujxQFH6zY9iXN/aajnei+l7t7JOtvNjYnajBQAYzqB+rpT+/pRT0iWJ+Q8HwCOK6W+WyFYY8ESzlhH+0UCWkl8n+wVB8PenNpRz77tLEmVZNsn3WR2lsMFkG5+F917Y+TEx69Ha+nBEJcaAJ5oV0eOBIh+2XsjJsiwGo4mM61fybKomfMgk3xUlMS9M6e9Xi1SLRyl0MGlDs/DeCz4/JmY3WnWbZMmtV+6Jroe+ir7bPIfrVxR4PAx9si8GPNHsSIGgqCTvipb9+Z+Bkwg8JZTlXvr0wBG7JFEOBk3qd9mv7kUJbTOsZn4Ui4Mxl+u9G99CEecHkiTl6H7PZrQAkBiJeq4CAVE9mn4Kkz/kO1xaZ5/IfhjwRLMkBqLRIILa/VT+/mDUtAMthcOSoq3tlaVoWEqJc+iBk7y7S70qnDvfxWAQfvUqsSecmAae7ygWB1Pceze+hQLPj34KspT9sx0tADEoKd60cwUpHA9L2rX2kBjUz7Pp4ZTDspL1Rj4i2xDi8Xi1x0BEppSQ16sE4tme6qaEvF5ZshCZtUb2CyHRvu/L5I+EyC5YwRPZnXJYtvFD3crE3s+Ks/dz9ohUDHgiG1NCXkHwytIhu1ay5SMGDgX7/eV53P8syX5/f7AO/0io1rBFT0RE5ECs4ImIiByIAU9ERORADHgiIiIHYsATERE5EAOeiIjIgRjwREREDvT/A/W02EY3T8r2AAAAAElFTkSuQmCC" /><!-- --></p>
-<p>If the user wishes to obtain the penalized estimates for a single value of lambda, they can either use <code>mlfitppml</code> as described above (just setting <code>lambdas == x</code>, where <code>x</code> is a number) or use the <code>penhdfeppml</code> function, upon which <code>mlfitppml</code> is built, directly. For instance:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">penhdfeppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambda =</span> <span class="fl">0.005</span>)</span></code></pre></div>
-<p>We can easily check that the penalized coefficient estimates of <code>penhdfeppml</code> and <code>mlfitppml</code> are equal for a lambda value of 0.005 (within a numerical tolerance):</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">as.vector</span>(reg3<span class="sc">$</span>beta[<span class="sc">!</span><span class="fu">is.na</span>(reg3<span class="sc">$</span>beta)]), <span class="fu">as.vector</span>(reg2<span class="sc">$</span>beta_pre[, <span class="dv">5</span>]), <span class="at">tol =</span> <span class="fl">1e-05</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-<p>For more details on <code>penhdfeppml</code>, run <code>?penhdfeppml</code>.</p>
+<h2><span class="header-section-number">4.1</span> Lasso regression</h2>
+<p>The <code>mlfitppml</code> function is a flexible tool for computing
+penalized PPML regressions with HDFE. For instance, if we want to fit a
+PPML regression with a lasso penalty for several values of the penalty
+parameter (lambda) at once, we can run:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.0075</span>, <span class="fl">0.005</span>, <span class="fl">0.0025</span>, <span class="fl">0.001</span>, <span class="fl">0.00075</span>, <span class="fl">0.0005</span>, <span class="fl">0.00025</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>reg2 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<p>The function returns a list that contains two sets of coefficients
+for each value of lambda: the penalized coefficients (in the
+<code>beta_pre</code> element) and the post-penalty or unpenalized
+coefficients (in the <code>beta</code> element; these are calculated by
+estimating a post-penalty regression with just the selected variables).
+We can plot the regularization path of the penalized coefficients as
+follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(reg2<span class="sc">$</span>beta_pre)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(results) <span class="ot">&lt;-</span> lambdas</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>provision <span class="ot">&lt;-</span> <span class="fu">row.names</span>(results)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(results, <span class="at">id.vars =</span> <span class="st">&quot;provision&quot;</span>, <span class="at">variable.name =</span> <span class="st">&quot;lambda&quot;</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">value.name =</span> <span class="st">&quot;coefficient&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>lambda <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(results<span class="sc">$</span>lambda))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(<span class="at">data =</span> results, <span class="at">mapping =</span> ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> coefficient, <span class="at">col =</span> provision)) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">scale_x_reverse</span>(<span class="at">expand =</span> ggplot2<span class="sc">::</span><span class="fu">expansion</span>(<span class="at">add =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.015</span>))) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  directlabels<span class="sc">::</span><span class="fu">geom_dl</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">label =</span> provision), </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method =</span> <span class="fu">list</span>(directlabels<span class="sc">::</span><span class="fu">dl.trans</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="fl">0.5</span>), <span class="st">&quot;last.bumpup&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Penalty parameter (lambda)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Coefficient&quot;</span>, </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">&quot;Figure 1: Regularization path for lasso&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAHgCAIAAAD17khjAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nOzde3BUZb4v/O8iYLYJ9yTcQiAZukFDUBAF7RYd56J2MmKmxPhurVfq5R27i/IdO9YM7qmtdU5NlZ6agZlNWo9FpWc2p/SUzhGZ2hm2pEdnZrud2C0ICCMhA3RjgCTcQrgEE3cgYb1/rNXdq++rO31Zvfr7qamadK/bs1Yi335+63lWC6IogoiIiPRlQq4bQEREROnHgCciItIhBjwREZEOMeCJiIh0iAFPRESkQwx4IiIiHWLAExER6RADnoiISIfyIOB9DrMQnc0VWG52+HLdTiWXzd86dWKdo9lsc2XjxMZzDdNx/X0OmzlwvbT4Cx1nC102c+BvdnznpcmLQ0SalAcBn3d8DnO9Mz278nic9cZkPinkJ9/uHU5PrhsR17ha6LLVKzY2pKVBRESJ5EvAW9vFSK0WADDY3aLotmvj302fy2Y2NqcWBZHn6G23mgDnq5rusKX9+mvqF5o28m9X+pslIsq8fAn4OMKLlr5gPdRsc7gc5kC1PLK86QtfanP5q+X+WqpydwkK5i6bYKx3wtreYo26MLmyPQCDpfWV8F3FbU+q5x7O57KZgzcNzDbF1Y24Soo9u2yx7qPE3qfPYRaMzR7AWS/vJqKpirMSQk5ZXtPlcvj3rGxqGJdN2mtgZxHrqm6hYp+JjuuyCUK9E9LGgYsR/4wi/whji/2bgnRfIeph4i6K0zwiyitROsYa420xxejBK5abWrzBFxHkrUPWjNi3tNQkby+tFmV3IduHam+xtntFURTbrYhocrT3Epyj19tuDT1k3PaM+9zjXUN/4yKvkmLb9igfbKQNY+8zZImpxRve1HZr7FOOe8YRvx0rYLKG7S3B1YvbwvB9RT1u6CWxtqs5o7A/wsi/FPW/qaQXxW8eEeWTfAn42P+OhfyT5w9EKWe97fKm6kMuZLn0jklO7cD+4nzYkMUN8yTOMdqZxmzPuM9dXuqVdxp2GeJfpcgICPlsEn+fYZ9vIhsT3DL08N7AOYYEXvQr749aa+gFCjmvZFoIZdBaYx837M9B1RnFTlTVvyn5Q0joYRIuStA8IsonOijRK7janICp5S27xQAABov9rXjJGY31lcDNX9/uHR6YWt5qtcjvyPtztmVr1JvJZG33Bm7bxm9PGs5d3qvdLYpiqxE+l8vhsEUdU6C4SlHJ4wyt7fKtdDX7jLqf3Ts8gLU9eMp2d7sV8OzYHawbBxcb7BF3NMKYWrytgQvkbrfC/9tMoYWBs4PB3pjguEmeUYLLi8CmCdrs6Xx1i8Ph8vn861oSLFLVPCLKD/kS8JGdoyijlXzHOwFTU4PiH0dDQ1NSKWeqNQZ+9nZ5AE+zUXlH2djsATqPZ+Qfu+A5SoPrTNamYJgnak8azj3A5zALgtForK9vbnZGGzyuvEpRuGzGZo+Uper3GZu1MeRXbQkL05DGGGvjn3LdYmVyGmtNwd9msi1M6rihkjmjuOK0Wfqw4/E4m5vrjUZ5UIYv0SI1zSOiPJEvAV9YDJZWd7vV42w25mDGsxTPMFmtLS3t7e1eb9Rb6/G2D+m8p2Wfmaf9FkZK0GZLq+htbwncUfc4mwNTLuMsIiLd0FXAGxbXhRcTpZJjyPIub3CxtytOT81YG2N0X1amcFla262Ap3l9IOLjtidt5+473glY20V3a6vdbrFYDAbf8U7VrZZq86Gd9/HuM+yWiKttHA8ZCCm+SBeobrFhvC1MVnrOSEWbDRZ7q1sURdHrlaZ2BI8cZ1E6LzgR5Y6uAl4qJnqa18sFR5/LsT7yTqqzLTj9Ke4DaQwNTSY4683B8qXP5TAnP9ktVf6I3+JS0560nruzzX8Mn8sm7UfNfQmpSxnaeVe9z2gHkO4yOOsDU7Xkdofei0hC5AVS1KNTaWGy0n1GMdvssgmCEPhbMRiMi2tNcvU/zqK0X3AiyqF0jNTLrPRNk4uYxyXNdIo5zjz6vC8VA4rTNE0uclh43Pak6dxjjOhXLo0cjR+YLxeNtT3+PoNbpjJNLubUgGi/lMAMtPCrM44WJjhuxK8+uTMKk+RvKulFnCZHpB/66sEDBrvbG/wXyhT+zBlLq9d/59FkbfG6N9XG352lVfQGb1VKo9qz+Yw1gzQU3lmvuHcasz1pOneD/S3Fv/Ema0u7t90aVt5P4Tzi7dNgf0Va6unyhneSLa3ukFMe32+g7hV3e/AitAfvJIyjhclK2xnFb7PB7o71txJnUbovOBHljiCKYq7bkFEum1Df2VKY/0QV8rlHctmEeqe1nQ+LJaICoa8evPSEz+DjOn3SiO7QuVE6VcjnTkREEfQV8PIQocBUcWO9EzC1bCqEPlshnzsREUXQV8DHv7moc4V87kREFE739+CJiIgKkc568ERERAQw4ImIiHSJAU9ERKRDDHgiIiIdYsATERHpkNYDXhCEXDeBiIgo/2g94ImIiCgFDHgiIiIdYsATERHpEAOeiIhIhxjwREREOsSAJyIi0iEGPBERkQ4x4ImIiHSIAU9ERKRDDHgiIiIdYsATERHpEAOeiIhIhxjwREREOsSAJyKiDDh4Zuyg/KO4u3t0w9HRDUfHdo/ktE0J3HQeHf3vA2LkgnMDYxvO3Mx+g8aHAU9ERGl3beyNwcDPN38/IjxRM3H7bUUNxblsVHwHz9zcE3XBtbF/7o+S+po3MdcNICKiAjBPw9EOhH4iUTh4ZjTq+/mAAU9ERGl1bkDu8r5xdDTw5htHRzF1wvZ5MevG5wbG/nlQ+PFU8Q25uyw8UePv8V8b23BReKL45u8HEdiJInrlNc8NjP1zP358W9EK/z4Pnhl9Y2TC/6iZMCdBk8XdF8WqigmV/Tf7FO8ePDP6xqDwRE3RvIHRN5K6BJrAgCciouhGNxyduP22pDebU1a0/ZaxDX3+rL2m+Dm+kZtv9As/vm3iCilcu8fmBbYaufn51KLttwnSKyl6g/vvHu2rnGidLFT139x3DSumSGvd3DeIqgohUbrj3MDN32PC/yjDrv6Q91fMm7h9HgAcjLqZ1vEePBERaYXwRI2c6CvmFT1RLLYFh7wJqybL6Y6Rm22DwTUxpejHU7Hn4s1zxcKqYuy55h8Nd03co9wqlpGb2/rxxLyEvfy8w4AnIiLNUNyqF+YVo2dQPBex6NzXYk/oTf25xQJGxLMQGsoFDIpSh/vgNRHFwsoE9/7F3WduomKClkf/pYoBT0REGlEszE1puzm3+H+aItwLcd81yPX5qQnq81JxfmNZol5+XuI9eCIiiiLFG/A5ce564McJ90y9+ca1m1aIeyD8OEFyiwcGRYyI/3xUMce9f2xDv6BqxIDWMeCJiEgjRsQDI/BXy2MOkZszWajqF8+MYIW/rn52RETxBKn3v2KKgD7RCRFTJyQKaaGhZmJD8OVN59GbfRVFP9dJh54leiIiyowzST+3Tvz9mZvSTfeDZ27ugdAYNWuLJzROFX/f7X9S3rWxNwZxb7l/lNwU4V6IewZx75QCTzj24ImIKO2mCPfi5u+7Rz+vKPr5LYlX9xOemCr+szx7Pl6dfMW8iT/GqH+evfBEzUTFKLkJ90y9uWdQuGdKqo3XCUEUNf0APkHQeguJiHQp2/fgIx9TQ+NT4AUMIiIifWKJnoiIsiLwCNsoiif8eGoODqriKbb5S+sFcJboiYhyIp+myVE0LNETEVE4prsOMOCJiIh0iAFPRESkQwx4IiIiHWLAExER6RADnoiISIcY8ERERDrEgCciohCcI6cPDHgiIiIdYsATERHpEAOeiIiCWJ/XDQY8ERGRDjHgiYiIdIgBT0REpEMMeCIikvEGvJ4w4ImIiHSIAU9ERKRDDHgiIgJYn9cdBjwREZEOMeCJiIh0iAFPRESkQwx4IiLiDXgdYsATERHpEAOeiIhIhxjwREREOsSAJyIqdLwBr0sMeCIiIh1iwBMREekQA56IiEiHGPBERAWNN+D1igFPRESkQwx4IiIiHWLAExEVLtbndYwBT0REpEMMeCIiIh1iwBMRFSjW5/WNAU9ERKRDDHgiIiIdYsATERUi1ud1jwFPRESkQwx4IiIiHWLAExEVHNbnCwEDnoiISIcY8ERERDrEgCciKiyszxcIBjwREZEOMeCJiIh0iAFPRFRAWJ8vHAx4IiIiHWLAExER6RADnoioULA+X1AY8ERERDrEgCciItIhBjwREZEOMeCJiAoCb8AXGgY8ERGRDjHgiYiIdIgBT0Skf6zPF6CJuW4AERHpkRduwGwELmH3v2J6I8zGuKtpkxfvtsk/3vH/om5m+JtKC2OdY44w4ImIKP3cbUBj2lbLDS/ebfPnuhfv/isg/WzE05tCVnRvwanbtJXuYImeiEj3WJ9PTeenmLbG32s34v7b8KU7ymqDe3AKuP+x7DZOBfbgiYgorS5h97/iKoA2nCrHDx4HAAxgdxuuAgCmrUHDvRGr/T+YGneHCxtxKmwPAAD3Fkxbgy87AOD+TViAkBK68lghtwmUvfMYBz11EdPLgm9MrwA6cPoxLAhdraMD09aEvqkNGQ34vVvXvvYxgJpntznWVUZfp2+nfWPP07teXJ3JhhARUdbMRMMmuLcAjfI9eACnOvxpegm7/xW7gYZ7Q1dL5Ms2LGxEg1HOZndZcKsv/44fbPJ/PvDi3bbg7XD3Frzbj6cfw8JyfHk0uMnpo0A5FsRKd79pioCfWhZlhdNuXAXuvzfKopzLXIm+b6f9Nby8a9euXdvWdGzcujfGSpvf7s5YE4iICp5G6vPBWvdMrFmDqx04nfwe5Hg24gdrcOpTDAYW3R7s/Ut19UCQmxuBo+i8hAW3A0eDB+05GrJVFANytSDM4KWQlz1HNdp9RyYDvren+yHTagCovG9NzceeKAnft3NzR/VDNRlrAhERacP0iK5wWFImvYeLOH0pYlFEXR1lmAZcHcDUe7EQ6PECALw4BSxcnFwDokjXfjIjYwHf13Oypmq+9HNlVTVO9vSFr7Fzc8eal5qqIja9WyFTzSMioiyaFhG649qDejMx3f9j1W04dRRQWZ+P0cipiq1U1vlzJWP34Ht7uhGZ3UFSvDsqsTNi0f79+wM/C4KQgcYRERUEjdTnAVwdAAJBGKP6nRGXcAVyxi+4DWjD6cfQcxQLG+PW5/2UzR4cCF8q1efV7CcnMtaDn18Vr/QuxXusgXdERKQvVxTpODiQSsf31PHgzzG7zjOxsDzkWNKHCbn3b8RCoOffcQqoSjisL2JXV/qB2xS326WPDqnVFbIiYwFfWVXd3dMr/dzXcxLVVYo07/uso7v77Y1r165du/Htbnz82lr7zvAKPhER5TVlOl7tQKd0y9yLDzqw8P5gx/dKRM84KuUePj0asgeluvtxtQNur/zS3QbcFpwLJ1fpb1M1LE7alfKgd5gVi5UfHTQpc9Pk5lfVfPzuzqbV6yr7Puvofuhp5Ty4ynWOXeukHzlNjogoPd7dEvKy6e+5rM9X3YZTHXj37/I8+IVrcOpf8SWA0Ee6BleLMw8e8fYQzoinG/FuG04BAKatwdOKOWwLbgOOYqHKq2LED9bgA/9BwybNSxX7qVq9AQ9AEEUxYzuPmAcfJc0TBLwgZLSFRET5JyzIA8Kenzq64eiO22+LuijPxH+aPcWg9fhkwBNRwVIZ5LEoR9hJu8rXmGfAp4SPqiUi0oqwRB9PHoeNn5d2Fdi/yj2/uyVbnwkCj62N5o4MfRtN/IPGeYptntB6/5g9eCLSN2WopzFN40+QU5n02Qt4ygD24ImIsi1Doa5e4KAZK93vs/3lV1j2XuustO85+8449r7Y/LX8wvStre6aeSoW5Z7W+8fswRORPmQz1JN9vk2smGcP3h/hC1vu3Wwvha/7JeNXpzD7p2LdPXEXaYLW45MBT0T5K1c99dQeYBcW50x3ABhqM+/5XZ2iFOHrfsn4VVX7d39sibMoV60NxRI9EVE65bz8nvLjaZ/elMZQV5bopZ9/isO/cgIArMveay0NT0dceEM43CP1hqMbajPv8TQtM+04/DsPgJCS+D7bX96v/VZV81efAvfLEXvhDeHwp1CuGRHJiQ9a2uj+bsgYP0NpFdBzfAiWeItUX6dMYsATEY1XzkM9XaSMh/8shL88JX73vbTs2Xn4/ZZ73xOlUvbhl2rvbW6a/LvmC/taZ8kFbdeFTzH5HxsSROOp5sOnrMvec8+SsvlFW2kgrU81XzB5v/ueQXp14Q3h8KfW4CeMF4Whn4p1q1I6aAjXhU+B+xdH2yTOopxgwBMRpUI3oR4mbEJdupi+1Sz1kg2zTKavftc1NG/TrIXNX+1x1d1jAYB9bedh+tYqQ+L9bJUTfdaPvd/qMXa3bZrVKG1lmhXY/Iyj+9Pgmrinddn9zsPvO2o2N6R00KALb9Sfh+lbT0QpwsdZlCMMeCIitbQf6un6+jipK5+u7juAulL/8PLSyjoAgKHmSetXv2q78GPLLODCHicWtsxKPAQ9uB+pJP61Z/dQo/TRIbho6PMdX6NOOaC9tMqET7uGYE/poDKp5j/7p1GGysdZlDsMeCKieLQf6hnyzF1PPY20BXw09zTORv2Ffa2z7lFdKl9Ym1oB3P+pIqWDApAjPPpEuDiLcooBT0QUrmBDPcsss+7H4T2uOrSdh3VZYxKl8mQN9XUCdakeVJoCFzXC4yzKOQY8ERGgi1BPV30eaR1eF8+se634VVsnnLi/XdUjcU7tuHDG7o/SmF3w0lVNk3+3Y+gMECja93iwsKk0lYNKEW6N9tCeOIu0gAFPRAUt2cezU1rd0zgb9ec/xeyfqhyb5vmqxTFrs71UHtQWows+z15zf3NwjP0+2+FPMfun/rlwyRx0qG39V6cU4/XULdIGBjwRFRwddNYjpbH7nk2WWffj/KfWWWqf/mb9lmnHnqeapZ/jdJ1n/VhcBuHwU9LMe9O3toqKErr6g/oueDwAvnpR+Er59sKWezc3xF4Uc1Z9dmn9OXF8kh0RpYu+O+vpDfgsleiTEvmYGoqLPXgi0jNddtYzTYvpTsljwBORDum7sx4pT+vz4YbazHvkx9BGWNiyzJSDg2qm3p4CrRfAWaInIvUKLdcD8m/8PGUee/BElN9YhNdJ953SjQFPRHmpYDvrRCox4Ikob7CznmnprM8f+gy4D8sBAK4P0XYFABotsExNz/4zYft76F2G/1brf90LmztkhdVmbJif9WaliAFPRFrHznocWq3P92LbaWy8T/657YrWox3Aoc+wF6hUvHNuEJiOnz+COTlr1Hgw4IlIi9hZ15u52k536RNJmHNXgal5mu5gwBORprCznhSNPtzmXBf++2EA2KbY27b3gAVovS/uVj3YWIVth+V3gp3+XtiOoHEq2k4Hd3Los2AkS2tKx934lHxfQF5nUFUX3HUElcsw/zB6FW+eHcTqpapOWZMY8ESUe8x1XZlTi9apsLn9Wdur+Dm+K9h2RV7z0GfY5sLcwFZXsK8KrU/JK0rpHty/C2fN2DAflYfxRS+W+2+Tf3EalcsSp/u5LrQBP69F++GQ989eQe+R4G147d9lCMWAJ6LcYBGeomi0yIm+/D40DmJXF5b7h7zdExjdNohdp4NrYj42LsC2I6h/BPdMR1uPfxxcL/YCjQnHxA3CeRiNlojPAb3YC1RWofUR+Y3t78GVTxnPgCeirGJnPV20OrxufJS36udORV8PztXK0RtYdK4XfcBaxZpzpgGncQ6wLEWbG4fuw3LgUA8wHSsS5bHrM2BZtNieHywYSO5agG1HYIl9l0FjGPBElHHsrGufNh5gNz3FEW1zAvE8H6shV+nV1OcDxXlVR5kGHJY/PeQDBjwRZQo765Ql5waDP9+1ANt6sAHYC2xMlNwHe4Ar+O/KTzaHYTsce8RAqh9BcoEBT0TpxM56duizPo8rODgYrJbH6oLPmY/Kwzg7iOWBov3VYPQurwLc2A5gQeKutuURWBQvlQ+6iRyTn2+z5hjwRJQG7KxTFMoMVqntM6x4BHP8j52J3gWfirULFGPse7HtNFab/dE7H6uBvaex2jyuxs+pxeqIMfmNlrjbaAsDnohSxM56rqS9+56BG/DzsRpoc2HfMvy3ZDK+sSpYMI8zs275fdiomGcfNoHtrgXYexp3jfuZshuewvb3YPO/VDXTT0O0/mWs/LpYIq1hZz3n8iHgkxdZEqfxYQ+eiFRhrhPlFwY8EcXEIrwG5fHwusAjbKOYjo1VOTho3n6RjBpaL4CzRE+Ufeysa5k+6/OUAezBExHAznqeyOPuu54NO/YdbB6SX5hqVrgXloSvMtRj3jf8yreXZHMUPgOeqKCxs17g2H0fNyndS1vuWW4vhe/UIWP3QWHoNrG2TLHOgG3faQ/Ks9wyBjxRwWFnnShthgZ2DMG6dLm9FAAMC5d7ccjYfdFVWyZ31vuPCUcu5qRpDHiiQsHOer7Lp7vvQz3mfafrlt6GI0edAKTCdfmAed9pDwDAutTcWuFfWRGBYfVt36lDxm5/7XtWWLc46kEHmpaW7TgiH0WxtwHbf/bU1tza3H0RKG+XSuWRx5WbHda2b6TeeXSlVe5vhwwPNJTcCnxzfAiWUvkQppoV7pIe4Ui8tmcCA55Iz9hZpxxyHulpuccsBgrX3eXt3zZbpNg+cqxRkbL+vB+w/Wewvu07dcjYjZZ7zPZSadFRc2m029shhpqPDFmXmt0V0p4P2koCaT3UfKHM+22zQXoV47hNpaeb+wdaK+RPEq7+iyhd0BAr3aNx9V8EyhdLm1QsEb+9BAD6k9hDujDgiXSInXVKKAt33001i+XCdXmZqXsINVVS1dpQXmbqPt3Wv8RSMew4edFUs8KfwWWtS8udR3ocC8vspQNbuodMNSv8Xeey1m+revRscG8VS7w13xhP9myqqJJC3TSrTE53xDru8oZZpc3BAvtA2wWYagJbqdB/rP4CTP4zzS0GPJF+MNd1LB/Hz9eVlMR5Ccg3sEPeLykx4WLXMIDhzqibJHNQQ8mtGBrYPVQlfUoILop9XPvCKmv30bb+JZYKoP+iE6Ut5arbINX8Z92WqMyQJQx4ovzGIjylQLuD50tL6hQvapMOyhQ2CTtuWeMs1PcPtFaUJVefD9xu10a6gwFPlKfYWS8o+dh9T9HQcCfgz9qhrmEgmfvfaTmupaIcRy66atF2AdalVWrq89JgQE2lOxjwRHmEnXVKCw1130vLmkpP7xgeBvy5ODzsQWlTidyl7lQuUmVox8Vhe6m8ScwueJzjAqgot+JoWxecKG+viNg2gpTuIfMCtIEBT6R17KxTGmko3QGgxF5d3hwc6z5gO3IRs26zlwIo21RTauw+7iiXpqgNO/YdbC5NNFMO8AQ26T9WH7MLHue4kKv0Fy5i1m2Jx8oN9azvHlKM19MQBjyRFrGzTgE6r89XLBGXQjjiDkyXF/1VbvmhMfvczdLrhPPgAQDWmrId/k3i9apjHxdSlf7CRWtF4sP5Lg54AHQfFLqVb5fGmzqfLVr/Khd+2QwVFHbWKVIaA15j3fd0i3xMTWFjD54o95jrFIvOu++USQx4otxgEZ6yTA/d96GewMNuI5S2LE1cUU//QTVQio+FAU+UVeysE6Uu4sHvYexxl2booJrFgCfKOHbWKTWFcvf9yFsjb5+d+JOfFc3KdUviuPDR9V+fLfrl+qJoC8d+98Lo+R/c0vywkO1mxcOAJ8oIhjpph6bTPT98OfrrD0SsjL7wyFujh4C52W2RCgx4orRhqFMacXidVhx5a+TtA7EXfzkab2kuMeCJxoWhThqXw+772O9eGD0k/1z07OsTlwYXif/xi+sfngEAzJv4iIrO74WPrv/6i6Jn7xp7+wNp5rTwyMu3fGc2AODL0X9qFx6ZO/rhAWDlRKmKrkhlec0LH13/9QcTlM1Qc2vgyFsjbx8QHnn5ltl/HHk7ynLxP9rH5v5g4uwPRs8nPoksY8ATJY2hTpTQ2O9eGMWPin95B6Q4f/sXgj9Kx373wuihlRN/+TNFEs9Tscszo2+fkT8oHHlr5O3XRmcH0vrM6Jd33fLL1+Vb4EfeGnn7gP8jxZej//TayPkfFf/jnUVzPxj98suJS++QW/jlAcz9wYT4N/6Xri/+5XoAOBJt6YWPbnyIiT95GH/5QEX7s40BT6QKQ52yKV31+dx1378UD82b+BM5SoW6u4QPPxD7gVnAhY/GDqHoWf9otaXrJy4/EOjoxyc88rKc6EvX3/LI2et/+qhoqTyuTbjjTv8At/NjfzoQXBN3THx25djb7WPf/dmEO+bhw4Nj/3hHkdxCCI/cOY5hcefH3v0Aj7xcNAtjqe8kgxjwRDEx1IlSdcfEX8rpHn4Pu/+siJWColxfdMfK0UNn1ex0wuzZgZ+F2XNx9oubFx6WqgLBRRf+NnYWE74fXBMVcwUcEPshfKe+6MPfikfWYylw5OAY5k2sm41Uif/xv0bxA/9tAi1iwBOFYKiTWraUesatT6W7HTHldvC84i77yok/+cHYr+Uitnj+bKojzucJqT2DdtacCfJPdwjLIVXpVdXn4/AX5zU1Ly4MA56IoU4R1IR3alGt7mPBxEkA8nkI/YWPbnx4Jjiw7sJHgSK2MDvr88kunLsJSBlfdMfK0bcPjv0jxEMoejb1eBY7vxBxZvTXL4wG3/vg+j99EDaWMLcY8FSIlIkOhnrBipO1metnq9izfAM+snmqWyX85SkAuZz7HlaH7z8b/NKwirkCPpDr5ADkPr0aZ8Y6zxf5S+Ixu+Cz7iya+8HY+fNY6i+e958VA73/pSuK8FvxdxjDyvEksfCdnxV/J/iSD7ohyiV20wtXrCDPYrVcveDwusjmqYj83Ee7JCTF5ZniN6XQnfXwpEe+CA6qP/LW9Q/PqBtFD/HD/zVWJ281GrMLPrvo+ytHg2Psvxx9+wCW/8g/F+4OYTlGDx3A8h9FfSadnjDgSc8Y6gUnalZ5ZxoAACAASURBVJZrMshToSLyxdZcR7tETvEXxgBg3sSfvD7xLy+M+uNZ+M7PbsEvrsv17XkTH1k5+qGqTnzRI3eN+avi8YrhS9cXP4sR+egQHnm5WDEUruiOlaOHDhTdcUeMjfVD69+2zu+Dp2Qx1AuFHrM8tdlxIb32sMuS5xckKPIxNZQIe/CkBwx1PcurAnuWRSnIh12WwNXj5So8agLeZRPq0S62WhK8R5RNDHUd0mOnXL2kuu9q77UHrp50bbV8MS98dP3XH8Qo2M6b+OxdOTioxr/gLhH24CmfMNR1gp3ycUhxGJ10bbXcoZ/18C2/fDjO8qK4SzN00LwW7w63z2E2NntibmrNRgee9+CJoZ7fCrtTrp6a7ns6R8jnMOlPYyOwbUG2Dzt+vk4s/Zv885Yf4IVpimWnUdwRY1HuqInPXJbjGfAFiJPU8xI75eOQMN0zOPnNFvv+fWZsfAdYk38BL6X7H57Bo5DjPBjkypdhi3JKTYne0sqIpQxjNz2fsFOeRRmf1678xY3j0Tq69+u/YdWdeFR6sQBbpmPTYbxwPwC8fhir7vQn+gL8YSEe9y/KLXX34KMX67NSoyf9YqjnAWZ55sXqvufgkTXp/c1exZoP8Ln/1YY12DbN/04Htk/HkQYYQuveq+5ER52q3T65Bu93yDtXbrXxHdx+Jzb9DUBIbztk/1ex5gPUKasIKrrd256J2Z73r6BuWfANw3Tgb/jj/f5PA7mjJuB9jvXNHqY5pQNDXaNYYNcSrTyNbjz8IdohhaiUsmvQ8UxIiV5KdzlZr2LNB1gDFRkPbOrABmnnp1HcgY1Tg2m96RSOPAMDgsfd4D/cxndQfAUj9+PJ6dh0OrjJH08D01Gvuqju68SmK9ii6KPfrtjWMFXtfjJNTcB7uzywvsJ0pxQx1LWFnXItCeu+6yHaJVfxOfByoIu8ACPResBS3VvuN09DxxoUd+CPdYn7vqvu9MfzAhy5E0sP4ycL5FBftdCf7v7ieSDIt63B9g68vgz1C7FJ0cn+wymsujO4VTz+ekCw2VfxOfBkxIrHr+LRXN+GVxPwxloTujLeEtIVhnrusVOueVK6S6Eu0UO0SxZgA/D4O/46eVSnsR3YUqV4ZxpWAX84jUcTDcGrU/SSDVOBK2i/KiducFFE8Vza/9+v4oU6bPib/0CRzYh7XtInldd3o/iUfJdBs9QEvMH+ilWotzWyRk9xMdRzhp3yfCOF+g38PLdf2Z5R257B7bvx+Dvyyw0xRs5v+gBh/1qoqNCHlMSTMC2488cX4vHT2LYg6fq85IVl2NQhf6pYFW2FxbnuvkPtk+zqnQDqBWfo+7wtTwz17GKnPJ+F9dSl7rsIfaa75IUGvAAA+OOneLwDt0cbxZbVGWVX0en/APHoAqADf7wffziFDWuS74j7iwGYBih+AOAbTF+Dx0ftNLnWjLeE8gMnqWcJO+W6oM/ye/IevR8bToWkICCX8cPfVOf9nuDHgphd8Gl4cjreV8atdL/cP59tA/CHT7Ed+EPCSfmRA+8VgwzCjuK7AizM/RB68FG1pAa76ZnFLNcXNaGe2rfG5ZOIR8FsB7b4M7jTH4c/uRNLFT37P36Kx0+p6tN//je8XiU/WObx2F1wqZAeGGO/sQNYGNz54wvx+Cl1YTwNLy/E44qhfNLwvUcVR1G2Z8sPEu4xG9Q+Jy4wE97aLm46bjbuaPK67VkYXMAn2eUKQz39WGDXr6R66vpPd4liAjoUpXgpxRFtHjwQd1CeROpM34nOv8nz4JV396M8Ji9yHnzooliDAyLJLY84KOI/xTZ3VMWnyybUd7Z43Yu3yM+s9TnMxuY6PotebxjqacNOud4pEx1Jlt8LJeAzJLJaTjGoGmTX5oS13W6Ay/+Owf6Ktbm+zdVq4SC7fMdQHxd2ygvGeBJdielOWcN78IWIoZ40BnlBSvsQOaa7KqHPuA2zZU0uDqqZqntSVBXAfQ7ppnugRO+v2Wf+LjxL9OnCUFeFQV7Y0tVNjyXvAl74T7f4bXOuW0EpUh2fLptQH5wHb8pKuoMBPz4M9ZgY5AQg84mulHfpjswF/Dnb62h9YU76d5wWfT6z/Zj09WqmZx5w/3BK1EV4YKWo2VOQqC7RczJ8nmCoh2CQk0JYnKOw56bnjuv1A06s1Gig9PnM9mN1LzW4VwE4Z1v3VzP8Gd/nM9uP4ZkHxB9OAc7Z1h0QoO2M5z34vMcnz8g4cJ0iZLODHl8+dt9H/ukFWArtvyDX7495qpe8JT99ds6mZ6YY3/G5frjCAvg+P+PBvHa5Qz+n9aV5zs1nXS/M0e5Y8zgB77Ip7rg7o6zAR9XmTEF309kpp9i0k+hK+Zru46YsaFcv8f7KYMA1x0//2nwSwAHhr1NaHA/YK2NtfM3x07/uMK9sch9oPqncAwC4Xt/9atWSuneOOQHrSw2tcm/7gDPyWAuUnexztnUHOsOq7qEsLzTo56ZwnIC3tMo3v1md14SCC3UGOSXCknuGjPzTC8W/fH2cGR9S0L7m+OlfjT+F91cG+68aFr++u15dcdvzzgHPAyvFX82Rstn4+uTAVp53zjQ5GkT588E527oDTv9Ncdfru43rrrXvXNFgntL8jqKT/flZJ6a0rIqZ7pGnsP6da6ZnVkibG1bNM71z7NV/M1ikEv3mM3hgpaY7uSzRa1pBhDqDnFTTZgc9vrzrvkvpPu7dSLVur9xXnmL/1cqudQe2fG5ojfrda7FUL/HKiT6n1bGk037c8cQcudNfPa/B3/v3/dtxZ3BNWF5Yaf3rgVf/zeBeNc/0zrG2z1dYVgGAa88ZVC9piFkzUPLXA4KnAFQa3Dsn29b9VXgHAEzyZxcNUxnw/olydoP81NqsPMauMOk21BnklCR20PPYuba/wvTMbMVkq9LaajTvOde6KplRaQsmB/dQObkO13Z8fs0uxWpw0bXd7msha6K0thrOniH80PDKA8fq5YNGNimOOa07G1oB37/91bjujHwr4fODwuYz1pcaxFWQahKCO3jXQItUBbzLZmyuaxfleXEGu9sLs1GwMePTRlehziCnVOVjBz2+vO6+/4Plqf9yvYfUp8l53pE7u0FJPl7WVFWa0pGnLPYfyHLvPEhD4ZKtzwMADD9cbH3nwI7Pr9l/CMeOM3hgpb8CMcX+4pId9mNJ1ySySf2japVZzkfVpoEeQp0D12kcdN9Bz+t0T4fwSeTZc+34af+HiVVzrTjQ9vkK7DmDB1bGHtMXi78YAHSdhMms+MBRObkO6Oy7Bmi1UM978FmVr6HOTjmlg/466BTTnMYHpFwcV/h53Od9P5wi18BjdsGnNJinNLu/9iHwnbFDijCe0/gA6vccxF9hfSnh3YHIgfdDXSdhbZoDXPMnfUgD6iq1mu5QF/CWTS0mY72tMViRd9nqnaYWL7vvCeXZJHUGOaVVISe6Prrv4+jQW55YYrIfMFf5O/GfHxQ2nwn26U8r8zi2k8fW/9tst2LUetQuuFRID4yxd71+wBmcsC5V6c84Ma89cS19ir1pXvPm4FA+efjeqsCiA7Z7pVl51xw/PeBfpFWqevAGu1tcbBMEIfBO1h5Vm4/yoJvOIKcM0H3JXcfSXZwHgEqD2wGzPXgb3j9hHZZ75+Gvx4KD1+J4YEmT27+HeI+GndO6cyXWHRD+CgCoXuLdqRj7tmquFWecD8xV1SddtUJ86aBg390M/0F/NUexCMLm3aGz7TVM6096z5dn0Ws01BnklEmF3EGPTx/d9xx/00xktZySxHvwqdNQqDPIKfPYQVdJH+lOOsBH1SYn96HOgeuULeyg6570rLqcpXvgsbVRmJ5Z2ZSDg+Zq2H9maL0AroUSfW5CnZ1yyi520NMij7rvCTvu/DL4fKe2B48C661nL9QZ5JQj7KAXMpbl1fFd2268elF+MWmNd/Z9wVF1Nz4zn++QvzZ+2o/cU2bmoH3x8R58UGZDnUFOucZEz6jRDUcBaL/7nuOyfD6R0l0O7xufmc93GHsvts9/zAI53evKXnLfCuC4rfe3Zmgv4+N9m9ymFpOxXpDvvgd+CMr7e/AZmaTOICdtYMk9O6RcRz5EO9hxT8ql3cMXUdIox/ak+9yzYT7f0fbNY5Zb4brW4Zm05q1bpTUXb5pWbrzqdk15TFuRGK8Hb7C7RTsUtfpsNSqT0tZNZ5CTxrCDnmX50mWXpNZxL34HI8+kflBFERu4vX3+YxZccpz/7Y6SxqbhtuYbACLq3tHF28p1afOrk9bUXe1wAtayl1rlLnWb3CeV17zkOP/b5kmN4szF/n0et/W2dcYrrc+0z37JrnxjUlkd0Dl6CZhpmfmSpoevSdTcg89eazJkvKHOgeukPeyg50p+ddklKXTchf9039JnHne6Y9qPxCkzAbguba4/X+6dvQSA52qbp6RRnL1YSlnjpTJF7sYUZyvP1b83zX5JnCS9Om7rbXOWyFnuurRZqqs3lJQ3Xz3mmrlYjrRvjjlR3vIPyRTVvznmBKwTIza58dn6qxdN0xo1F5a6vQefSqizU04axg56buVjrktyVJaXithef//Y3+W9BACT1njlbF7cOntN5/lPHVMW2ycl2mOcrSbd3uDf3HftU2dwTVhmNlqH2169Znb/w+2mq3KBHYDrm79j0pqGhAcNOm4b+Dsmrdl0a+ibUqlAcaYaoqt78GpDnUFOmscOunbkVyleKZfj6S4dvwFMKotee1e+P6msDhd3/Ncl+6REARlnq+CiS7uHL4Yet7x2Epw3LmLKfa+UdNR/c7z11sXA8bZhmKYtUf2gWSnIb28Pv5uwuHX+S63ScLzev7fM3pD4Y0o2ZfQe/N6ta1/7GEDNs9sc6yIeOBx/qVrxQp1BTvmDHXStyccuu5ToAeOJ9nHW5wEApknlSb2f2t4SmbnYH7qWW2/HwDHXzMWW5Orzx229bc64YwUMU+63Xm1T9TElm1R9m1xrKo+a6dtpfw0v79q1Gn077Ru3Vu16cbXqpQmEh3ogyG2h6zHIScOY6NqUF7keFuQBGhsh77lxEch54Em1BADArUusaGv75jF883eUNKrqbUvjBBOPBPTXCXJ/vgpq78H7HGZjsweAtV3cdNxs3NGU6Ovkenu6HzKtBoDK+9bUvO3Z++Lq1WqXRvHuFjztk/8FfFq5wMYgpzzAkrv2abAUn5MgL34HAK5XuoFxPMZu5uJJwI2BqN8J6xk+5pviz0vVnWl1W81sKClvHlYe92LXDZhKpN7/4sYS1H/z7xiGtSzxsD453UsaI8YARo7Jv9h1A9apKvaZTaoC3mUT6jtbvOIrW4R6AAb7Wy07jEbb4nhV+76ekzVV8qOEK6uq0dHTh9WVqpbefffdIbuyvQfgaWD0xp3Rj+X/xE2kWTfw87B3Rt/h36229E6rAYAXR3LdEKUt0d/OZCOPSf+3/+6Tfxip3lqc6m4sU9aYznesv7ZEmofmu7bdeLWifb4ZAG4E3j9uG1DfmVa1lVQtD4yxd11qc+L29sBYv1tvx8Dfnbi9/dYo24a65LjU4VGM11OYaZ96e/NAcJSfPLIv8T6zS03Au9qcsLbbDXD53zHYX7E217e5Wi0xE763pxtVMXcZd+n+/fsDPwuCEOig63bEPxFpQHWuGxDg/o1gfk50vico37Q+ldytUuGTNzH8lGhJ+sZ172Zh/ksigJPj+xghPxnmt8JV6bU8D/44gJI1TcP+96P0j2NQu9Xi1vmN6G0ThqVmrPHOV1TXb11ixd+dJUsSjym7cWzHDQAdxt4O5dvyg+1ufUws+3fh/Gb5a+Pl+Xsak7HQnF9Vk/JSIqICZn5OdP9GsD4XkujKvE827HNl0n3u+fdFW1AW/gwZVaJvFe2ZM/Lg9mjiLAoVs/F+tz4mzn9MzZ5yRtUgu00tJuOrjk2WwOcTl63eaWrxxvsIVFlV3e3pBSoB9PWcRLWpUvVSIqLCJmW8WZHxylBX2bkXLeWC62Kynfj5L4mBTvy63cLOhvz4MEGRVPXgDXa3uNgmCM2APCHe1JJojB3mV9V8/O7OptXrKvs+6+h+6OnVSSwlIip0kRkfEJboUfNefPB54ZM3gXGNQc5eul9ynP+t/BjaCKZpjZn5bvj4B9Xel8ckK6Pfth4x071vp31jz9PylDhV8+C18H3wRES5Eivj4wjkvW3O/xQffD6FTjyA3s3C6Nn/GscgO8o9rccnA56IClwKGQ/A+Z4gBTyAFDJeqtKffHEcA+kPj/ZjYsUy4PxY3y9Gb9lQXLEs7mqadONP1/vapYsvTP/ZLdNnq1qkERNUrudzmAUFs8OX0WYREZFEqtUnu9U4B+JJd+LHsYOx/u1j6VstN2786Xpf+4SKrcXVW4urN0y48ovrV84nXqQdqgLe5zAbm+vaxYD2umYjM56IKDtSy/gAabRdGttTGMautIuT6otKpVfLiqbPE698NJZokYaomge/pdljbXcrxsxbWtutQv0Wl11bXzZDRKRXccbcac75sb5fjN4AsH1kaN7EymcBAOfG+raPyt/mXn9L5feF8NU2FcV83M35sb5fjJVuKBoK2wMAjPW/ODapfsKV9jGgqGLrxFIAh0dP+gsDymOF3CY4PHpy+824pfWiiq1FyS/SED48hogoPySb8dJAeuk2fApT5uZHzi9XaXZR5Vb0vzgKKVDPjwEYah+b/rPi6bOltL7eh1sqvx+6WqKzubJ9tHRDceUyKZuv988JbCVeOSRUbi2WPx8cHj25faxU3udY/4vXT56bWP1/TyidhyuHxiqWycE8dGgM8yaWqr5xfuNPN66cEaY/GyXX4yzKLTUlesumFpOz3uYKviPNg9/E7jsRUTaNp1af20L9pPpJcl95dtGseuFG+9hQ0nu4RU70ZRMr64WhP44FZrhNWj7B3/sXr/xxLLgmiio2FOGLsSvnhdLlAr4Q/QcdG/5CuVVch0dPvjjS1y4GT0HNIg1QdQ/eYHd7Wzrrg2Ps6jsTz4MnIqL0kzJ+PLfkc+KWOcEGT5ozAbh5I8lRaeF7ODM2dD5i0fmbQ2dC1sQsYRLEGxcw6ftFpRgbPgwAOCwOQSi9Q901XDaxemtx9dZbSg9dP7ll7IbKRRqgdhS9we4WFZjuRES5Yn5OVN+VVz4GJ3edeGHSLMWrWYKqrnOcPag3G7fIPxWV3IWhQ2OQ6/NF6uvzUgOmP1qk/FShblEuqQ14IiLSlNTK9TnKePHGBcWrC2L2Orvncd3/Y+nyInwhDmFs+AuUPhp7TF8s/mJAcotyJ2HAu2yCoLj97nOYOQueiEgTxjl9LpuunwsO2btx7mbyHWhx6MvgHmJ2wWdPKJ0XcixcEG8Eev/LhFKMDf9vcQhFJQmH9Z0f63txpP+w4p0L4g1pwziLtCRuwPscZqG+s8WrmAxnsLvF9rpmozL0iYgoR1LI+Kx14kNCvf2G/CiYw6N97aKyAx2Sx7Ep99AfswsuTH+06Eb7dX/6jvVvH8NdRf4RcEUld2HoizHcJZQmPN7soul3QTGUTxq+V1Qaf5GWxHsQrMsm1KNdjDbXPc6i9OKjaomIEoozfU745M3Wc/9f2IPtUntAfVKG/vdI/xfAvImVz+LCL0ZvqZ94vV2exV6qmBcXXC3BPPhYexiLMtEuch586KJSVRPzFM2LaHb8RRoRJz7jhni2Ep4BT0SkRqyMjxrwyErGp038p9lTDBxkR0SkB8nW6vn8Wt2L8yQ7Y60JO477YIkyI853vBOmJmPm2kVEREmK9ag761Oi8z1hnF8/k1mBx9ZGIUzfkJmHxMU/qCa/IC4p8Qrg/u+YiazD+xxm446mbDzrhiV6IqKkhGW89LTaWAGfT4V6SlK8Er3B7m63OuvDZ8W5bIKxGS1v8Vk3RETak0dz5yijVPSPfQ6zsdkTfG3K5mNq2YMnIkqBsh/PTnxhUjHILuwptXxMLRGR5rEfTxxFT0SkT8z4AseAJyLSLWXGS2PpI9fhfDm9YsATEelZrCfcke4x4ImI9I+1+gLEgCci0j+pVh+rSk+6xIAnItI58cHnhU/ejFOr5214XWLAExEVChbqCwoDnoioUJifE5cOglX6AsGAJyIqIBxUXzgY8EREBSeyVs/b8PrDgCciKizWp8QjU3k/Xv8Y8ERE+icNpFe+wwfZ6h4DnoioQDHj9Y0BT0RUuJQZz9vwOsOAJyIqOMpH2kkZz668/kzMdQOIiCjHpLlz7t8ImN+f67ZQ2rAHT0REAKfI6w578EREhUiq0lufCgl16Tb8p70VDHsAgK9np/H0ZflF6d3e5SsMwYVXHIfebx6Sfl7Ubv6OJevNS4A9eCKighA5Uy4Wjq4H4E9304InRfNz4oq7TUP7je7/cMkLu23uP2Pxc6L5OdH8XHv5ifrgIs1gwBMREUW4snvgMsq/566aDgAlK9wr7jbhRNsAAPh6DjhLFzWUyKtaqoKLNIQleiKiAhWnSi8+J7p/I4yzUD980Hxwv0d+IRWxrzgOvb+j7HtNA3+Wi9vhde+o4m3lOvabV0vurju93wlYb3uutQxS99oJ5ZpXHIfeb771e+KSGv8+u23uP3cueFLO7yim25c/Z1e+UTK9DugcvoIy7B64bCqrCTa7ZIXbvELdRckiBjwREaXf8EHzwf1Y8KRYNR2A69hv6g/N8C6vAeA5/WdP+ffE5TVSyhqPTVfkbkxxtvKcPtG04jlR7k9329x/dpbLWe469huj+3K7+TsNZTOaT3e7ltTId8oHup2Y0VIWK92jGeh2AtaS6UB31xDqqqa7jv2mXnpugKqPKVnHEj0REaWdq2e/p/Tut/z9Y8uS58RABJbe7ZWzuaZ1xd2miwccwyr2GGcrRbXc13PAGVwTliXfs+LEqz1XDGWLlFV018UTyq1U6LYdPYHSuzeVAcNXOgHn0d+0lcv34L1lJ4y8B09ERBqifOJNgFSlH1d9/srxb4Bbp0fv1CrfL5leh8s7Bq4k3mWcrYKLruweuBx63Bm1pfAMX0bJilfK4bzYDQDobruIkBp7AlLNf1G7optuWvBka5n8s6FqpVWD9+AZ8EREhUL9QPp0MJXMSOr91PaWyPTFt8o/WcoX4WK3C3J9vkltfb7b5v6zs/Rub+hEuLoS5eYzaksDnx40g/fgiYgoEzzDl4FkbnJnhFRLAACU1Vjx57aB7+DiCZR/z66mPi+NEwy7xV4yvS7auql+BMkY9uCJiApa1Cr9eE1ffCvwzRVftGWege7g+6o70+q2mt5QNiP0uJe7hgLRW9NYDufF/2i7CGt54mF9crqXf08MH0An7UfZX7/cNRTWp9cABjwREaWdpepu09D+9T3ybXJfz04hMAwt+H637egJlK9U1ZlWt5WhaqV1aL/xmJy+rmN/dmLRK4GxfuWLcPGEE4say6JsG+qK4/h+j2K8XvjZKUb5SSP7NiXeZ3axRE9EROlXssK9AuaD7wunpdfyPPjjAMrvbhrwv1/+PTVz5JDEVjWt5u/B/WchMIHNrOh/l9VYccJZXpP4sbLD3TuGAOw3uvcr3zZJU+dLVrjN022B5/1pc5qcIIqafuCwIGi9hUREeUT45E3xwecj3w974o3guihaytN/+MgHzmRuq4LHEj0REZEOsURPRFRApJlyUTvxuaT8ZrZwpgXfa8rBQeM8xTZPaL0AzhI9EVF65bhKT9nCHjwREVHyBh07XV0rn2pVDgy43GV+/7D8/TqLzOJ35+ekZTIGPBERUbJcf3E1X4JV+dblLvP7h3GPRVwxFei1Od0CcprxHGRHRERAhp54o0u9Nud79SfC3/Wd7PFgwSsrpgIA5rd+fwFO9OTyG2jYgyciooxQ1qtnLvOuq5W/wf0v79XD3A63nJGLzOJ3pzp2uppnKPu7vTanu/Mei1vOy0iDjp2uHYvMTSfczZeiHOLVmcvq9h12AtbvS1X0XpvT7QxpzGDyB/XvZ+Yy77qpW5zuVC5L1rAHT0RUWLLzlTOBerX1KdFqacFh486u4BNkT7hfnWkRrU+JTy4znXCbD6Jh0fSQ/m53jxPTm6rjBC0AePa5m2eYRetTotVsvXTY+JdexaKe2iefEq2KdF8krflU+4zDRudnLkxN6aDzW61Pif5PEkqG6ioTTr96cBAA0Gv702ksqkr8RJ3MYcATEZEsfVV61xeHPTOXvSV3hafa15mtlw5vCTy+PbBoxvymmfBcGpTSsc2/guur05hZ1ZDw21tmLvPK/e/5rU8uM5044rgcWBTc3HfwiDO4JizfNVtx+tWDqR40lhm1bqu5bp9LcL4nON2d91hyPMiOAU9EROnW23YCpkXzFd3cqbUz4fzK38OeMdW/aOpiKVBn1L6yKLBC5OYxBPcDzJhahys7Tg5GLBrcfeJKyJqYWjsTnkuDKR40lu7PBKcb339KKlo0nXAJyqJF9jHgiYgoKH2deI/cl5X+55LvlMdm+ZZ/VJq6+jwA08zE60Tj/1SR0kFjGHQcOI1FZv+suan27y4zKYsW2cdBdkRElAmmBKPVItRUWeFu674PX53GIrM9g9+uPnj8MjAjvQcd7LoE0yLF+c6YWgd0XhkEUv7QMD7swRMRUYg0dOLnNy6C59Jg4hUjtnJ+9VnbCVi/perutedEb7AGHrMLPrVh0XRcHlRUywe7LgV6/0kfNAZ/2T9U3fQcpTsY8ERElAGWu6Th8f7A6/5McL4XfBlrq28twInTTixoVPm9cZcOrw8Ztb40ahfcsGKpcoy96y9uZ3DCevIHjW6qfeUCnHDb5Jr8oGOn2zlz2aYcfgEeS/RERAUnC185M6PW/STM77uEffIb/vnocdVUWXHaqX522aJlTSf8h4j3aNj5rVYznG5Bmnk/c5nXqpjnluxBY6m5T/w+hD+9FzrbPne0/lUu/LIZIqJMSBjwWv+ymcjH1FAoluiJiIh0iCV6IiKKonWwQnD157ITP+jYGXNyneke3t/HCAAAEl1JREFUc2a+JD7+QZOcF5BbWi+As0RPRJQJCUv0zvcE29ScBjyND3vwREREyXEdulh/rcS7psQA4Nw14eBI5DrWFeWtc7LeMgWt94/ZgyciypC8H2eXK1KiT/YHfLgRm+uac+4UcXlx1lsWgoPsiIiI1BuxReuvB/h8w04Ut+c63cGAJyKijPh62Oy6KPj/ZzsXXOLzXQ68b/aN+d8esbkuO3zXBNdFwXXNFW2Xij1fdpwL7j/BTs5dCz/c18Pm0Cbh3DXBddnxdeLT8vmGnZNLWubGbNt675jJWJLLr4n1Y8ATEVF0qdfnvx42dwzXrSgXLeWipVxcUew8KAeqz3fZ6EXLmnLRUi6uKYH3siKex5rPFnkt5aJlSqKAHGs+6N//imKP97IirUN3cu6acHDEKrdkSp33snBoBJOLmybDeS7YEXedG8Hk4obJic9rvRctK0oWx1ju8g17UPyKoSjRjrKBAU9EROn29ZgHxY2BIWZzpogWacTZyBbvmMk41S5F6eQS94pij3c40F83zS1W+ew3k3GGPIRtzhSvscjpHQ48a16xkzGHdyS4JopbVxTj7LDj66KGuUU4e91/3JG2s2oOPeY4OIxA46MYaTsLjXTfwYAnIqL0m3OLFSP1kZX2c9edKGqao+jgTi4yYaTN3/+um6y276tc0zB5Ir4e2f11xKKvR3Z8HbrPyUUmjHV9DYOhxBo4bmSrovH5BptR8lac3rm6/WQNp8kREVHaFbdaJtZ2XK53yWVwxZyxseaOi82ha9clvf+i2oTl9KgmF/mPVdw491r9uZHWOcWucyOYXJKgPi8V56MPm5ep2k8WMeCJiApUhr9ypsi+ptwOQJo1fvBy7ZoZdgAoalkzI3aVO8O+Huv0f56wzCnGweuu5Wg7C+uKeMkNwHduxIMxT8hHk2Gja1jxwUWqz6u9xZAFDHgiIsosy/Ip1rPXur6WS/ddXwPjDfixHefG7P5qecyu8+TipsnDO74eAwJF+zEPipqkNefcYsW1tkNworg90RNpDIYZoiK6Qx50499zZzK3GLKA9+CJiCjdwmadnbvulIvqxZuMRc6DwUWuQxdVzk8L4/EOyludu1Z/FlZj1C54kd2oHGM/Yjs4grkl/vpBceNcOM+OYO4taRgW9/WYJ+UbB5nBHjwREaXbnCniimtCsKAdLMsbDDO8uGwMLipuTzwpLgqrsXiHfyfxHgo7Z4q4AsLBi9KXtJuMM0TFKDnLnGKcHbHOScNDaXxfjwITF2sp4LX+IFg+qpaIKHMyeQ8+Y/yT7HP7pHftY4meiIhIh1iiJyIqXBkeSJ+qr4fNHcOe6MuKWlZk5jHv8Q+aw5H/qdJ6AZwleiKijNJiwFM6sERPRESkQwx4IiIiHWLAExER6RADnoiISIcY8ERERDrEgCciItIhBjwRUUGTpsLnuhWUfgx4IiIiHWLAExER6RADnoiISIcY8ERERDrEgCciItIhBjwREZEOMeCJiIh0iAFPRESkQwx4IqJCx2fd6BIDnoiISIcY8ERERDrEgCciItIhBjwREZEOMeCJiIh0iAFPRESkQwx4IiIiHWLAExER6RADnoiI+KwbHcpowO/dunbt2rVr19p39sVcp2+nfe3WvZlsBRERUeHJXMD37bS/hpd37dq1a9uajo0xMrxv5+a3uzPWBCIiokKVuYDv7el+yLQaACrvW1PzsSdKwvft3NxR/VBNxppARERUqCZmasd9PSdrqpqknyurqtHR04fVlSFr7Nzcseall7D5457QTe++++5MtYqIiKgwZCzge3u6URVnuRTvjkrsjFi0f//+wM+CIGSgcURERDqXzoDfu3Xtax8DAB56eVdTVbzSeyDeEXv4HREREaUqnQG/+sVdu14Mvqzu9vQClQD6ek6i2qSoz/d91tHd3b1x7dvy69fWnnx2m2NdSAWfiIiIUpaxEj3mV9V8/O7OptXrKvs+6+h+6OnVimWV6xy71kk/9u20b+x5eteLq6PuhIiIiFKRuVH0lescL1e/vXHt2rUbO9ZskwKck96JiIiyQhBFMddtiEcQtN5CIiLdED55U3zw+Vy3gtKDj6olIiLSIQY8ERGRDjHgiYiIdIgBT0REpEMMeCIiIh1iwBMREekQA56IiEiHGPBERCQTH3xe+OTNXLeC0oMBT0REpEMMeCIiIh1iwBMREekQA56IiEiHGPBEREQ6xIAnIiLSIQY8EREFcaacbjDgiYiIdIgBT0REpEMMeCIiIh1iwBMREekQA56IiEiHGPBEREQ6xIAnIqIQnCmnDwx4IiIiHWLAExER6RADnoiISIcY8ERERDrEgCciItIhBjwREZEOMeCJiIh0iAFPRESkQwx4IiIiHWLAExER6RADnoiIwvFptTrAgCciItIhBjwREZEOMeCJiIh0iAFPRESkQwx4IiIiHWLAExER6RADnoiISIcY8ERERDrEgCciItIhBjwREZEOMeCJiCjtTtg+edPWn+tWpMXwfvMnH7nC3uz/SPjkTeGTN4VP/o9jOCfNSowBT0REUfBx9ACAE7Z9ez1h7/V/JHRdarnnefHB58Xamc37NJrxDHgiIqJo+j8SPvmjM/zdy46TXlP1I/YSAEDFw+0VA80nT2S9cYlNzHUDiIhIv4b3m/ftrat9FF1yUpqqn3ZXnDD7u8XW2udbKxLuwddUa9jRJW9iqn7avXAGAOCE7ZN9tdUzm096AWP7gw9bIHWvvVCuKbdBcSC5C/5/ySEdVf9HQpfXVP20u2Sf0KVsz4kdw6grmRF4w1hahpMnXFhkUXtRsoQ9eCIiyixn177ae54XH3zeW13mOfmusO/SKw/KL51dEbe3oxho7tpbVyuVxI2ek+8q7u4PNF+Y6X3weVGR7lZpzQcfrTv5rtB1AiWLmkrg7A92sl39XpQYGuKkO4CKh8UHn/d/kghTVlsafGEomZn4DHKBAU9ERNGJDz6flv0ECtqGCoMJMFXfI3V2DRUGE7xtKsbimaqflvvfFQ97q8ucJ/f7AotmLTLIP0rFc/+aWNRaa0T/PsfwjIZZZeg/4f8kcaKtX7lVkoYuhd+SB4BLx7V3G54BT0REmaUsaEe+THYPhpKZGPbtHo5YFFE8R+lMEwa6hmBYeI818Emi/4QTZU0VSbch7zDgiYhI40JK4kkomVEn/7SosUKu0quqz8dROtMU5d2Zi1PeYcYw4ImISKeGL3f6f7RUGNF/woUTbf2wVt+dYn1eNtA1FHzhG740rp1lDAOeiIg0bmBH/+XAi5hd8JJFTSXoHA6uiaFLnkDvv2KRFd62rhNOGBvjj9uPL+Io3qEBVGhuCD0Y8EREpH2ekx/KD5Pp/6g+Zhd8hr1aOcb+hK3Li4p7/HPhpCq9d9xhLB1F2Z6ylupF49plZnAePBERaZ212rBj35vN0s9xps5XPCzWQuh6MzDnXlTMc7NUGNHvtVaMO4wrHvZW/x+j3J6yBPPpc0cQRTHXbYhHELTeQiIiyqDIx9SQOizRExER6RBL9ERElFPD+82RX+giK2upHd+A99QOqtWqe1K0XgBniZ6IiCgFLNETERHpEAOeiIhIhxjwREREOsSAJyIi0iEGPBERkQ4x4ImIiHSIAU9ERKRHoratXLky11dIo3hlYuGViYVXJhZemVh4ZWLR1JWJFaB58CQ7kQ+6iebuu+/mlYmKVyYWXplYeGVi4ZWJJS+uDEv0REREOsSAJyIi0iE+6Z2IiEiH2IMnIiLSIQY8ERGRDjHgiYiIdIgBT0REpEM5D/i9W9euXbt27Vr7zj51S/t22tcGbd2bxbZmV9JXxq9vp13P1yWVK+N/T9d/MEjlyij+c9L1pUn1vybd/8eUypWJv4nO5PlfTjYeRxdT7/svPPYve0J/SrR0z79ErKhDqVyZ4LLHdHyJkr8yivWibaIbKfzN7PmXx154vzew3P+z3qT6X9Oef3nsMV3/x5TKlYm/ic7k/V9ObnvwvT3dD5lWA0DlfWtqPvbsTby0r+dkTdX8rLc021K4MgCAvp2bO6ofqslmU7Ms+StTuc6x68XViLWJbiR/ZfZ6Pn7o6XWVAIDKdU8/1N3Tm+U2Z0cq/zXt3bp27Wsnn335WT3/x5TKlYm/ic7k/V9OTgNeGdaVVdU42dOXcGlvT3f32xv1XlRM5cpAivc1LzVVZbWt2ZXilfEv/6zD/5+k7qRwZVa/6P/kA2Cv52OdfnRO6W9m9Yu7du1yrNPlBQlI4cok+k9MV/L/LyenAd/b053s0r6ek6h5dtuuXbt27dq1repdnd4FSuHK+ONd7pDpVUpXBpBvNm98G8826TPfU78yANC30/7ayWd1+sczriujaylcmYK6XPn/l5PTL5uZXxWviBF1aeU6x651gRdV1d2eXkB//yqlcGWkeHdUArr8yOOXwpWRyH85e7eute/c5tBhkqV8ZbB369rXTj6ry4sCYDxXRu9SuDJ6v1x7t6597WMAwEMv72rK+7+cnPbgK6uqA3f9+npOorqqUvVSfUv+yvR91uG/d7Hx7W58/JpOh7iO929mtUmvd5pTuzJ9O+1rX8PLu3Sb7uC/M7GlcGX0frlWv7hL9uJqHfzl5HaQ3fyqmo/f3dmH6DdHoy3du1URXH09J/V6QzXpK1O5zuH/w9z2bA0e0u0/2eP8m9HvneYUrkzfTvvGt6tfVtyI16fkr0yhSOHKFNTlyv+/nFwP45fnEwRn6IRMOIhY6p8GFv6uDiV9Zfx0P3uFfzOxJHdlFJdFpt8/m1T/a9L9f0ypXJk4//joT37/5fDb5IiIiHQo50+yIyIiovRjwBMREekQA56IiEiHGPBEREQ6xIAnIiLSIQY8UUI+h1mIYHb40n4Q/z59Lld6d559aTgFn8Ms2FyhV2a8+1OxH5dNEGyuBGuk+7dPlAEMeCJVTC1e5QRTbwuajfFjIFU+h9n46vFM7Dlr0nEKPsf65rr2Vkt6WpRWltb2uub1jHjSOgY8USoM9lescLZlJOEJgGtLM1o2aTHeAcCyqQXNW/jbJ21jwBONn7KG7+/WSwVhV3BJsL8fWvIPqfZ6HWZjsweeZqNgdvjCqsX+mnXYkc0Ohy3KvqIexecwCzaHvMTmirdaSOPNDp9yzbBGhbztCzmFuNcntCUhp/Wq09TUYIh7pVNpLbA72rWCK/ju8USHA6QPeM5X2YknbcvRE/SI8oi3xRReom+3ArC2+5fKPypX9baYEKzsK1ZqtwZXV7wf2FJ5tIh1Ay+U20drSZyjKBbEXy2k8VHPJc65By5Y3OsTfj7RLnjw1fhaG7Ja+LVSXvEEv6lobSTSIAY8UUJyZITy/1sfkgKK12GBEMxvrzd836G5HpIcir1Hy/eUjqJcX+VqMY4S79yjfkaJfX1ChG6T9EnFuiaqzkLxgSDG4aI2kkh7WKInUiWisyYP//Id7wSc9cE6br0T6Dwu1W5NtcaIHRkMBihKwsZmT7zDWja1mKRb/b7dOzzWxmg3pRVHMSyug6fLG/8oyvXVrRbjXOKeu5p1ol2fOMbXWgCA4gr6r5XveGfIJWloMiU+HABjrSn8ZIk0hQFPNG4R4e+2R949DnDZBEGo7wwtKMdkaGgyOdtccfJ9XEdJrjFRqDn35K5PHONuraYPR5RmDHiicTEsroNnx271HTlXm9PU4g1knLcrbg/en/COOPnu6fL6f/Qd75Q6qSqPkmxjwpqm4tyTvj5xjK+1AELqC/6ee6DqIQvsNsHhvF0e1C1O7ZMKUTYw4InGx7KpxeQJzop22RI/AycQeD6Hud4ZvjQ8cAwNTSZnc3Oc/ruzXhon7nOsV6wW/ygqGxNfrHNXnkIK1weWRmuM6vd4WgsAgZZI1+oVu0E6mv8SwmVT7jbO4cIq+0Taw4AnGieD3e1tQbNRvsXc2eKNW4G2tLZbPfLaxh1N3nZrSJzDHzjB2V3SXeHY+W5qaUG9dJe4rl0eG5D4KCobk9q5K08hyevz/7dzx7YJA1EYgO1d4oYR4glgAI8AJQukZAC7TEnrnrABEyCq2+VSJDTIQkjIyuPyfQv4fFf8eif7v27BxNj/7Gqrqnrvu0tzs1fV8jN/rX+/E9gt+vUjj0uH8TT5Ix+EUeec/3oNwF1paJvLR55qdUtD24zdA5H5ao6bereI+153jgSiMMFDdOkwBi51m0nsrrjYPXvwQ8BDYGlo67oZu33USXY+b9t9f17NU/f/pONmde7/4ZHwalzRA0CBTPAAUCABDwAFEvAAUCABDwAFEvAAUCABDwAF+gammhf81hRAegAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>The user can also get a penalized PPML regression without
+high-dimensional fixed effects. To do so, simply set the option fixed to
+NULL.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.0075</span>, <span class="fl">0.005</span>, <span class="fl">0.0025</span>, <span class="fl">0.001</span>, <span class="fl">0.00075</span>, <span class="fl">0.0005</span>, <span class="fl">0.00025</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>reg2_nofe <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span></code></pre></div>
+<p>If the user wishes to obtain the penalized estimates for a single
+value of lambda, they can either use <code>mlfitppml</code> as described
+above (just setting <code>lambdas == x</code>, where <code>x</code> is a
+number) or use the <code>penhdfeppml</code> function, upon which
+<code>mlfitppml</code> is built, directly. For instance:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">penhdfeppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambda =</span> <span class="fl">0.005</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<p>We can easily check that the penalized coefficient estimates of
+<code>penhdfeppml</code> and <code>mlfitppml</code> are equal for a
+lambda value of 0.005 (within a numerical tolerance):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">as.vector</span>(reg3<span class="sc">$</span>beta[<span class="sc">!</span><span class="fu">is.na</span>(reg3<span class="sc">$</span>beta)]), <span class="fu">as.vector</span>(reg2<span class="sc">$</span>beta_pre[, <span class="dv">5</span>]), <span class="at">tol =</span> <span class="fl">1e-05</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>For more details on <code>penhdfeppml</code>, run
+<code>?penhdfeppml</code>.</p>
 </div>
 <div id="ridge-regression-in-development" class="section level2" number="4.2">
-<h2 number="4.2"><span class="header-section-number">4.2</span> Ridge regression (in development)</h2>
-<p><code>mlfitppml</code> also allows user to use the ridge penalty in their PPML regressions. Simply run:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0001</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">10</span>) </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>reg4 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;ridge&quot;</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span></code></pre></div>
-<p>Note that this feature is still in development and may contain bugs.</p>
+<h2><span class="header-section-number">4.2</span> Ridge regression (in
+development)</h2>
+<p><code>mlfitppml</code> also allows user to use the ridge penalty in
+their PPML regressions. Simply run:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0001</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">10</span>) </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>reg4 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;ridge&quot;</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<p>Note that this feature is still in development and may contain
+bugs.</p>
 </div>
 <div id="penalty-selection" class="section level2" number="4.3">
-<h2 number="4.3"><span class="header-section-number">4.3</span> Penalty selection</h2>
+<h2><span class="header-section-number">4.3</span> Penalty
+selection</h2>
 <div id="cross-validation" class="section level3" number="4.3.1">
-<h3 number="4.3.1"><span class="header-section-number">4.3.1</span> Cross-validation</h3>
-<p>The <code>mlfitppml</code> function enables users to carry out cross-validation of their models via the <code>xval</code> and <code>IDs</code> arguments. When <code>xval</code> is set to <code>TRUE</code>, the function performs cross-validation using a user-provided vector of IDs. For instance, if we want to do k-fold cross validation with k = 20, splitting the data set by agreement (not by observation), we can do the following:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">unique</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>])</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>nfolds <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> id, <span class="at">fold =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nfolds, <span class="at">size =</span> <span class="fu">length</span>(id), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>cross_ids <span class="ot">&lt;-</span> <span class="fu">merge</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>], </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                   unique_ids, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p>Now we activate the cross-validation option in <code>mlfitppml</code> and input the ID vector:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reg5 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
-<p>Now the function also returns a <code>rmse</code> element that includes the cross-validation results (the average RMSE or root mean squared error for each value of lambda). Users can employ this tool to choose the value of the penalty parameter that minimizes the RMSE:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>reg5<span class="sc">$</span>rmse</span></code></pre></div>
+<h3><span class="header-section-number">4.3.1</span>
+Cross-validation</h3>
+<p>The <code>mlfitppml</code> function enables users to carry out
+cross-validation of their models via the <code>xval</code> and
+<code>IDs</code> arguments. When <code>xval</code> is set to
+<code>TRUE</code>, the function performs cross-validation using a
+user-provided vector of IDs. For instance, if we want to do k-fold cross
+validation with k = 20, splitting the data set by agreement (not by
+observation), we can do the following:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">unique</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>nfolds <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> id, <span class="at">fold =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nfolds, <span class="at">size =</span> <span class="fu">length</span>(id), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>cross_ids <span class="ot">&lt;-</span> <span class="fu">merge</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>], </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                   unique_ids, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Now we activate the cross-validation option in <code>mlfitppml</code>
+and input the ID vector:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>reg5 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
+<p>Now the function also returns a <code>rmse</code> element that
+includes the cross-validation results (the average RMSE or root mean
+squared error for each value of lambda). Users can employ this tool to
+choose the value of the penalty parameter that minimizes the RMSE:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reg5<span class="sc">$</span>rmse</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>reg5_nofe <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="cn">NULL</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
 <table>
 <caption>Table 4: Cross-validation results</caption>
 <thead>
@@ -667,22 +1003,34 @@ Table 3: Unpenalized PPML results
 </tr>
 </tbody>
 </table>
-<p>In this case, the RMSE criterion suggest that the penalty should be set at 0. In other words, the results in Table 3 are the ones that minimize the mean squared error of the regression, according to 20-fold cross-validation.</p>
+<p>In this case, the RMSE criterion suggest that the penalty should be
+set at 0. In other words, the results in Table 3 are the ones that
+minimize the mean squared error of the regression, according to 20-fold
+cross-validation.</p>
 </div>
 <div id="plugin-lasso" class="section level3" number="4.3.2">
-<h3 number="4.3.2"><span class="header-section-number">4.3.2</span> Plugin lasso</h3>
-<p>This package also enables the use of the plugin lasso method, incorporating coefficient-specific penalty weights calculated automatically by the package. The most convenient way to do this is to set <code>method = &quot;plugin&quot;</code> in <code>mlfitppml</code>. Note that the plugin algorithm requires a clustering variable - we are using the interaction of the exporter and importer variables in the <code>trade</code> data set:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>reg6 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg6<span class="sc">$</span>beta)] <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
+<h3><span class="header-section-number">4.3.2</span> Plugin lasso</h3>
+<p>This package also enables the use of the plugin lasso method,
+incorporating coefficient-specific penalty weights calculated
+automatically by the package. The most convenient way to do this is to
+set <code>method = &quot;plugin&quot;</code> in <code>mlfitppml</code>. Note that
+the plugin algorithm requires a clustering variable - we are using the
+interaction of the exporter and importer variables in the
+<code>trade</code> data set:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>reg6 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>))</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 3</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9787471.95031103</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg6<span class="sc">$</span>beta)] <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
 <table class="kable_wrapper">
 <caption>
 Table 5: Plugin Lasso results
@@ -702,7 +1050,7 @@ Table 5: Plugin Lasso results
 <tbody>
 <tr class="odd">
 <td align="left">ad_prov_14</td>
-<td align="right">0.0205</td>
+<td align="right">0.0204</td>
 <td align="right">0.4593</td>
 <td align="right">0.1397</td>
 </tr>
@@ -804,18 +1152,171 @@ Table 5: Plugin Lasso results
 </tr>
 </tbody>
 </table>
-<p>We can see that the plugin lasso is very strict: only two provisions have non-zero coefficients when the penalties are set at the level suggested by the plugin algorithm. Compare this to the cross-validation results, which didn’t remove any of the provisions.</p>
+<p>We can see that the plugin lasso is very strict: only three
+provisions have non-zero coefficients when the penalties are set at the
+level suggested by the plugin algorithm. Compare this to the
+cross-validation results, which didn’t remove any of the provisions.</p>
+<p>We can also set the gamma value as defined in Belloni et al. to
+something less strict, e.g. 0.3.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>reg6_gamma <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>), <span class="at">gamma_val=</span><span class="fl">0.3</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 5</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9458290.22374599</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(reg6<span class="sc">$</span>beta)[<span class="fu">which</span>(reg6_gamma<span class="sc">$</span>beta <span class="sc">!=</span> <span class="dv">0</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>results_gamma <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6_gamma<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6_gamma<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6_gamma<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>results_gamma<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg6_gamma<span class="sc">$</span>beta)] <span class="ot">&lt;-</span> reg6_gamma<span class="sc">$</span>ses</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>results_gamma</span></code></pre></div>
+<table class="kable_wrapper">
+<caption>
+Table 6: Plugin Lasso results, different gamma value
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Provision</th>
+<th align="right">Lasso Coefficient</th>
+<th align="right">Post-Lasso Coefficient</th>
+<th align="right">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ad_prov_14</td>
+<td align="right">0.1761</td>
+<td align="right">0.0551</td>
+<td align="right">0.1721</td>
+</tr>
+<tr class="even">
+<td align="left">cp_prov_23</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">tbt_prov_07</td>
+<td align="right">0.0340</td>
+<td align="right">0.3870</td>
+<td align="right">0.1716</td>
+</tr>
+<tr class="even">
+<td align="left">tbt_prov_33</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">tf_prov_41</td>
+<td align="right">0.0436</td>
+<td align="right">0.4284</td>
+<td align="right">0.1845</td>
+</tr>
+<tr class="even">
+<td align="left">tf_prov_45</td>
+<td align="right">0.1752</td>
+<td align="right">0.1622</td>
+<td align="right">0.0828</td>
+</tr>
+<tr class="odd">
+<td align="left">env_prov_18</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Provision</th>
+<th align="right">Lasso Coefficient</th>
+<th align="right">Post-Lasso Coefficient</th>
+<th align="right">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">et_prov_38</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">inv_prov_22</td>
+<td align="right">0.0652</td>
+<td align="right">0.1716</td>
+<td align="right">0.064</td>
+</tr>
+<tr class="odd">
+<td align="left">lm_prov_10</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">moc_prov_21</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">ser_prov_47</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">ste_prov_30</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">cp_prov_26</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>When doing this, we see that more provisions than before are
+selected.</p>
 </div>
 <div id="iceberg-lasso-in-development" class="section level3" number="4.3.3">
-<h3 number="4.3.3"><span class="header-section-number">4.3.3</span> Iceberg lasso (in development)</h3>
-<p>This package also allows users to implement the two-step lasso described in Breinlich et al. (2021). This method consists in, first, running a plugin lasso estimation and second, running individual lasso regressions on each of the variables selected in the first stage. The <code>iceberg</code> function is designed precisely with this second step in mind. It takes a vector of dependent variables and returns a lasso regression for each one of them:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>iceberg_results <span class="ot">&lt;-</span> <span class="fu">iceberg</span>(<span class="at">data =</span> trade2[, <span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)],</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">dep =</span> results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>],</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">selectobs =</span> (trade2<span class="sc">$</span>time <span class="sc">==</span> <span class="st">&quot;2016&quot;</span>))</span></code></pre></div>
-<p>Currently, the function returns a matrix with coefficient estimates for each of the selected provisions. Support for standard errors (including clustered) is in development as of the current version of the package. The iceberg lasso coefficients are:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>iceberg_results</span></code></pre></div>
+<h3><span class="header-section-number">4.3.3</span> Iceberg lasso (in
+development)</h3>
+<p>This package also allows users to implement the two-step lasso
+described in Breinlich et al. (2021). This method consists in, first,
+running a plugin lasso estimation and second, running individual lasso
+regressions on each of the variables selected in the first stage. The
+<code>iceberg</code> function is designed precisely with this second
+step in mind. It takes a vector of dependent variables and returns a
+lasso regression for each one of them:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>iceberg_results <span class="ot">&lt;-</span> <span class="fu">iceberg</span>(<span class="at">data =</span> trade2[, <span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)],</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">dep =</span> results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>],</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">selectobs =</span> (trade2<span class="sc">$</span>time <span class="sc">==</span> <span class="st">&quot;2016&quot;</span>))</span></code></pre></div>
+<p>Currently, the function returns a matrix with coefficient estimates
+for each of the selected provisions. Support for standard errors
+(including clustered) is in development as of the current version of the
+package. The iceberg lasso coefficients are:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>iceberg_results</span></code></pre></div>
 <table>
-<caption>Table 6: Iceberg Lasso coefficients</caption>
+<caption>Table 7: Iceberg Lasso coefficients</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -905,9 +1406,11 @@ Table 5: Plugin Lasso results
 </tr>
 </tbody>
 </table>
-<p>Since PPML coefficients can’t be easily interpreted, you may find it useful to see the raw correlations between the variables in the iceberg lasso step:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>provcorr <span class="ot">&lt;-</span> <span class="fu">cor</span>(trade2[, results<span class="sc">$</span>prov])</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>(provcorr <span class="ot">&lt;-</span> provcorr[, results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>]])</span></code></pre></div>
+<p>Since PPML coefficients can’t be easily interpreted, you may find it
+useful to see the raw correlations between the variables in the iceberg
+lasso step:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>provcorr <span class="ot">&lt;-</span> <span class="fu">cor</span>(trade2[, results<span class="sc">$</span>prov])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>(provcorr <span class="ot">&lt;-</span> provcorr[, results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>]])</span></code></pre></div>
 <table>
 <caption>Table 7: Iceberg Lasso correlations</caption>
 <thead>
@@ -1008,13 +1511,286 @@ Table 5: Plugin Lasso results
 </div>
 </div>
 </div>
-<div id="references" class="section level1" number="5">
-<h1 number="5"><span class="header-section-number">5</span> References</h1>
-<p>Breinlich, H., Corradi, V., Rocha, N., Ruta, M., Santos Silva, J.M.C. and T. Zylkin, T. (2021). “Machine Learning in International Trade Research: Evaluating the Impact of Trade Agreements”, Policy Research Working Paper; No. 9629. World Bank, Washington, DC.</p>
-<p>Correia, S., P. Guimaraes and T. Zylkin (2020). “Fast Poisson estimation with high dimensional fixed effects”, <em>STATA Journal</em>, 20, 90-115.</p>
-<p>Gaure, S (2013). “OLS with multiple high dimensional category variables”, <em>Computational Statistics &amp; Data Analysis</em>, 66, 8-18.</p>
-<p>Friedman, J., T. Hastie, and R. Tibshirani (2010). “Regularization paths for generalized linear models via coordinate descent”, <em>Journal of Statistical Software</em>, 33, 1-22.</p>
-<p>Belloni, A., V. Chernozhukov, C. Hansen and D. Kozbur (2016). “Inference in high dimensional panel models with an application to gun control”, <em>Journal of Business &amp; Economic Statistics</em>, 34, 590-605.</p>
+<div id="bootstrap-lasso" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Bootstrap Lasso</h1>
+<p>To illustrate this, we select the trade data, but now not dropping id
+and agreement variable.</p>
+<p>We want to cluster by agreement, that means that we draw observations
+with the same agreement ID. For this, we need to create a new agreement
+ID in the following way:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), ] <span class="co"># Now, we need id and agreement variable</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s cluster by agreement</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id <span class="ot">&lt;-</span> trade3<span class="sc">$</span>id <span class="co"># ID refers to agreement ID</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id[<span class="fu">is.na</span>(trade3<span class="sc">$</span>alt_id)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># We set this to zero when the ID is missing, interpreting this as the country pair not being part of any agreement.</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>exp  <span class="ot">&lt;-</span> <span class="fu">factor</span>(trade3<span class="sc">$</span>exp)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>imp  <span class="ot">&lt;-</span> <span class="fu">factor</span>(trade3<span class="sc">$</span>imp)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>pair     <span class="ot">&lt;-</span> <span class="fu">interaction</span>(exp, imp)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>pair <span class="ot">&lt;-</span> pair</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> <span class="fu">within</span>(trade3, {alt_id2 <span class="ot">=</span> <span class="fu">ave</span>(alt_id,pair,<span class="at">FUN=</span>max)} ) <span class="co"># This creates the maximum of the ID for each pair. This adjusts for the fact that some pairs might have been part of different agreements and we want to take get a unique agreement ID for each pair. </span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id2[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>] <span class="ot">&lt;-</span> trade3<span class="sc">$</span>pair[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>]</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(trade3<span class="sc">$</span>alt_id2) <span class="co"># This cluster variable collects pairs for pairs that are in agreement, uses the pair ID for those that are not.</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Thus, it allows errors to be clustered within agreements.</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>alt_id2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(trade3<span class="sc">$</span>alt_id2)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>clus <span class="ot">&lt;-</span> alt_id2 <span class="co">#Add the ID to the data</span></span></code></pre></div>
+<p>Next, we run Bootstrap Lasso, which means drawing agreement clusters
+with replacement using the ID just created. In the bootstrap() command,
+first hdfeppml() is run, using a dummy which is one when any provision
+was in place and zero otherwise to get initial values of mu. These are
+then used in plugin Lasso. This is repeated B times (as specified in
+bootreps) and the command selects those provisions selected by plugin in
+at least a fraction of cases. This fraction can be specified by the
+option boot_threshold (Default is 1 pc).</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">bootstrap</span>(<span class="at">data=</span>trade3, <span class="at">dep=</span><span class="st">&quot;export&quot;</span>, <span class="at">cluster_id=</span><span class="st">&quot;clus&quot;</span>, <span class="at">fixed=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)), <span class="at">indep=</span><span class="dv">7</span><span class="sc">:</span><span class="dv">22</span>, <span class="at">bootreps=</span><span class="dv">10</span>, <span class="at">colcheck_x =</span> <span class="cn">TRUE</span>, <span class="at">colcheck_x_fes =</span> <span class="cn">TRUE</span>, <span class="at">boot_threshold =</span> <span class="fl">0.01</span>, <span class="at">post=</span><span class="cn">TRUE</span>, <span class="at">gamma_val=</span><span class="fl">0.01</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<caption>Table 8: Coefficients of bootstrap repetitions</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">1</th>
+<th align="right">2</th>
+<th align="right">3</th>
+<th align="right">4</th>
+<th align="right">5</th>
+<th align="right">6</th>
+<th align="right">7</th>
+<th align="right">8</th>
+<th align="right">9</th>
+<th align="right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ad_prov_14</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">0.10</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">cp_prov_23</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">tbt_prov_07</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.64</td>
+<td align="right">0</td>
+<td align="right">0.38</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">tbt_prov_33</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">tf_prov_41</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">tf_prov_45</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">env_prov_18</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">et_prov_38</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.42</td>
+<td align="right">0</td>
+<td align="right">0.34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">inv_prov_22</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">ipr_prov_15</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">ipr_prov_44</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">lm_prov_10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">moc_prov_21</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">ser_prov_47</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">ste_prov_30</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">cp_prov_26</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="references" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> References</h1>
+<p>Breinlich, H., Corradi, V., Rocha, N., Ruta, M., Santos Silva, J.M.C.
+and T. Zylkin, T. (2021). “Machine Learning in International Trade
+Research: Evaluating the Impact of Trade Agreements”, Policy Research
+Working Paper; No. 9629. World Bank, Washington, DC.</p>
+<p>Correia, S., P. Guimaraes and T. Zylkin (2020). “Fast Poisson
+estimation with high dimensional fixed effects”, <em>STATA Journal</em>,
+20, 90-115.</p>
+<p>Gaure, S (2013). “OLS with multiple high dimensional category
+variables”, <em>Computational Statistics &amp; Data Analysis</em>, 66,
+8-18.</p>
+<p>Friedman, J., T. Hastie, and R. Tibshirani (2010). “Regularization
+paths for generalized linear models via coordinate descent”, <em>Journal
+of Statistical Software</em>, 33, 1-22.</p>
+<p>Belloni, A., V. Chernozhukov, C. Hansen and D. Kozbur (2016).
+“Inference in high dimensional panel models with an application to gun
+control”, <em>Journal of Business &amp; Economic Statistics</em>, 34,
+590-605.</p>
 </div>
 
 

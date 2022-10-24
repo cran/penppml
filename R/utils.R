@@ -8,23 +8,82 @@
 #' @param x Regressor matrix.
 #' @param fes List of fixed effects.
 #' @param hdfetol Tolerance for the centering, passed on to \code{lfe::demeanlist}.
-#'
+#' @param colcheck_x Logical. If \code{TRUE}, this checks collinearity between the independent variables and drops the
+#' collinear variables.
+#' @param colcheck_x_fes Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
+#' by the fixed effects drops those that are perfectly explained.
 #' @return A numeric vector containing the variables that pass the collinearity check.
 
-collinearity_check <- function(y, x, fes, hdfetol) {
+collinearity_check <- function(y, x=NULL, fes=NULL, hdfetol, colcheck_x_fes=FALSE, colcheck_x=FALSE) {
+  # Collinearity check does not make sense without x. Stop if x not provided.
+  if(missing(x)){
+    stop("Please provide x.")
+  }
   mu  <- (y + mean(y)) / 2
   z   <- (y - mu) / mu + log(mu)
+  z[which(z==Inf)] <- 0 # test
   reg_z  <- matrix(z)
+  if(!missing(x)){
   reg_x  <- x
+  }
   mu  <- (y + mean(y)) / 2
 
-  z_resid <- collapse::fhdwithin(reg_z, fes, w = mu)
-  x_resid <- collapse::fhdwithin(reg_x, fes, w = mu)
+  if(!missing(fes)){
+    if(is.null(fes)){
+      z_resid <- collapse::fwithin(x=reg_z, g=factor(rep(1,length(reg_z))), w = mu)
+      if(!missing(x)){
+        x_resid <- collapse::fwithin(x=reg_x,g=factor(rep(1,length(reg_z))), w = mu)
+      }
+    }else{
+      z_resid <-  collapse::fhdwithin(reg_z, fes, w = mu)
+      if(!missing(x)){
+        x_resid <- collapse::fhdwithin(reg_x, fes, w = mu)
+      }
+    }
+  } else {
+    z_resid <- reg_z
+    if(!missing(x)){
+      x_resid <- reg_x
+    }
+  }
 
-  check <- stats::lm.wfit(x_resid, z_resid, mu)
-  check$coefficients
-  include_x <- which(!is.na(check$coefficients))
-}
+  if(!missing(x)){ # x is not missing
+
+    #Exclude x which have zero variance
+    x_var <- var(x)
+    include_x_var <- which(diag(x_var)!=0)
+    if (length(which(diag(x_var)==0)) != 0){
+      message(paste("The following variables are dropped because their variation is equal zero:", paste(names(which(diag(x_var)==0)), collapse=" ")))
+    }
+
+    if(colcheck_x_fes==TRUE){
+      orig_sds <- matrixStats::colSds(x)
+      res_sds <- matrixStats::colSds(x_resid)
+      frac_sds <- res_sds/orig_sds
+      include_x_first <- union(which(!is.na(frac_sds)), which(frac_sds >= 1e-5))
+      rm(res_sds, orig_sds)
+      if(!is.null(names(which(frac_sds < 1e-5)))){
+      message(
+      paste("The following variables have been dropped, because most of their variation is explained by the fixed effects: ", paste(names(which(frac_sds < 1e-5)), collapse=" ")))
+      }
+    }
+
+  if(colcheck_x==TRUE){
+    check <- stats::lm.wfit(x_resid, z_resid, mu)
+    if(length(names(which(is.na(check$coefficients)))) != 0){
+    message(paste("The following variables have been dropped, due to collinearity: ", paste(names(which(is.na(check$coefficients))), collapse=" ")))
+    }
+  }
+  }
+
+  if(colcheck_x_fes==TRUE & colcheck_x==TRUE ){
+    include_x <- intersect(intersect(include_x_first, which(!is.na(check$coefficients))), include_x_var)
+  } else  if (colcheck_x_fes==FALSE & colcheck_x == TRUE ){
+      include_x <- intersect(which(!is.na(check$coefficients)), include_x_var)
+  } else if(colcheck_x_fes==TRUE & colcheck_x == FALSE){
+        include_x <- intersect(include_x_first, include_x_var)
+  }
+ }
 
 
 #' Cluster-robust Standard Error Estimation
@@ -173,17 +232,9 @@ genfes <- function(data, inter) {
 #'   \item \code{cluster}: cluster vector.
 #' }
 
-genmodel <- function(data, dep = 1, indep = NULL, fixed = NULL, cluster = NULL, selectobs = NULL) {
+genmodel <- function(data, dep = NULL, indep = NULL, fixed = NULL, cluster = NULL, selectobs = NULL) {
   # First, we filter using selectobs:
   if (!is.null(selectobs)) data <- data[selectobs, ]
-
-  # Then we deal with y:
-  if (is.numeric(dep) | is.character(dep)) {
-    y <- data[, dep]
-  } else {
-    stop("Unsupported format for dependent variable: dep must be a character or numeric vector.")
-  }
-
   # Now the fes:
   if (is.numeric(fixed) | is.character(fixed)) {
     fes <- as.list(data[, fixed])
@@ -195,6 +246,44 @@ genmodel <- function(data, dep = 1, indep = NULL, fixed = NULL, cluster = NULL, 
     stop("Unsupported format for fixed effects: fixed must be a numeric or character vector or a list
          of numeric or character vectors.")
   }
+
+  # mat_fes <- matrix(unlist(fes), ncol=length(fes))
+  # data_fes <- data.frame(data, mat_fes)
+  #
+  # obs_before <- dim(data)[1]
+  #
+  # for(fe_ind in 1:length(fes)){
+  #   fe_name_temp <- paste("X",fe_ind,sep="")
+  #   #print(fe_name_temp)
+  #   #print("Nr obs before")
+  #   #print(dim(data_fes)[1])
+  #   data_sum <- data_fes %>% dplyr::group_by(!!rlang::sym(fe_name_temp)) %>% dplyr::summarise(sum_dep = sum(!!rlang::sym(dep)))
+  #   data_var <- data_fes %>% dplyr::group_by(!!rlang::sym(fe_name_temp)) %>% dplyr::summarise(var_dep = var(!!rlang::sym(dep)))
+  #   data_temp <- dplyr::left_join(data_fes, data_sum, by=fe_name_temp)
+  #   data_temp <- dplyr::left_join(data_temp, data_var, by=fe_name_temp)
+  #   # Include observations where sum and variance unequal zero and var not NA, i.e. at least two observations in group
+  #   incl_obs <- which(data_temp$sum_dep!=0 & !is.na(data_temp$var_dep) & data_temp$var_dep != 0)
+  #   data_fes <- data_temp[incl_obs,]
+  #   fes <- lapply(fes, "[", incl_obs)
+  #   #IDs <- IDs[incl_obs]
+  #   print(length(fes[[fe_ind]]))
+  #   print(dim(data_fes)[1])
+  #   data_fes <- data_fes %>% dplyr::select(-any_of(c("sum_dep", "var_dep", fe_name_temp)))
+  # }
+  # data <- data_fes
+  # message(paste(obs_before - dim(data)[1], "Observations are omitted because their sum or variance is zero inside a fixed effects category or because their variance is NA, indicating that there is only one observation inside that category."))
+
+  # Then we deal with y:
+  if (is.numeric(dep) | is.character(dep)) {
+    y <- data[, dep]
+  } else {
+    stop("Unsupported format for dependent variable: dep must be a character or numeric vector.")
+  }
+
+
+  # temp_fe_mat <- as.matrix(data[,1:length(fes)])
+  # fes <- split(temp_fe_mat, rep(1:ncol(temp_fe_mat), each = nrow(temp_fe_mat)))
+  # print(head(fes))
 
   # Next the clusters (if any):
   if (is.numeric(cluster) | is.character(cluster)) {
@@ -216,6 +305,7 @@ genmodel <- function(data, dep = 1, indep = NULL, fixed = NULL, cluster = NULL, 
   } else {
     stop("Unsupported format for independent variables: x must be a character or numeric vector.")
   }
+
   if (is.null(cluster)) {
     return(list(y = y, x = x, fes = fes))
   } else {

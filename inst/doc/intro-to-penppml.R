@@ -5,10 +5,13 @@ knitr::opts_chunk$set(
 )
 
 ## ----setup 1, eval = FALSE----------------------------------------------------
-#  install.packages(penppml)
+#  install.packages("penppml")
 
-## ----setup 2------------------------------------------------------------------
-library(penppml)
+## ---- eval=FALSE--------------------------------------------------------------
+#  library(penppml)
+
+## ---- hide=TRUE, eval=TRUE----------------------------------------------------
+devtools::load_all()
 
 ## ----inspect trade, echo = FALSE----------------------------------------------
 knitr::kable(head(trade[, 1:10], 10), format = "pipe", caption = "Table 1: International Trade Data Set")
@@ -16,12 +19,12 @@ knitr::kable(head(trade[, 1:10], 10), format = "pipe", caption = "Table 1: Inter
 ## ----inspect countries, echo = FALSE------------------------------------------
 knitr::kable(head(countries, 10), format = "pipe", caption = "Table 2: Country Data Set",)
 
-## ----filter trade data--------------------------------------------------------
+## ----filter trade data, eval=TRUE---------------------------------------------
 selected <- countries$iso[countries$region %in% c("Americas")]
 trade2 <- trade[(trade$exp %in% selected) & (trade$imp %in% selected), -(5:6)] # We remove columns 5 and 
 # 6 because these variables are not needed in our regressions.
 
-## ----try hdfeppml-------------------------------------------------------------
+## ----try hdfeppml, eval=TRUE--------------------------------------------------
 reg1 <- hdfeppml(data = trade2,
                  dep = "export",
                  fixed = list(c("exp", "time"), 
@@ -42,6 +45,13 @@ knitr::kable(list(results[1:8, ], results[9:16, ]),
              caption = "Table 3: Unpenalized PPML results",
              row.names = FALSE,
              digits = 4)
+
+## ----try hdfeppml2, eval=FALSE------------------------------------------------
+#  reg1_indep <- hdfeppml(data = trade2, indep=5:7,
+#                   dep = "export",
+#                   fixed = list(c("exp", "time"),
+#                                c("imp", "time"),
+#                                c("exp", "imp")))
 
 ## ----try mlfitpenppml lasso, results = FALSE----------------------------------
 lambdas <- c(0.05, 0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.00075, 0.0005, 0.00025, 0.0001, 0)
@@ -70,6 +80,15 @@ ggplot2::ggplot(data = results, mapping = ggplot2::aes(x = lambda, y = coefficie
                         method = list(directlabels::dl.trans(x = x + 0.5), "last.bumpup")) +
   ggplot2::labs(x = "Penalty parameter (lambda)", y = "Coefficient", 
                 title = "Figure 1: Regularization path for lasso")
+
+## ----try mlfitpenppml lasso nofe, results = FALSE-----------------------------
+lambdas <- c(0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.00075, 0.0005, 0.00025, 0.0001, 0)
+
+reg2_nofe <- mlfitppml(data = trade2,
+                  dep = "export",
+                  fixed = NULL,
+                  penalty = "lasso",
+                  lambdas = lambdas)
 
 ## ----try penhdfeppml, results = FALSE-----------------------------------------
 reg3 <- penhdfeppml(data = trade2,
@@ -116,6 +135,15 @@ cross_ids <- merge(trade[(trade$exp %in% selected) & (trade$imp %in% selected), 
 ## ----xval results, eval = FALSE-----------------------------------------------
 #  reg5$rmse
 
+## ----try cross validation nofe, eval = FALSE----------------------------------
+#  reg5_nofe <- mlfitppml(data = trade2,
+#                    dep = "export",
+#                    fixed = NULL,
+#                    penalty = "lasso",
+#                    lambdas = c(seq(0.5, 0.1, by = -0.1), 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0),
+#                    xval = TRUE,
+#                    IDs =  cross_ids$fold)
+
 ## ----display xval results, echo = FALSE---------------------------------------
 # Note for package maintainer: notice that the code above is not being evaluated when building the vignette (due to the eval = FALSE option). This is for convenience: the cross-validation algorithm takes forever to run and, since vignettes are rebuilt a couple of times every time R CMD check is run, this makes it too cumbersome to check the package. Instead, I've run the code above in a separate R session and stored the results, which I'm reproducing below (re-running the code above should produce similar results):
 rmse <- structure(list(lambda = c(0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.01, 
@@ -154,6 +182,30 @@ knitr::kable(list(results[1:7,], results[8:14,]),
              row.names = FALSE,
              digits = 4)
 
+## ----try plugin lasso gamma, results = FALSE----------------------------------
+reg6_gamma <- mlfitppml(data = trade2,
+                  dep = "export",
+                  fixed = list(c("exp", "time"), 
+                              c("imp", "time"),
+                              c("exp", "imp")),
+                  penalty = "lasso",
+                  method = "plugin",
+                  cluster = c("exp", "imp"), gamma_val=0.3)
+rownames(reg6$beta)[which(reg6_gamma$beta != 0)]
+
+## ----plugin results gamma, results = FALSE------------------------------------
+results_gamma <- data.frame(prov = rownames(reg6_gamma$beta), b_pre = reg6_gamma$beta_pre, b = reg6_gamma$beta, se = 0)
+results_gamma$se[!is.na(reg6_gamma$beta)] <- reg6_gamma$ses
+results_gamma
+
+## ----display plugin results gamma, echo = FALSE-------------------------------
+knitr::kable(list(results_gamma[1:7,], results_gamma[8:14,]), 
+             format = "pipe",
+             col.names = c("Provision", "Lasso Coefficient", "Post-Lasso Coefficient", "SE"), 
+             caption = "Table 6: Plugin Lasso results, different gamma value",
+             row.names = FALSE,
+             digits = 4)
+
 ## ----try iceberg,  results = FALSE--------------------------------------------
 iceberg_results <- iceberg(data = trade2[, -(1:4)],
                            dep = results$prov[results$b != 0],
@@ -165,7 +217,7 @@ iceberg_results
 ## ----display iceberg results, echo = FALSE------------------------------------
 knitr::kable(iceberg_results, 
              format = "pipe",
-             caption = "Table 6: Iceberg Lasso coefficients",
+             caption = "Table 7: Iceberg Lasso coefficients",
              row.names = TRUE,
              digits = 4)
 
@@ -179,4 +231,32 @@ knitr::kable(provcorr,
              caption = "Table 7: Iceberg Lasso correlations",
              row.names = TRUE,
              digits = 4)
+
+## ---- message=FALSE, warning=FALSE, results=FALSE, eval=TRUE------------------
+trade3 <- trade[(trade$exp %in% selected) & (trade$imp %in% selected), ] # Now, we need id and agreement variable
+# Let's cluster by agreement
+trade3$alt_id <- trade3$id # ID refers to agreement ID
+trade3$alt_id[is.na(trade3$alt_id)] <- 0 # We set this to zero when the ID is missing, interpreting this as the country pair not being part of any agreement.
+exp  <- factor(trade3$exp)
+imp  <- factor(trade3$imp)
+pair     <- interaction(exp, imp)
+trade3$pair <- pair
+trade3 <- within(trade3, {alt_id2 = ave(alt_id,pair,FUN=max)} ) # This creates the maximum of the ID for each pair. This adjusts for the fact that some pairs might have been part of different agreements and we want to take get a unique agreement ID for each pair. 
+
+trade3$alt_id2[trade3$alt_id2==0] <- trade3$pair[trade3$alt_id2==0]
+unique(trade3$alt_id2) # This cluster variable collects pairs for pairs that are in agreement, uses the pair ID for those that are not.
+# Thus, it allows errors to be clustered within agreements.
+alt_id2 <- factor(trade3$alt_id2)
+trade3$clus <- alt_id2 #Add the ID to the data
+
+## ----try bootstrap lasso, warning=FALSE, message=FALSE, results = FALSE, eval=TRUE----
+set.seed(123)
+bs1 <- bootstrap(data=trade3, dep="export", cluster_id="clus", fixed=list(c("exp", "time"), c("imp", "time"), c("exp", "imp")), indep=7:22, bootreps=10, colcheck_x = TRUE, colcheck_x_fes = TRUE, boot_threshold = 0.01, post=TRUE, gamma_val=0.01, verbose=FALSE)
+
+## ----bss table, echo = FALSE, eval=TRUE---------------------------------------
+knitr::kable(bs1$betas, 
+             format = "pipe",
+             caption = "Table 8: Coefficients of bootstrap repetitions",
+             row.names = TRUE,
+             digits = 2)
 

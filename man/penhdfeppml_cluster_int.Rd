@@ -16,12 +16,14 @@ penhdfeppml_cluster_int(
   penweights = NULL,
   saveX = TRUE,
   mu = NULL,
-  colcheck = TRUE,
+  colcheck_x = TRUE,
+  colcheck_x_fes = TRUE,
   K = 15,
   init_z = NULL,
   post = FALSE,
   verbose = FALSE,
-  lambda = NULL
+  lambda = NULL,
+  gamma_val = NULL
 )
 }
 \arguments{
@@ -38,7 +40,7 @@ penhdfeppml_cluster_int(
 \item{hdfetol}{Tolerance parameter for the within-transformation step,
 passed on to \code{collapse::fhdwithin}.}
 
-\item{glmnettol}{Tolerance parameter to be passed on to \code{glmnet::glmnet}.}
+\item{glmnettol}{Tolerance parameter to be passed on to \code{glmnet}.}
 
 \item{penalty}{Only "lasso" is supported at the present stage.}
 
@@ -48,10 +50,13 @@ passed on to \code{collapse::fhdwithin}.}
 \item{saveX}{Logical. If \code{TRUE}, it returns the values of x and z after partialling out the
 fixed effects.}
 
-\item{mu}{Optional: initial values of the conditional mean \eqn{\mu}, to be used as weights in the
-first iteration of the algorithm.}
+\item{mu}{A vector of initial values for mu that can be passed to the command.}
 
-\item{colcheck}{Logical. If \code{TRUE}, checks for perfect multicollinearity in \code{x}.}
+\item{colcheck_x}{Logical. If \code{TRUE}, this checks collinearity between the independent variables and drops the
+collinear variables.}
+
+\item{colcheck_x_fes}{Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
+by the fixed effects drops those that are perfectly explained.}
 
 \item{K}{Maximum number of iterations.}
 
@@ -63,6 +68,8 @@ first iteration of the algorithm.}
 \item{verbose}{Logical. If \code{TRUE}, it prints information to the screen while evaluating.}
 
 \item{lambda}{Penalty parameter (a number).}
+
+\item{gamma_val}{Numerical value that determines the regularization threshold as defined in Belloni, Chernozhukov, Hansen, and Kozbur (2016). NULL default sets parameter to 0.1/log(n).}
 }
 \value{
 An object of class \code{elnet} with the elements described in \link[glmnet]{glmnet}, as
