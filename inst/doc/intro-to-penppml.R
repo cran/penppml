@@ -237,10 +237,14 @@ trade3 <- trade[(trade$exp %in% selected) & (trade$imp %in% selected), ] # Now, 
 # Let's cluster by agreement
 trade3$alt_id <- trade3$id # ID refers to agreement ID
 trade3$alt_id[is.na(trade3$alt_id)] <- 0 # We set this to zero when the ID is missing, interpreting this as the country pair not being part of any agreement.
-exp  <- factor(trade3$exp)
-imp  <- factor(trade3$imp)
-pair     <- interaction(exp, imp)
-trade3$pair <- pair
+
+# Create pair ID
+v1 <- do.call(paste, as.data.frame(t(apply(trade3[1:2], 1, sort))))
+trade3$pair <-  match(v1, unique(v1))
+trade3$pair <- trade3$pair + 500
+
+
+# Create maximal ID from the preexisting ID-variable inside each pair
 trade3 <- within(trade3, {alt_id2 = ave(alt_id,pair,FUN=max)} ) # This creates the maximum of the ID for each pair. This adjusts for the fact that some pairs might have been part of different agreements and we want to take get a unique agreement ID for each pair. 
 
 trade3$alt_id2[trade3$alt_id2==0] <- trade3$pair[trade3$alt_id2==0]

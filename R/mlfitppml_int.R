@@ -132,7 +132,6 @@ mlfitppml_int = function(y, x, fes, lambdas, penalty = "lasso", tol = 1e-8, hdfe
     # if "post", implement post-lasso PPML using selected covariates
     if (post) {
       x_select <- penreg$x_resid[,as.numeric(penreg$beta)!=0]
-
       # "pen_beta_pre" are raw lasso coefficients
       pen_beta_pre <- penreg$beta
       #x_select <- x[,as.numeric(penreg$beta)!=0]
@@ -156,8 +155,10 @@ mlfitppml_int = function(y, x, fes, lambdas, penalty = "lasso", tol = 1e-8, hdfe
       pen_beta_pre <- t(pen_beta_pre)
       colnames(pen_beta_pre) <- xnames
     }
-    # store results
-    results <- list("beta" = t(pen_beta), "beta_pre" = t(pen_beta_pre), "deviance" = penreg$deviance, "bic" = penreg$bic, "lambda" = penreg$lambda, "phi" =penreg$phi, "ses" =t(ses))
+    # store results, conditionally, because post may not be true
+    if(post){results <- list("beta" = t(pen_beta), "beta_pre" = t(pen_beta_pre), "deviance" = penreg$deviance, "bic" = penreg$bic, "lambda" = penreg$lambda, "phi" =penreg$phi, "ses" =t(ses))} else {
+      results <- list("beta" = t(pen_beta), "deviance" = penreg$deviance, "bic" = penreg$bic, "lambda" = penreg$lambda, "phi" =penreg$phi, "ses" =t(ses))
+    }
   } else {
 
     # if method != "plugin", do the following:

@@ -1,6 +1,6 @@
 Package: penppml
 Title: Penalized Poisson Pseudo Maximum Likelihood Regression
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person(given = "Diego",
            family = "Ferreras Garrucho",
@@ -10,10 +10,10 @@ Authors@R: c(
            family = "Zylkin",
            role = "aut",
            email = "tzylkin@richmond.edu"),
-    person(given = "Nicolas",
-           family = "Apfel",
+    person(given = "Joao",
+           family = "Cruz",
            role = "cre",
-           email = "nicolas.apfel@gmail.com")   
+           email = "jm01780@surrey.ac.uk")   
     )       
 Description: A set of tools that enables efficient estimation of penalized 
     Poisson Pseudo Maximum Likelihood regressions, using lasso or ridge penalties, for models 
@@ -29,7 +29,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: gzip
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 LinkingTo: Rcpp, RcppEigen
 Imports: Rcpp, glmnet, fixest, collapse, rlang, magrittr, matrixStats,
         dplyr, devtools
@@ -41,10 +41,10 @@ Suggests: testthat (>= 3.0.0), MASS, knitr, rmarkdown, directlabels,
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: yes
-Packaged: 2022-10-17 16:13:53 UTC; na0026
+Packaged: 2022-12-15 16:12:46 UTC; joaoa
 Author: Diego Ferreras Garrucho [aut],
   Tom Zylkin [aut],
-  Nicolas Apfel [cre]
-Maintainer: Nicolas Apfel <nicolas.apfel@gmail.com>
+  Joao Cruz [cre]
+Maintainer: Joao Cruz <jm01780@surrey.ac.uk>
 Repository: CRAN
-Date/Publication: 2022-10-24 10:32:37 UTC
+Date/Publication: 2022-12-16 10:30:02 UTC

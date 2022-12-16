@@ -57,7 +57,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Nicolas Apfel \email{nicolas.apfel@gmail.com}
+\strong{Maintainer}: Joao Cruz \email{jm01780@surrey.ac.uk}
 
 Authors:
 \itemize{
