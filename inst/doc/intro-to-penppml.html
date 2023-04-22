@@ -1021,10 +1021,10 @@ interaction of the exporter and importer variables in the
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>))</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 3</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9787471.95031103</span></span></code></pre></div>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 4</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9569210.98986142</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg6<span class="sc">$</span>beta)] <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
 <table class="kable_wrapper">
 <caption>
@@ -1045,9 +1045,9 @@ Table 5: Plugin Lasso results
 <tbody>
 <tr class="odd">
 <td align="left">ad_prov_14</td>
-<td align="right">0.0204</td>
-<td align="right">0.4593</td>
-<td align="right">0.1397</td>
+<td align="right">0.1249</td>
+<td align="right">0.4784</td>
+<td align="right">0.1402</td>
 </tr>
 <tr class="even">
 <td align="left">cp_prov_23</td>
@@ -1069,15 +1069,15 @@ Table 5: Plugin Lasso results
 </tr>
 <tr class="odd">
 <td align="left">tf_prov_41</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
+<td align="right">0.1388</td>
+<td align="right">0.5465</td>
+<td align="right">0.1860</td>
 </tr>
 <tr class="even">
 <td align="left">tf_prov_45</td>
-<td align="right">0.1403</td>
-<td align="right">0.2362</td>
-<td align="right">0.0760</td>
+<td align="right">0.1741</td>
+<td align="right">0.1756</td>
+<td align="right">0.0844</td>
 </tr>
 <tr class="odd">
 <td align="left">env_prov_18</td>
@@ -1102,43 +1102,43 @@ Table 5: Plugin Lasso results
 <tr class="odd">
 <td align="left">et_prov_38</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">inv_prov_22</td>
-<td align="right">0.0082</td>
-<td align="right">0.161</td>
-<td align="right">0.0616</td>
+<td align="right">0.0299</td>
+<td align="right">0.1809</td>
+<td align="right">0.0641</td>
 </tr>
 <tr class="odd">
 <td align="left">lm_prov_10</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">moc_prov_21</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">ser_prov_47</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">ste_prov_30</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">cp_prov_26</td>
 <td align="right">0.0000</td>
-<td align="right">0.000</td>
+<td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 </tbody>
@@ -1147,10 +1147,10 @@ Table 5: Plugin Lasso results
 </tr>
 </tbody>
 </table>
-<p>We can see that the plugin lasso is very strict: only three
-provisions have non-zero coefficients when the penalties are set at the
-level suggested by the plugin algorithm. Compare this to the
-cross-validation results, which didn’t remove any of the provisions.</p>
+<p>We can see that the plugin lasso is very strict: only four provisions
+have non-zero coefficients when the penalties are set at the level
+suggested by the plugin algorithm. Compare this to the cross-validation
+results, which didn’t remove any of the provisions.</p>
 <p>We can also set the gamma value as defined in Belloni et al. to
 something less strict, e.g. 0.3.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>reg6_gamma <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
@@ -1163,10 +1163,10 @@ something less strict, e.g. 0.3.</p>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>), <span class="at">gamma_val=</span><span class="fl">0.3</span>)</span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 5</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9458290.22374599</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9373535.08261457</span></span>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(reg6<span class="sc">$</span>beta)[<span class="fu">which</span>(reg6_gamma<span class="sc">$</span>beta <span class="sc">!=</span> <span class="dv">0</span>)]</span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>results_gamma <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6_gamma<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6_gamma<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6_gamma<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>results_gamma<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg6_gamma<span class="sc">$</span>beta)] <span class="ot">&lt;-</span> reg6_gamma<span class="sc">$</span>ses</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>results_gamma<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6_gamma<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>results_gamma</span></code></pre></div>
 <table class="kable_wrapper">
 <caption>
@@ -1187,7 +1187,7 @@ Table 6: Plugin Lasso results, different gamma value
 <tbody>
 <tr class="odd">
 <td align="left">ad_prov_14</td>
-<td align="right">0.1761</td>
+<td align="right">0.1028</td>
 <td align="right">0.0551</td>
 <td align="right">0.1721</td>
 </tr>
@@ -1199,7 +1199,7 @@ Table 6: Plugin Lasso results, different gamma value
 </tr>
 <tr class="odd">
 <td align="left">tbt_prov_07</td>
-<td align="right">0.0340</td>
+<td align="right">0.1402</td>
 <td align="right">0.3870</td>
 <td align="right">0.1716</td>
 </tr>
@@ -1211,13 +1211,13 @@ Table 6: Plugin Lasso results, different gamma value
 </tr>
 <tr class="odd">
 <td align="left">tf_prov_41</td>
-<td align="right">0.0436</td>
+<td align="right">0.2209</td>
 <td align="right">0.4284</td>
 <td align="right">0.1845</td>
 </tr>
 <tr class="even">
 <td align="left">tf_prov_45</td>
-<td align="right">0.1752</td>
+<td align="right">0.1694</td>
 <td align="right">0.1622</td>
 <td align="right">0.0828</td>
 </tr>
@@ -1243,43 +1243,43 @@ Table 6: Plugin Lasso results, different gamma value
 <tbody>
 <tr class="odd">
 <td align="left">et_prov_38</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">inv_prov_22</td>
-<td align="right">0.0652</td>
+<td align="right">0.076</td>
 <td align="right">0.1716</td>
 <td align="right">0.064</td>
 </tr>
 <tr class="odd">
 <td align="left">lm_prov_10</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">moc_prov_21</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">ser_prov_47</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="left">ste_prov_30</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">cp_prov_26</td>
-<td align="right">0.0000</td>
+<td align="right">0.000</td>
 <td align="right">0.0000</td>
 <td align="right">NA</td>
 </tr>
@@ -1289,7 +1289,7 @@ Table 6: Plugin Lasso results, different gamma value
 </tr>
 </tbody>
 </table>
-<p>When doing this, we see that more provisions than before are
+<p>When doing this, we see that one more provision than before is
 selected.</p>
 </div>
 <div id="iceberg-lasso-in-development" class="section level3" number="4.3.3">
@@ -1316,6 +1316,7 @@ package. The iceberg lasso coefficients are:</p>
 <tr class="header">
 <th align="left"></th>
 <th align="right">ad_prov_14</th>
+<th align="right">tf_prov_41</th>
 <th align="right">tf_prov_45</th>
 <th align="right">inv_prov_22</th>
 </tr>
@@ -1324,80 +1325,86 @@ package. The iceberg lasso coefficients are:</p>
 <tr class="odd">
 <td align="left">cp_prov_23</td>
 <td align="right">0.0000</td>
-<td align="right">0.6143</td>
+<td align="right">0.0000</td>
+<td align="right">0.6377</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
 <td align="left">tbt_prov_07</td>
 <td align="right">0.0000</td>
-<td align="right">0.1002</td>
+<td align="right">0.0000</td>
+<td align="right">0.1015</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
 <td align="left">tbt_prov_33</td>
-<td align="right">-0.0042</td>
+<td align="right">-0.0040</td>
+<td align="right">0.0060</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="even">
-<td align="left">tf_prov_41</td>
-<td align="right">0.0010</td>
-<td align="right">0.1793</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
 <td align="left">env_prov_18</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">et_prov_38</td>
 <td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.3399</td>
 </tr>
 <tr class="odd">
+<td align="left">et_prov_38</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0009</td>
+<td align="right">0.0000</td>
+<td align="right">0.3345</td>
+</tr>
+<tr class="even">
 <td align="left">ipr_prov_15</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
+<td align="right">0.0000</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ipr_prov_44</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
+<td align="right">0.0000</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">lm_prov_10</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">moc_prov_21</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
 <td align="right">0.0000</td>
 </tr>
 <tr class="odd">
+<td align="left">moc_prov_21</td>
+<td align="right">0.0000</td>
+<td align="right">-0.0136</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="even">
 <td align="left">ser_prov_47</td>
 <td align="right">0.0000</td>
 <td align="right">0.0000</td>
-<td align="right">0.5074</td>
-</tr>
-<tr class="even">
-<td align="left">ste_prov_30</td>
 <td align="right">0.0000</td>
-<td align="right">0.0489</td>
-<td align="right">0.0729</td>
+<td align="right">0.5126</td>
 </tr>
 <tr class="odd">
+<td align="left">ste_prov_30</td>
+<td align="right">0.0000</td>
+<td align="right">0.0000</td>
+<td align="right">0.0142</td>
+<td align="right">0.0735</td>
+</tr>
+<tr class="even">
 <td align="left">cp_prov_26</td>
-<td align="right">-0.0047</td>
-<td align="right">0.0491</td>
-<td align="right">-0.0191</td>
+<td align="right">-0.0046</td>
+<td align="right">0.0044</td>
+<td align="right">0.0812</td>
+<td align="right">-0.0203</td>
 </tr>
 </tbody>
 </table>
@@ -1412,6 +1419,7 @@ lasso step:</p>
 <tr class="header">
 <th align="left"></th>
 <th align="right">ad_prov_14</th>
+<th align="right">tf_prov_41</th>
 <th align="right">tf_prov_45</th>
 <th align="right">inv_prov_22</th>
 </tr>
@@ -1420,84 +1428,98 @@ lasso step:</p>
 <tr class="odd">
 <td align="left">ad_prov_14</td>
 <td align="right">1.0000</td>
+<td align="right">-0.0044</td>
 <td align="right">0.1471</td>
 <td align="right">0.2265</td>
 </tr>
 <tr class="even">
 <td align="left">cp_prov_23</td>
 <td align="right">0.1466</td>
+<td align="right">0.3062</td>
 <td align="right">0.9744</td>
 <td align="right">0.1593</td>
 </tr>
 <tr class="odd">
 <td align="left">tbt_prov_07</td>
 <td align="right">0.1096</td>
+<td align="right">0.2290</td>
 <td align="right">0.7372</td>
 <td align="right">0.3075</td>
 </tr>
 <tr class="even">
 <td align="left">tbt_prov_33</td>
 <td align="right">-0.0121</td>
+<td align="right">0.3659</td>
 <td align="right">0.1790</td>
 <td align="right">0.1497</td>
 </tr>
 <tr class="odd">
 <td align="left">tf_prov_41</td>
 <td align="right">-0.0044</td>
+<td align="right">1.0000</td>
 <td align="right">0.3072</td>
 <td align="right">-0.0196</td>
 </tr>
 <tr class="even">
 <td align="left">tf_prov_45</td>
 <td align="right">0.1471</td>
+<td align="right">0.3072</td>
 <td align="right">1.0000</td>
 <td align="right">0.1464</td>
 </tr>
 <tr class="odd">
 <td align="left">env_prov_18</td>
 <td align="right">-0.0007</td>
+<td align="right">-0.0015</td>
 <td align="right">-0.0048</td>
 <td align="right">0.0754</td>
 </tr>
 <tr class="even">
 <td align="left">et_prov_38</td>
 <td align="right">0.3522</td>
+<td align="right">-0.0126</td>
 <td align="right">0.0792</td>
 <td align="right">0.5964</td>
 </tr>
 <tr class="odd">
 <td align="left">inv_prov_22</td>
 <td align="right">0.2265</td>
+<td align="right">-0.0196</td>
 <td align="right">0.1464</td>
 <td align="right">1.0000</td>
 </tr>
 <tr class="even">
 <td align="left">lm_prov_10</td>
 <td align="right">-0.0007</td>
+<td align="right">-0.0015</td>
 <td align="right">0.0221</td>
 <td align="right">0.0754</td>
 </tr>
 <tr class="odd">
 <td align="left">moc_prov_21</td>
 <td align="right">0.3547</td>
+<td align="right">-0.0125</td>
 <td align="right">0.0804</td>
 <td align="right">0.6010</td>
 </tr>
 <tr class="even">
 <td align="left">ser_prov_47</td>
 <td align="right">0.3154</td>
+<td align="right">-0.0054</td>
 <td align="right">0.0652</td>
 <td align="right">0.6676</td>
 </tr>
 <tr class="odd">
 <td align="left">ste_prov_30</td>
 <td align="right">0.1349</td>
+<td align="right">-0.0289</td>
 <td align="right">0.8065</td>
 <td align="right">0.5273</td>
 </tr>
 <tr class="even">
 <td align="left">cp_prov_26</td>
 <td align="right">-0.0149</td>
+<td align="right">0.2975</td>
 <td align="right">0.8290</td>
 <td align="right">0.2387</td>
 </tr>
@@ -1563,7 +1585,7 @@ option boot_threshold (Default is 1 pc).</p>
 <tr class="odd">
 <td align="left">ad_prov_14</td>
 <td align="right">0</td>
-<td align="right">0.63</td>
+<td align="right">0.00</td>
 <td align="right">0.00</td>
 <td align="right">0</td>
 <td align="right">NA</td>
@@ -1590,7 +1612,7 @@ option boot_threshold (Default is 1 pc).</p>
 <td align="left">tbt_prov_07</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">0.19</td>
+<td align="right">0.20</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -1628,8 +1650,8 @@ option boot_threshold (Default is 1 pc).</p>
 <tr class="even">
 <td align="left">tf_prov_45</td>
 <td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.21</td>
+<td align="right">0.46</td>
+<td align="right">0.13</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -1655,7 +1677,7 @@ option boot_threshold (Default is 1 pc).</p>
 <td align="left">et_prov_38</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">0.00</td>
+<td align="right">0.29</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -1746,7 +1768,7 @@ option boot_threshold (Default is 1 pc).</p>
 <td align="left">ste_prov_30</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">0.31</td>
+<td align="right">0.21</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>

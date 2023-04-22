@@ -1,6 +1,6 @@
 Package: penppml
 Title: Penalized Poisson Pseudo Maximum Likelihood Regression
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person(given = "Diego",
            family = "Ferreras Garrucho",
@@ -41,10 +41,10 @@ Suggests: testthat (>= 3.0.0), MASS, knitr, rmarkdown, directlabels,
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
 NeedsCompilation: yes
-Packaged: 2022-12-15 16:12:46 UTC; joaoa
+Packaged: 2023-04-22 18:41:06 UTC; joaoa
 Author: Diego Ferreras Garrucho [aut],
   Tom Zylkin [aut],
   Joao Cruz [cre]
 Maintainer: Joao Cruz <jm01780@surrey.ac.uk>
 Repository: CRAN
-Date/Publication: 2022-12-16 10:30:02 UTC
+Date/Publication: 2023-04-22 19:00:02 UTC

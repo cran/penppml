@@ -171,7 +171,7 @@ reg6 <- mlfitppml(data = trade2,
 
 ## ----plugin results, results = FALSE------------------------------------------
 results <- data.frame(prov = rownames(reg6$beta), b_pre = reg6$beta_pre, b = reg6$beta, se = 0)
-results$se[!is.na(reg6$beta)] <- reg6$ses
+results$se <- reg6$ses[1,]
 results
 
 ## ----display plugin results, echo = FALSE-------------------------------------
@@ -195,7 +195,7 @@ rownames(reg6$beta)[which(reg6_gamma$beta != 0)]
 
 ## ----plugin results gamma, results = FALSE------------------------------------
 results_gamma <- data.frame(prov = rownames(reg6_gamma$beta), b_pre = reg6_gamma$beta_pre, b = reg6_gamma$beta, se = 0)
-results_gamma$se[!is.na(reg6_gamma$beta)] <- reg6_gamma$ses
+results_gamma$se <- reg6_gamma$ses[1,]
 results_gamma
 
 ## ----display plugin results gamma, echo = FALSE-------------------------------
