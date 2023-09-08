@@ -34,6 +34,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # To reduce run time, we keep only countries in Latin America and the Caribbean:
 #' LatAmericaCar <- countries$iso[countries$sub.region == "Latin America and the Caribbean"]
 #' trade <- trade[(trade$imp %in% LatAmericaCar) & (trade$exp %in% LatAmericaCar), ]
@@ -45,12 +46,14 @@
 #'             pair     = interaction(trade$exp, trade$imp))
 #' # Finally, we try penhdfeppml_cluster_int:
 #' reg <- penhdfeppml_cluster_int(y = y, x = x, fes = fes, cluster = fes$pair)
+#' }
 #'
 #' @inheritSection hdfeppml_int References
 
 penhdfeppml_cluster_int <- function(y, x, fes, cluster, tol = 1e-8, hdfetol = 1e-4, glmnettol = 1e-12,
                                 penalty = "lasso", penweights = NULL, saveX = TRUE, mu = NULL,
-                                colcheck_x = TRUE, colcheck_x_fes = TRUE, K = 15, init_z = NULL, post = FALSE,
+                                colcheck = TRUE, colcheck_x = colcheck, colcheck_x_fes = colcheck, 
+                                K = 15, init_z = NULL, post = FALSE,
                                 verbose = FALSE, lambda = NULL, phipost=TRUE, gamma_val=NULL) {
 
   xnames <- colnames(x)

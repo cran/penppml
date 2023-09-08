@@ -378,8 +378,7 @@ dummies (Breinlich, Corradi, Rocha, Ruta, Santos Silva and Zylkin,
 commands:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;penppml&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(penppml)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Loading penppml</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>()</span></code></pre></div>
 </div>
 <div id="data-sets" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Data Sets</h1>
@@ -391,234 +390,10 @@ a subset of 16 out of 305 “essential” provisions featured in the full
 data set. More information about the data set and the variables is
 included in the corresponding help file, accessible via
 <code>?trade</code>.</p>
-<table>
-<caption>Table 1: International Trade Data Set</caption>
-<colgroup>
-<col width="4%" />
-<col width="4%" />
-<col width="6%" />
-<col width="11%" />
-<col width="3%" />
-<col width="12%" />
-<col width="13%" />
-<col width="13%" />
-<col width="14%" />
-<col width="14%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">exp</th>
-<th align="left">imp</th>
-<th align="left">time</th>
-<th align="right">export</th>
-<th align="right">id</th>
-<th align="left">agreement</th>
-<th align="right">ad_prov_14</th>
-<th align="right">cp_prov_23</th>
-<th align="right">tbt_prov_07</th>
-<th align="right">tbt_prov_33</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ABW</td>
-<td align="left">AIA</td>
-<td align="left">1988</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ABW</td>
-<td align="left">AIA</td>
-<td align="left">1996</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ABW</td>
-<td align="left">AIA</td>
-<td align="left">2012</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ABW</td>
-<td align="left">AIA</td>
-<td align="left">2016</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ABW</td>
-<td align="left">ANT</td>
-<td align="left">1988</td>
-<td align="right">13087119</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ABW</td>
-<td align="left">ANT</td>
-<td align="left">1996</td>
-<td align="right">2371576</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ABW</td>
-<td align="left">ARE</td>
-<td align="left">1988</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ABW</td>
-<td align="left">ARE</td>
-<td align="left">1996</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ABW</td>
-<td align="left">ARE</td>
-<td align="left">2012</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ABW</td>
-<td align="left">ARE</td>
-<td align="left">2016</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="left"></td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
 <p>Along with the <code>trade</code> data set, the package includes an
 auxiliary data frame, <code>countries</code>, which contains basic
 information about the country ISO codes included in the main data
 set.</p>
-<table>
-<caption>Table 2: Country Data Set</caption>
-<thead>
-<tr class="header">
-<th align="left">iso</th>
-<th align="left">name</th>
-<th align="left">region</th>
-<th align="left">sub.region</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">AFG</td>
-<td align="left">Afghanistan</td>
-<td align="left">Asia</td>
-<td align="left">Southern Asia</td>
-</tr>
-<tr class="even">
-<td align="left">ALA</td>
-<td align="left">0c5land Islands</td>
-<td align="left">Europe</td>
-<td align="left">Northern Europe</td>
-</tr>
-<tr class="odd">
-<td align="left">ALB</td>
-<td align="left">Albania</td>
-<td align="left">Europe</td>
-<td align="left">Southern Europe</td>
-</tr>
-<tr class="even">
-<td align="left">DZA</td>
-<td align="left">Algeria</td>
-<td align="left">Africa</td>
-<td align="left">Northern Africa</td>
-</tr>
-<tr class="odd">
-<td align="left">ASM</td>
-<td align="left">American Samoa</td>
-<td align="left">Oceania</td>
-<td align="left">Polynesia</td>
-</tr>
-<tr class="even">
-<td align="left">AND</td>
-<td align="left">Andorra</td>
-<td align="left">Europe</td>
-<td align="left">Southern Europe</td>
-</tr>
-<tr class="odd">
-<td align="left">AGO</td>
-<td align="left">Angola</td>
-<td align="left">Africa</td>
-<td align="left">Sub-Saharan Africa</td>
-</tr>
-<tr class="even">
-<td align="left">AIA</td>
-<td align="left">Anguilla</td>
-<td align="left">Americas</td>
-<td align="left">Latin America and the Caribbean</td>
-</tr>
-<tr class="odd">
-<td align="left">ATA</td>
-<td align="left">Antarctica</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">ATG</td>
-<td align="left">Antigua and Barbuda</td>
-<td align="left">Americas</td>
-<td align="left">Latin America and the Caribbean</td>
-</tr>
-</tbody>
-</table>
 <p>This enables users to easily filter by region or subregion. For
 instance, if we want to restrict our analysis to countries in the
 Americas, we can do the following:</p>
@@ -637,11 +412,7 @@ HDFE, using the <code>hdfeppml</code> function as follows:</p>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; User did not specify independent variables. By default, the function takes all variables</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         not included in &#39;dep&#39; or &#39;fixed&#39; as regressors.</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables have been dropped, due to collinearity:  ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)))</span></code></pre></div>
 <p>As we can see, the function is designed to be data-frame-friendly:
 the user sets a data frame of reference in the <code>data</code>
 argument and then picks the dependent, independent and fixed effect
@@ -669,128 +440,10 @@ issue, run <code>?hdfeppml</code> or <code>?hdfeppml_int</code>. Note
 also that this applies to all of the main functions in our package: both
 the data-frame-friendly wrapper and the internal function are available
 for use.</p>
-<p>The results of our PPML model are:</p>
+<p>To obtain the results associated with our PPML model:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg1<span class="sc">$</span>coefficients), <span class="at">b =</span> reg1<span class="sc">$</span>coefficients, <span class="at">se =</span> <span class="dv">0</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se[<span class="sc">!</span><span class="fu">is.na</span>(reg1<span class="sc">$</span>coefficients)] <span class="ot">&lt;-</span> reg1<span class="sc">$</span>se</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
-<table class="kable_wrapper">
-<caption>
-Table 3: Unpenalized PPML results
-</caption>
-<tbody>
-<tr>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ad_prov_14</td>
-<td align="right">0.0392</td>
-<td align="right">0.3253</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_23</td>
-<td align="right">-0.0317</td>
-<td align="right">0.0514</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_07</td>
-<td align="right">0.3924</td>
-<td align="right">0.3171</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_33</td>
-<td align="right">-0.0484</td>
-<td align="right">0.3303</td>
-</tr>
-<tr class="odd">
-<td align="left">tf_prov_41</td>
-<td align="right">0.6611</td>
-<td align="right">0.1829</td>
-</tr>
-<tr class="even">
-<td align="left">tf_prov_45</td>
-<td align="right">0.1357</td>
-<td align="right">0.0618</td>
-</tr>
-<tr class="odd">
-<td align="left">env_prov_18</td>
-<td align="right">-0.2564</td>
-<td align="right">0.1340</td>
-</tr>
-<tr class="even">
-<td align="left">et_prov_38</td>
-<td align="right">-0.0104</td>
-<td align="right">0.1276</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">inv_prov_22</td>
-<td align="right">0.3549</td>
-<td align="right">0.0617</td>
-</tr>
-<tr class="even">
-<td align="left">ipr_prov_15</td>
-<td align="right">NA</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
-<td align="left">ipr_prov_44</td>
-<td align="right">NA</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">lm_prov_10</td>
-<td align="right">-0.5864</td>
-<td align="right">0.1742</td>
-</tr>
-<tr class="odd">
-<td align="left">moc_prov_21</td>
-<td align="right">0.0930</td>
-<td align="right">0.1492</td>
-</tr>
-<tr class="even">
-<td align="left">ser_prov_47</td>
-<td align="right">-0.2656</td>
-<td align="right">0.1132</td>
-</tr>
-<tr class="odd">
-<td align="left">ste_prov_30</td>
-<td align="right">0.0263</td>
-<td align="right">0.0636</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_26</td>
-<td align="right">-0.1628</td>
-<td align="right">0.0854</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<p>(Note that the functions is automatically dropping perfectly
-collinear variables from the estimation algorithm and reporting
-<code>NA</code> as the coefficient.)</p>
 <p>If we want to specify the independent variable, we can specify indep
 as pointing to columns 5 to 7 with the following code.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>reg1_indep <span class="ot">&lt;-</span> <span class="fu">hdfeppml</span>(<span class="at">data =</span> trade2, <span class="at">indep=</span><span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>,</span>
@@ -816,66 +469,25 @@ parameter (lambda) at once, we can run:</p>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span></code></pre></div>
 <p>The function returns a list that contains two sets of coefficients
 for each value of lambda: the penalized coefficients (in the
 <code>beta_pre</code> element) and the post-penalty or unpenalized
 coefficients (in the <code>beta</code> element; these are calculated by
-estimating a post-penalty regression with just the selected variables).
-We can plot the regularization path of the penalized coefficients as
-follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(reg2<span class="sc">$</span>beta_pre)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(results) <span class="ot">&lt;-</span> lambdas</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>provision <span class="ot">&lt;-</span> <span class="fu">row.names</span>(results)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(results, <span class="at">id.vars =</span> <span class="st">&quot;provision&quot;</span>, <span class="at">variable.name =</span> <span class="st">&quot;lambda&quot;</span>, </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">value.name =</span> <span class="st">&quot;coefficient&quot;</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>lambda <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(results<span class="sc">$</span>lambda))</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(<span class="at">data =</span> results, <span class="at">mapping =</span> ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> coefficient, <span class="at">col =</span> provision)) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">scale_x_reverse</span>(<span class="at">expand =</span> ggplot2<span class="sc">::</span><span class="fu">expansion</span>(<span class="at">add =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.015</span>))) <span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  directlabels<span class="sc">::</span><span class="fu">geom_dl</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">label =</span> provision), </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method =</span> <span class="fu">list</span>(directlabels<span class="sc">::</span><span class="fu">dl.trans</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="fl">0.5</span>), <span class="st">&quot;last.bumpup&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Penalty parameter (lambda)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Coefficient&quot;</span>, </span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">&quot;Figure 1: Regularization path for lasso&quot;</span>)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>The user can also get a penalized PPML regression without
-high-dimensional fixed effects. To do so, simply set the option fixed to
-NULL.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.01</span>, <span class="fl">0.0075</span>, <span class="fl">0.005</span>, <span class="fl">0.0025</span>, <span class="fl">0.001</span>, <span class="fl">0.00075</span>, <span class="fl">0.0005</span>, <span class="fl">0.00025</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>reg2_nofe <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Lasso exceeded 50 iterations. Break loop and return last model.</span></span></code></pre></div>
+estimating a post-penalty regression with just the selected
+variables).</p>
 <p>If the user wishes to obtain the penalized estimates for a single
 value of lambda, they can either use <code>mlfitppml</code> as described
 above (just setting <code>lambdas == x</code>, where <code>x</code> is a
 number) or use the <code>penhdfeppml</code> function, upon which
 <code>mlfitppml</code> is built, directly. For instance:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">penhdfeppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambda =</span> <span class="fl">0.005</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
-<p>We can easily check that the penalized coefficient estimates of
-<code>penhdfeppml</code> and <code>mlfitppml</code> are equal for a
-lambda value of 0.005 (within a numerical tolerance):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">as.vector</span>(reg3<span class="sc">$</span>beta[<span class="sc">!</span><span class="fu">is.na</span>(reg3<span class="sc">$</span>beta)]), <span class="fu">as.vector</span>(reg2<span class="sc">$</span>beta_pre[, <span class="dv">5</span>]), <span class="at">tol =</span> <span class="fl">1e-05</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">penhdfeppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambda =</span> <span class="fl">0.005</span>)</span></code></pre></div>
 <p>For more details on <code>penhdfeppml</code>, run
 <code>?penhdfeppml</code>.</p>
 </div>
@@ -884,16 +496,15 @@ lambda value of 0.005 (within a numerical tolerance):</p>
 development)</h2>
 <p><code>mlfitppml</code> also allows user to use the ridge penalty in
 their PPML regressions. Simply run:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0001</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">10</span>) </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>reg4 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;ridge&quot;</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lambdas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0001</span>, <span class="dv">0</span>, <span class="at">length.out =</span> <span class="dv">10</span>) </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>reg4 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;ridge&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> lambdas)</span></code></pre></div>
 <p>Note that this feature is still in development and may contain
 bugs.</p>
 </div>
@@ -910,98 +521,28 @@ cross-validation of their models via the <code>xval</code> and
 user-provided vector of IDs. For instance, if we want to do k-fold cross
 validation with k = 20, splitting the data set by agreement (not by
 observation), we can do the following:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">unique</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>])</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>nfolds <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> id, <span class="at">fold =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nfolds, <span class="at">size =</span> <span class="fu">length</span>(id), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>cross_ids <span class="ot">&lt;-</span> <span class="fu">merge</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>], </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                   unique_ids, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">unique</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>nfolds <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>unique_ids <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> id, <span class="at">fold =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nfolds, <span class="at">size =</span> <span class="fu">length</span>(id), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>cross_ids <span class="ot">&lt;-</span> <span class="fu">merge</span>(trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), <span class="dv">5</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>], </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                   unique_ids, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Now we activate the cross-validation option in <code>mlfitppml</code>
 and input the ID vector:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>reg5 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reg5 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
 <p>Now the function also returns a <code>rmse</code> element that
 includes the cross-validation results (the average RMSE or root mean
 squared error for each value of lambda). Users can employ this tool to
 choose the value of the penalty parameter that minimizes the RMSE:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reg5<span class="sc">$</span>rmse</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>reg5_nofe <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="cn">NULL</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lambdas =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">0.1</span>), <span class="fl">0.05</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.001</span>, <span class="fl">0.0005</span>, <span class="fl">0.0001</span>, <span class="dv">0</span>),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xval =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">IDs =</span>  cross_ids<span class="sc">$</span>fold)</span></code></pre></div>
-<table>
-<caption>Table 4: Cross-validation results</caption>
-<thead>
-<tr class="header">
-<th align="right">Penalty (lambda)</th>
-<th align="right">RMSE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">5e-01</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="even">
-<td align="right">4e-01</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="odd">
-<td align="right">3e-01</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="even">
-<td align="right">2e-01</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="odd">
-<td align="right">1e-01</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="even">
-<td align="right">5e-02</td>
-<td align="right">108.5813</td>
-</tr>
-<tr class="odd">
-<td align="right">1e-02</td>
-<td align="right">108.5750</td>
-</tr>
-<tr class="even">
-<td align="right">5e-03</td>
-<td align="right">108.5743</td>
-</tr>
-<tr class="odd">
-<td align="right">1e-03</td>
-<td align="right">108.5740</td>
-</tr>
-<tr class="even">
-<td align="right">5e-04</td>
-<td align="right">108.5739</td>
-</tr>
-<tr class="odd">
-<td align="right">1e-04</td>
-<td align="right">108.5739</td>
-</tr>
-<tr class="even">
-<td align="right">0e+00</td>
-<td align="right">108.5739</td>
-</tr>
-</tbody>
-</table>
-<p>In this case, the RMSE criterion suggest that the penalty should be
-set at 0. In other words, the results in Table 3 are the ones that
-minimize the mean squared error of the regression, according to 20-fold
-cross-validation.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>reg5<span class="sc">$</span>rmse</span></code></pre></div>
 </div>
 <div id="plugin-lasso" class="section level3" number="4.3.2">
 <h3><span class="header-section-number">4.3.2</span> Plugin lasso</h3>
@@ -1012,285 +553,32 @@ set <code>method = &quot;plugin&quot;</code> in <code>mlfitppml</code>. Note tha
 the plugin algorithm requires a clustering variable - we are using the
 interaction of the exporter and importer variables in the
 <code>trade</code> data set:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>reg6 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>))</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 4</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9569210.98986142</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
-<table class="kable_wrapper">
-<caption>
-Table 5: Plugin Lasso results
-</caption>
-<tbody>
-<tr>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Lasso Coefficient</th>
-<th align="right">Post-Lasso Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ad_prov_14</td>
-<td align="right">0.1249</td>
-<td align="right">0.4784</td>
-<td align="right">0.1402</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_23</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_07</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_33</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">tf_prov_41</td>
-<td align="right">0.1388</td>
-<td align="right">0.5465</td>
-<td align="right">0.1860</td>
-</tr>
-<tr class="even">
-<td align="left">tf_prov_45</td>
-<td align="right">0.1741</td>
-<td align="right">0.1756</td>
-<td align="right">0.0844</td>
-</tr>
-<tr class="odd">
-<td align="left">env_prov_18</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Lasso Coefficient</th>
-<th align="right">Post-Lasso Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">et_prov_38</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">inv_prov_22</td>
-<td align="right">0.0299</td>
-<td align="right">0.1809</td>
-<td align="right">0.0641</td>
-</tr>
-<tr class="odd">
-<td align="left">lm_prov_10</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">moc_prov_21</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">ser_prov_47</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">ste_prov_30</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">cp_prov_26</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<p>We can see that the plugin lasso is very strict: only four provisions
-have non-zero coefficients when the penalties are set at the level
-suggested by the plugin algorithm. Compare this to the cross-validation
-results, which didn’t remove any of the provisions.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>reg6 <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>))</span></code></pre></div>
+<p>To display the plugin lasso results:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>results</span></code></pre></div>
 <p>We can also set the gamma value as defined in Belloni et al. to
 something less strict, e.g. 0.3.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>reg6_gamma <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>), <span class="at">gamma_val=</span><span class="fl">0.3</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following variables are dropped because their variation is equal zero: ipr_prov_15 ipr_prov_44</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No of variables: 5</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; BIC: 9373535.08261457</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(reg6<span class="sc">$</span>beta)[<span class="fu">which</span>(reg6_gamma<span class="sc">$</span>beta <span class="sc">!=</span> <span class="dv">0</span>)]</span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>results_gamma <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6_gamma<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6_gamma<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6_gamma<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>results_gamma<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6_gamma<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>results_gamma</span></code></pre></div>
-<table class="kable_wrapper">
-<caption>
-Table 6: Plugin Lasso results, different gamma value
-</caption>
-<tbody>
-<tr>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Lasso Coefficient</th>
-<th align="right">Post-Lasso Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ad_prov_14</td>
-<td align="right">0.1028</td>
-<td align="right">0.0551</td>
-<td align="right">0.1721</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_23</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_07</td>
-<td align="right">0.1402</td>
-<td align="right">0.3870</td>
-<td align="right">0.1716</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_33</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">tf_prov_41</td>
-<td align="right">0.2209</td>
-<td align="right">0.4284</td>
-<td align="right">0.1845</td>
-</tr>
-<tr class="even">
-<td align="left">tf_prov_45</td>
-<td align="right">0.1694</td>
-<td align="right">0.1622</td>
-<td align="right">0.0828</td>
-</tr>
-<tr class="odd">
-<td align="left">env_prov_18</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Provision</th>
-<th align="right">Lasso Coefficient</th>
-<th align="right">Post-Lasso Coefficient</th>
-<th align="right">SE</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">et_prov_38</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">inv_prov_22</td>
-<td align="right">0.076</td>
-<td align="right">0.1716</td>
-<td align="right">0.064</td>
-</tr>
-<tr class="odd">
-<td align="left">lm_prov_10</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">moc_prov_21</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">ser_prov_47</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">ste_prov_30</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">cp_prov_26</td>
-<td align="right">0.000</td>
-<td align="right">0.0000</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<p>When doing this, we see that one more provision than before is
-selected.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>reg6_gamma <span class="ot">&lt;-</span> <span class="fu">mlfitppml</span>(<span class="at">data =</span> trade2,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dep =</span> <span class="st">&quot;export&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fixed =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">penalty =</span> <span class="st">&quot;lasso&quot;</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;plugin&quot;</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cluster =</span> <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>), <span class="at">gamma_val=</span><span class="fl">0.3</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(reg6<span class="sc">$</span>beta)[<span class="fu">which</span>(reg6_gamma<span class="sc">$</span>beta <span class="sc">!=</span> <span class="dv">0</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>results_gamma <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prov =</span> <span class="fu">rownames</span>(reg6_gamma<span class="sc">$</span>beta), <span class="at">b_pre =</span> reg6_gamma<span class="sc">$</span>beta_pre, <span class="at">b =</span> reg6_gamma<span class="sc">$</span>beta, <span class="at">se =</span> <span class="dv">0</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>results_gamma<span class="sc">$</span>se <span class="ot">&lt;-</span> reg6_gamma<span class="sc">$</span>ses[<span class="dv">1</span>,]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>results_gamma</span></code></pre></div>
 </div>
 <div id="iceberg-lasso-in-development" class="section level3" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> Iceberg lasso (in
@@ -1302,229 +590,18 @@ regressions on each of the variables selected in the first stage. The
 <code>iceberg</code> function is designed precisely with this second
 step in mind. It takes a vector of dependent variables and returns a
 lasso regression for each one of them:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>iceberg_results <span class="ot">&lt;-</span> <span class="fu">iceberg</span>(<span class="at">data =</span> trade2[, <span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)],</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">dep =</span> results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>],</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">selectobs =</span> (trade2<span class="sc">$</span>time <span class="sc">==</span> <span class="st">&quot;2016&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>iceberg_results <span class="ot">&lt;-</span> <span class="fu">iceberg</span>(<span class="at">data =</span> trade2[, <span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)],</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">dep =</span> results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>],</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">selectobs =</span> (trade2<span class="sc">$</span>time <span class="sc">==</span> <span class="st">&quot;2016&quot;</span>))</span></code></pre></div>
 <p>Currently, the function returns a matrix with coefficient estimates
 for each of the selected provisions. Support for standard errors
 (including clustered) is in development as of the current version of the
-package. The iceberg lasso coefficients are:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>iceberg_results</span></code></pre></div>
-<table>
-<caption>Table 7: Iceberg Lasso coefficients</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">ad_prov_14</th>
-<th align="right">tf_prov_41</th>
-<th align="right">tf_prov_45</th>
-<th align="right">inv_prov_22</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">cp_prov_23</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.6377</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_07</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.1015</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_33</td>
-<td align="right">-0.0040</td>
-<td align="right">0.0060</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">env_prov_18</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
-<td align="left">et_prov_38</td>
-<td align="right">0.0000</td>
-<td align="right">-0.0009</td>
-<td align="right">0.0000</td>
-<td align="right">0.3345</td>
-</tr>
-<tr class="even">
-<td align="left">ipr_prov_15</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
-<td align="left">ipr_prov_44</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">lm_prov_10</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="odd">
-<td align="left">moc_prov_21</td>
-<td align="right">0.0000</td>
-<td align="right">-0.0136</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-</tr>
-<tr class="even">
-<td align="left">ser_prov_47</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.5126</td>
-</tr>
-<tr class="odd">
-<td align="left">ste_prov_30</td>
-<td align="right">0.0000</td>
-<td align="right">0.0000</td>
-<td align="right">0.0142</td>
-<td align="right">0.0735</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_26</td>
-<td align="right">-0.0046</td>
-<td align="right">0.0044</td>
-<td align="right">0.0812</td>
-<td align="right">-0.0203</td>
-</tr>
-</tbody>
-</table>
+package.</p>
 <p>Since PPML coefficients can’t be easily interpreted, you may find it
 useful to see the raw correlations between the variables in the iceberg
 lasso step:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>provcorr <span class="ot">&lt;-</span> <span class="fu">cor</span>(trade2[, results<span class="sc">$</span>prov])</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>(provcorr <span class="ot">&lt;-</span> provcorr[, results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>]])</span></code></pre></div>
-<table>
-<caption>Table 7: Iceberg Lasso correlations</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">ad_prov_14</th>
-<th align="right">tf_prov_41</th>
-<th align="right">tf_prov_45</th>
-<th align="right">inv_prov_22</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ad_prov_14</td>
-<td align="right">1.0000</td>
-<td align="right">-0.0044</td>
-<td align="right">0.1471</td>
-<td align="right">0.2265</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_23</td>
-<td align="right">0.1466</td>
-<td align="right">0.3062</td>
-<td align="right">0.9744</td>
-<td align="right">0.1593</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_07</td>
-<td align="right">0.1096</td>
-<td align="right">0.2290</td>
-<td align="right">0.7372</td>
-<td align="right">0.3075</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_33</td>
-<td align="right">-0.0121</td>
-<td align="right">0.3659</td>
-<td align="right">0.1790</td>
-<td align="right">0.1497</td>
-</tr>
-<tr class="odd">
-<td align="left">tf_prov_41</td>
-<td align="right">-0.0044</td>
-<td align="right">1.0000</td>
-<td align="right">0.3072</td>
-<td align="right">-0.0196</td>
-</tr>
-<tr class="even">
-<td align="left">tf_prov_45</td>
-<td align="right">0.1471</td>
-<td align="right">0.3072</td>
-<td align="right">1.0000</td>
-<td align="right">0.1464</td>
-</tr>
-<tr class="odd">
-<td align="left">env_prov_18</td>
-<td align="right">-0.0007</td>
-<td align="right">-0.0015</td>
-<td align="right">-0.0048</td>
-<td align="right">0.0754</td>
-</tr>
-<tr class="even">
-<td align="left">et_prov_38</td>
-<td align="right">0.3522</td>
-<td align="right">-0.0126</td>
-<td align="right">0.0792</td>
-<td align="right">0.5964</td>
-</tr>
-<tr class="odd">
-<td align="left">inv_prov_22</td>
-<td align="right">0.2265</td>
-<td align="right">-0.0196</td>
-<td align="right">0.1464</td>
-<td align="right">1.0000</td>
-</tr>
-<tr class="even">
-<td align="left">lm_prov_10</td>
-<td align="right">-0.0007</td>
-<td align="right">-0.0015</td>
-<td align="right">0.0221</td>
-<td align="right">0.0754</td>
-</tr>
-<tr class="odd">
-<td align="left">moc_prov_21</td>
-<td align="right">0.3547</td>
-<td align="right">-0.0125</td>
-<td align="right">0.0804</td>
-<td align="right">0.6010</td>
-</tr>
-<tr class="even">
-<td align="left">ser_prov_47</td>
-<td align="right">0.3154</td>
-<td align="right">-0.0054</td>
-<td align="right">0.0652</td>
-<td align="right">0.6676</td>
-</tr>
-<tr class="odd">
-<td align="left">ste_prov_30</td>
-<td align="right">0.1349</td>
-<td align="right">-0.0289</td>
-<td align="right">0.8065</td>
-<td align="right">0.5273</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_26</td>
-<td align="right">-0.0149</td>
-<td align="right">0.2975</td>
-<td align="right">0.8290</td>
-<td align="right">0.2387</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>provcorr <span class="ot">&lt;-</span> <span class="fu">cor</span>(trade2[, results<span class="sc">$</span>prov])</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>(provcorr <span class="ot">&lt;-</span> provcorr[, results<span class="sc">$</span>prov[results<span class="sc">$</span>b <span class="sc">!=</span> <span class="dv">0</span>]])</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1535,25 +612,25 @@ and agreement variable.</p>
 <p>We want to cluster by agreement, that means that we draw observations
 with the same agreement ID. For this, we need to create a new agreement
 ID in the following way:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), ] <span class="co"># Now, we need id and agreement variable</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s cluster by agreement</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id <span class="ot">&lt;-</span> trade3<span class="sc">$</span>id <span class="co"># ID refers to agreement ID</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id[<span class="fu">is.na</span>(trade3<span class="sc">$</span>alt_id)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># We set this to zero when the ID is missing, interpreting this as the country pair not being part of any agreement.</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pair ID</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(paste, <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">apply</span>(trade3[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">1</span>, sort))))</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>pair <span class="ot">&lt;-</span>  <span class="fu">match</span>(v1, <span class="fu">unique</span>(v1))</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>pair <span class="ot">&lt;-</span> trade3<span class="sc">$</span>pair <span class="sc">+</span> <span class="dv">500</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create maximal ID from the preexisting ID-variable inside each pair</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> <span class="fu">within</span>(trade3, {alt_id2 <span class="ot">=</span> <span class="fu">ave</span>(alt_id,pair,<span class="at">FUN=</span>max)} ) <span class="co"># This creates the maximum of the ID for each pair. This adjusts for the fact that some pairs might have been part of different agreements and we want to take get a unique agreement ID for each pair. </span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id2[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>] <span class="ot">&lt;-</span> trade3<span class="sc">$</span>pair[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>]</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(trade3<span class="sc">$</span>alt_id2) <span class="co"># This cluster variable collects pairs for pairs that are in agreement, uses the pair ID for those that are not.</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Thus, it allows errors to be clustered within agreements.</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>alt_id2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(trade3<span class="sc">$</span>alt_id2)</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>clus <span class="ot">&lt;-</span> alt_id2 <span class="co">#Add the ID to the data</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> trade[(trade<span class="sc">$</span>exp <span class="sc">%in%</span> selected) <span class="sc">&amp;</span> (trade<span class="sc">$</span>imp <span class="sc">%in%</span> selected), ] <span class="co"># Now, we need id and agreement variable</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s cluster by agreement</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id <span class="ot">&lt;-</span> trade3<span class="sc">$</span>id <span class="co"># ID refers to agreement ID</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id[<span class="fu">is.na</span>(trade3<span class="sc">$</span>alt_id)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># We set this to zero when the ID is missing, interpreting this as the country pair not being part of any agreement.</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pair ID</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(paste, <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">apply</span>(trade3[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">1</span>, sort))))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>pair <span class="ot">&lt;-</span>  <span class="fu">match</span>(v1, <span class="fu">unique</span>(v1))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>pair <span class="ot">&lt;-</span> trade3<span class="sc">$</span>pair <span class="sc">+</span> <span class="dv">500</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create maximal ID from the preexisting ID-variable inside each pair</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>trade3 <span class="ot">&lt;-</span> <span class="fu">within</span>(trade3, {alt_id2 <span class="ot">=</span> <span class="fu">ave</span>(alt_id,pair,<span class="at">FUN=</span>max)} ) <span class="co"># This creates the maximum of the ID for each pair. This adjusts for the fact that some pairs might have been part of different agreements and we want to take get a unique agreement ID for each pair. </span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>alt_id2[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>] <span class="ot">&lt;-</span> trade3<span class="sc">$</span>pair[trade3<span class="sc">$</span>alt_id2<span class="sc">==</span><span class="dv">0</span>]</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(trade3<span class="sc">$</span>alt_id2) <span class="co"># This cluster variable collects pairs for pairs that are in agreement, uses the pair ID for those that are not.</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Thus, it allows errors to be clustered within agreements.</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>alt_id2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(trade3<span class="sc">$</span>alt_id2)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>trade3<span class="sc">$</span>clus <span class="ot">&lt;-</span> alt_id2 <span class="co">#Add the ID to the data</span></span></code></pre></div>
 <p>Next, we run Bootstrap Lasso, which means drawing agreement clusters
 with replacement using the ID just created. In the bootstrap() command,
 first hdfeppml() is run, using a dummy which is one when any provision
@@ -1562,236 +639,8 @@ then used in plugin Lasso. This is repeated B times (as specified in
 bootreps) and the command selects those provisions selected by plugin in
 at least a fraction of cases. This fraction can be specified by the
 option boot_threshold (Default is 1 pc).</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">bootstrap</span>(<span class="at">data=</span>trade3, <span class="at">dep=</span><span class="st">&quot;export&quot;</span>, <span class="at">cluster_id=</span><span class="st">&quot;clus&quot;</span>, <span class="at">fixed=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)), <span class="at">indep=</span><span class="dv">7</span><span class="sc">:</span><span class="dv">22</span>, <span class="at">bootreps=</span><span class="dv">10</span>, <span class="at">colcheck_x =</span> <span class="cn">TRUE</span>, <span class="at">colcheck_x_fes =</span> <span class="cn">TRUE</span>, <span class="at">boot_threshold =</span> <span class="fl">0.01</span>, <span class="at">post=</span><span class="cn">TRUE</span>, <span class="at">gamma_val=</span><span class="fl">0.01</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<table>
-<caption>Table 8: Coefficients of bootstrap repetitions</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">1</th>
-<th align="right">2</th>
-<th align="right">3</th>
-<th align="right">4</th>
-<th align="right">5</th>
-<th align="right">6</th>
-<th align="right">7</th>
-<th align="right">8</th>
-<th align="right">9</th>
-<th align="right">10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">ad_prov_14</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_23</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">tbt_prov_07</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.20</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">tbt_prov_33</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">tf_prov_41</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">tf_prov_45</td>
-<td align="right">0</td>
-<td align="right">0.46</td>
-<td align="right">0.13</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">env_prov_18</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">et_prov_38</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.29</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">inv_prov_22</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ipr_prov_15</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">ipr_prov_44</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">lm_prov_10</td>
-<td align="right">NA</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">moc_prov_21</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">ser_prov_47</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ste_prov_30</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.21</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">cp_prov_26</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">bootstrap</span>(<span class="at">data=</span>trade3, <span class="at">dep=</span><span class="st">&quot;export&quot;</span>, <span class="at">cluster_id=</span><span class="st">&quot;clus&quot;</span>, <span class="at">fixed=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;imp&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;exp&quot;</span>, <span class="st">&quot;imp&quot;</span>)), <span class="at">indep=</span><span class="dv">7</span><span class="sc">:</span><span class="dv">22</span>, <span class="at">bootreps=</span><span class="dv">10</span>, <span class="at">colcheck_x =</span> <span class="cn">TRUE</span>, <span class="at">colcheck_x_fes =</span> <span class="cn">TRUE</span>, <span class="at">boot_threshold =</span> <span class="fl">0.01</span>, <span class="at">post=</span><span class="cn">TRUE</span>, <span class="at">gamma_val=</span><span class="fl">0.01</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="references" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> References</h1>

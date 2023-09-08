@@ -30,6 +30,8 @@
 #' collinear variables.
 #' @param colcheck_x_fes Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
 #' by the fixed effects drops those that are perfectly explained.
+#' @param colcheck Logical. If \code{TRUE}, performs both checks in \code{colcheck_x} and \code{colcheck_x_fes}. 
+#' If the user specifies \code{colcheck_x} and \code{colcheck_x_fes} individually, this option is overwritten.
 #' @param gamma_val Numerical value that determines the regularization threshold as defined in Belloni, Chernozhukov, Hansen, and Kozbur (2016). NULL default sets parameter to 0.1/log(n).
 #' @param phipost Logical. If \code{TRUE}, the plugin coefficient-specific penalty weights are iteratively
 #' calculated using estimates from a post-penalty regression when \code{method == "plugin"}. Otherwise,
@@ -58,6 +60,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # To reduce run time, we keep only countries in the Americas:
 #' americas <- countries$iso[countries$region == "Americas"]
 #' trade <- trade[(trade$imp %in% americas) & (trade$exp %in% americas), ]
@@ -72,15 +75,18 @@
 #'
 #' # We can also try ridge:
 #' \donttest{reg <- penhdfeppml_int(y = y, x = x, fes = fes, lambda = 0.1, penalty = "ridge")}
+#' }
 #'
 #' @inheritSection hdfeppml_int References
 #' @importFrom stats gaussian
 #' @importFrom stats var
+#' @importFrom stats na.omit
 #' @importFrom utils head
 #' @importFrom devtools load_all
 
 penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmnettol = 1e-12,
-                            penalty = "lasso", penweights = NULL, saveX = TRUE, mu = NULL, colcheck_x = FALSE, colcheck_x_fes = TRUE,
+                            penalty = "lasso", penweights = NULL, saveX = TRUE, mu = NULL,
+                            colcheck = TRUE, colcheck_x = colcheck, colcheck_x_fes = colcheck,
                             init_z = NULL, post = FALSE, verbose = FALSE, phipost = TRUE, standardize = TRUE,
                             method = "placeholder", cluster = NULL, debug = FALSE, gamma_val=NULL) {
   xnames <- colnames(x)
@@ -96,21 +102,21 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
                                       verbose = verbose, phipost=phipost, lambda = NULL, gamma_val=gamma_val)
   }
   else {
-
+    
     # if "plugin" option not enabled, do the following
     b <- matrix(NA, nrow = ncol(x), ncol = 1)  # fix this later.
     rownames(b) <- colnames(x)
     include_x <- 1:ncol(x)
-
-   # if (is.null(penweights)) {
-   #    penweights <- rep(1, length(include_x))   #note this is the default used by glmnet. Using "NULL" actually gives you incorrect weights.
-   #  } #N: moved this below colchecks, because include_x gets updated
-
+    
+    # if (is.null(penweights)) {
+    #    penweights <- rep(1, length(include_x))   #note this is the default used by glmnet. Using "NULL" actually gives you incorrect weights.
+    #  } #N: moved this below colchecks, because include_x gets updated
+    
     if (length(penweights) > length(include_x)){
       print("penweights needs to be same length as number of x variables")
       stop()
     }
-
+    
     # collinearity check
     if (colcheck_x==TRUE & colcheck_x_fes==TRUE){
       include_x <- collinearity_check(y,x,fes,1e-6, colcheck_x=colcheck_x, colcheck_x_fes=colcheck_x_fes)
@@ -140,11 +146,11 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
       colcheck_x_post = FALSE
       colcheck_x_fes_post = TRUE
     }
-
+    
     if (is.null(penweights)) {
       penweights <- rep(1, length(include_x))   #note this is the default used by glmnet. Using "NULL" actually gives you incorrect weights.
     }
-
+    
     # number of obs (needed for deviance)
     n <- length(y)
     # estimation algorithm (this implements a version of the algorithm from p. 110 of CGZ SJ 2020 but with penalized WLS in place of the WLS step)
@@ -153,9 +159,9 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
     iter <-0
     while (crit > tol) {
       iter <- iter + 1
-
+      
       if(iter > 50){message("Lasso exceeded 50 iterations. Break loop and return last model."); break}
-
+      
       if (iter == 1) {
         # initilize "mu"
         if (is.null(mu)){
@@ -176,7 +182,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
         }
         reg_x  <- x[which(mu>0),]
         n <- length(z)
-
+        
       } else {
         last_z <- z
         n <- length(mu)
@@ -223,7 +229,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
           x_resid <- reg_x
         }
       }
-
+      
       # if(sd(z_resid)==Inf){
       #   print("z_resid")
       #   print(head(z_resid))
@@ -240,7 +246,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
       #   print(all.equal(temp1,temp2))
       #   print(sum(is.na(temp2)))
       # }
-
+      
       #       print(length(z))
       #       print(length(reg_z))
       #print("mu")
@@ -252,7 +258,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
       #  print(dim(reg_x))
       # print(length(z_resid))
       # print(dim(x_resid))
-
+      
       if (is.null(penweights)) {
         print("null penweights")
         #penreg <- glmnet(x = x_resid, y = z_resid, weights = mu/sum(mu), lambda = lambda, thresh = glmnettol, standardize = standardize, family=gaussian(link = "identity"), warm.g=NULL)
@@ -271,7 +277,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
           print(sum(penweights))
         }
       }
-
+      
       # The SCAD option is DISABLED:
       #      if (penalty == "SCAD") {  ## !! currently *very* slow... can be sped up using warm starts??
       #        wz_resid <- sqrt(mu) * z_resid
@@ -283,35 +289,35 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
         penreg <- fastridge(x = x_resid, y = z_resid, weights = mu/sum(mu), lambda = n * lambda,
                             standardize = standardize) # ,penalty.factor=penweights
       } else {
-
+        
         # Lasso is the default, so a
         if (penalty != "lasso" & iter == 1) {
           warning(penalty, " penalty is not supported. Lasso is used by default.")
         }
         if (debug) {
           penreg <- glmnet::glmnet(x = x_resid, y = z_resid, weights = mu/sum(mu), lambda = lambda,
-                                thresh = glmnettol, standardize = standardize, family=gaussian(link = "identity"))
+                                   thresh = glmnettol, standardize = standardize, family=gaussian(link = "identity"))
           print((penreg$beta))
           print(penweights)
         }
         if (debug) {
           penreg <- glmnet::glmnet(x = x_resid, y = z_resid, weights = mu/sum(mu), lambda = lambda,
-                                thresh = glmnettol, standardize = standardize, family=gaussian(link = "identity"))
+                                   thresh = glmnettol, standardize = standardize, family=gaussian(link = "identity"))
           print((penreg$beta))
           print(penweights)
         }
         penreg <- glmnet::glmnet(x = x_resid, y = z_resid, weights = mu/sum(mu), lambda = lambda,
-                              thresh = glmnettol, penalty.factor = penweights, standardize = standardize, family=gaussian(link = "identity"))
+                                 thresh = glmnettol, penalty.factor = penweights, standardize = standardize, family=gaussian(link = "identity"))
         if (debug) {
           print((penreg$beta))
           stop()
         }
       }
-
+      
       b[include_x] <- penreg$beta #[-1,]   #does using [,include_x] make a difference?
-
+      
       residuals <- z_resid - x_resid %*% b[include_x]
-
+      
       mu <- as.numeric(exp(z - residuals))
       #print("smaller zero")
       #     print(length(which(mu <= 0)))
@@ -322,7 +328,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
       # print("mu")
       # print(length(mu[which(mu == 1e-190)]))
       # print(length(mu[which(mu == 1e16)]))
-
+      
       # calculate deviance
       temp <-  -(y * log(y/mu) - (y-mu)) # Problem sits here: - Inf + Inf = NaN
       temp[which(y == 0)] <- -mu[which(y == 0)]
@@ -330,40 +336,40 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
       # print("temp")
       # print(y[which(is.na(temp))])
       # print(mu[which(is.na(temp))])
-
+      
       deviance <- -2 * sum(temp)/n
       # print("pen")
       # print(temp[which(is.na(temp))])
       # print(mu[which(is.na(temp))])
       # print(y[which(is.na(temp))])
       if(deviance<0) deviance = 0
-
+      
       delta_deviance <- old_deviance - deviance
-
+      
       if (!is.na(delta_deviance) & (deviance < 0.1 * delta_deviance)) {
         delta_deviance = deviance
       }
-
+      
       denom_crit = max(c( min(c(deviance, old_deviance)) , 0.1 ))
       crit = abs(delta_deviance) / denom_crit
-
+      
       if (verbose == TRUE) {
         print(crit)
       }
-
+      
       old_deviance <- deviance
     }
     ## elements to return
     k   <- ncol(matrix(x))
     n   <- length(y)
     select_x <- which(b != 0)
-
+    
     k   <- length(select_x) #ncol(matrix(x[,select_x]))
     bic <- deviance + k * log(n)/n
     # k = number of elements in x here
     # BIC would be BIC = deviance + k * ln(n)
-
-
+    
+    
     # if "post" enabled use post-lasso ppml estimates instead of lasso estimates
     if (post) {
       x_select <- x_resid[, as.numeric(penreg$beta) != 0]
@@ -381,7 +387,7 @@ penhdfeppml_int <- function(y, x, fes, lambda, tol = 1e-8, hdfetol = 1e-4, glmne
         print("no covariates selected!")
       }
     }
-
+    
     # return results
     penreg[["beta"]] <- b
     penreg[["mu"]]  <-  mu

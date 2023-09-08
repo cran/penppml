@@ -32,6 +32,8 @@
 #' collinear variables.
 #' @param colcheck_x_fes Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
 #' by the fixed effects drops those that are perfectly explained.
+#' @param colcheck Logical. If \code{TRUE}, performs both checks in \code{colcheck_x} and \code{colcheck_x_fes}. 
+#' If the user specifies \code{colcheck_x} and \code{colcheck_x_fes} individually, this option is overwritten.
 #' @inheritParams penhdfeppml_int
 #'
 #' @return A list with the following elements:
@@ -52,6 +54,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # First, we need to transform the data (this is what mlfitppml handles internally). Start by
 #' # filtering the data set to keep only countries in the Americas:
 #' americas <- countries$iso[countries$region == "Americas"]
@@ -69,10 +72,12 @@
 #' \donttest{reg <- mlfitppml_int(y = y, x = x, fes = fes, cluster = fes$pair, method = "plugin")}
 #'
 #' # For an example with cross-validation, please see the vignette.
+#' }
 #'
 #' @inheritSection hdfeppml_int References
 
-mlfitppml_int = function(y, x, fes, lambdas, penalty = "lasso", tol = 1e-8, hdfetol = 1e-4, colcheck_x = FALSE, colcheck_x_fes = TRUE,
+mlfitppml_int = function(y, x, fes, lambdas, penalty = "lasso", tol = 1e-8, hdfetol = 1e-4, 
+                     colcheck = TRUE, colcheck_x = colcheck, colcheck_x_fes = colcheck,
                      post = TRUE, cluster = NULL, method = "bic", IDs = 1:n, verbose = FALSE, xval = FALSE,
                      standardize = TRUE, vcv = TRUE, phipost=TRUE, penweights = NULL, K = 15, gamma_val=NULL, mu=NULL) {
 

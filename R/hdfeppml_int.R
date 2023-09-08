@@ -32,6 +32,8 @@
 #' collinear variables.
 #' @param colcheck_x_fes Logical. If \code{TRUE}, this checks whether the independent variables are perfectly explained
 #' by the fixed effects drops those that are perfectly explained.
+#' @param colcheck Logical. If \code{TRUE}, performs both checks in \code{colcheck_x} and \code{colcheck_x_fes}. 
+#' If the user specifies \code{colcheck_x} and \code{colcheck_x_fes} individually, this option is overwritten.
 #'
 #' @return A list with the following elements:
 #' \itemize{
@@ -48,6 +50,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # To reduce run time, we keep only countries in the Americas:
 #' americas <- countries$iso[countries$region == "Americas"]
 #' trade <- trade[(trade$imp %in% americas) & (trade$exp %in% americas), ]
@@ -59,6 +62,7 @@
 #'             pair     = interaction(trade$exp, trade$imp))
 #' # Finally, the call to hdfeppml_int:
 #' reg <- hdfeppml_int(y = y, x = x, fes = fes)
+#' }
 #'
 #' @section References:
 #' Breinlich, H., Corradi, V., Rocha, N., Ruta, M., Santos Silva, J.M.C. and T. Zylkin (2021).
@@ -78,8 +82,8 @@
 #' models with an application to gun control", \emph{Journal of Business & Economic Statistics}, 34, 590-605.
 #'
 
-hdfeppml_int <- function(y, x=NULL, fes=NULL, tol = 1e-8, hdfetol = 1e-4, colcheck_x = TRUE,
-                             colcheck_x_fes = TRUE, mu = NULL, saveX = TRUE,
+hdfeppml_int <- function(y, x=NULL, fes=NULL, tol = 1e-8, hdfetol = 1e-4,  mu = NULL, saveX = TRUE,
+                             colcheck = TRUE, colcheck_x = colcheck, colcheck_x_fes = colcheck,
                              init_z = NULL, verbose = FALSE, maxiter = 1000, cluster = NULL, vcv = TRUE) {
   if(missing(x) & missing(fes)){
     stop("Please provide at least one of the arguments x or fes.")
